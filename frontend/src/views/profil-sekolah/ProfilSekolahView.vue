@@ -247,7 +247,7 @@
             <div class="space-y-6">
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Sejarah Sekolah</label>
-                <RichTextEditor 
+                <TinyMCEEditor 
                   v-model="form.sejarah"
                   placeholder="Masukkan sejarah sekolah"
                   :height="180"
@@ -255,7 +255,7 @@
         </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Prestasi Sekolah</label>
-                <RichTextEditor 
+                <TinyMCEEditor 
                   v-model="form.prestasi"
                   placeholder="Masukkan prestasi sekolah"
                   :height="180"
@@ -263,7 +263,7 @@
       </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Visi</label>
-                <RichTextEditor 
+                <TinyMCEEditor 
                   v-model="form.visi"
                   placeholder="Masukkan visi sekolah"
                   :height="120"
@@ -271,7 +271,7 @@
         </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Misi</label>
-                <RichTextEditor 
+                <TinyMCEEditor 
                   v-model="form.misi"
                   placeholder="Masukkan misi sekolah"
                   :height="180"
@@ -279,7 +279,7 @@
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Tujuan</label>
-                <RichTextEditor 
+                <TinyMCEEditor 
                   v-model="form.tujuan"
                   placeholder="Masukkan tujuan sekolah"
                   :height="120"
@@ -478,7 +478,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import api from '@/services/api'
-import RichTextEditor from '@/components/editor/RichTextEditor.vue'
+import TinyMCEEditor from '@/components/editor/TinyMCEEditor.vue'
 
 const authStore = useAuthStore()
 

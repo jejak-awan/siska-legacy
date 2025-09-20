@@ -59,15 +59,6 @@ const routes = [
     }
   },
   {
-    path: '/demo/editor',
-    name: 'EditorDemo',
-    component: () => import('../views/demo/EditorDemo.vue'),
-    meta: { 
-      requiresAuth: true,
-      title: 'Demo Editor - Sistem Kesiswaan'
-    }
-  },
-  {
     path: '/dashboard',
     name: 'Dashboard',
     component: DashboardView,
@@ -130,16 +121,6 @@ const routes = [
           requiresAuth: true,
           roles: ['admin'],
           title: 'Profil Sekolah - Sistem Kesiswaan'
-        }
-      },
-      {
-        path: 'editor-demo',
-        name: 'EditorDemo',
-        component: () => import('../views/EditorDemo.vue'),
-        meta: { 
-          requiresAuth: true,
-          roles: ['admin'],
-          title: 'Editor Demo - Sistem Kesiswaan'
         }
       },
       {

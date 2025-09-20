@@ -38,11 +38,11 @@ const props = defineProps({
   },
   toolbar: {
     type: String,
-    default: 'undo redo | bold italic underline | alignleft aligncenter alignright | bullist numlist outdent indent | link image | removeformat'
+    default: 'undo redo | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | removeformat | help'
   },
   plugins: {
     type: String,
-    default: 'lists link image wordcount'
+    default: 'lists link paste wordcount'
   }
 })
 
@@ -57,71 +57,95 @@ const characterCount = computed(() => {
   return textContent.length
 })
 
-// TinyMCE Configuration
+// TinyMCE Configuration - Local Only (No External Dependencies)
 const editorConfig = {
   height: props.height,
   menubar: false,
-  toolbar: props.toolbar,
-  plugins: props.plugins,
+  toolbar: 'undo redo | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | removeformat | help',
+  plugins: 'lists link paste wordcount',
   placeholder: props.placeholder,
   branding: false,
   promotion: false,
   statusbar: false,
   resize: false,
+  // Disable external services
+  external_plugins: {},
+  // Local content styling
   content_style: `
     body { 
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
       font-size: 14px; 
       line-height: 1.6;
       margin: 8px;
+      color: #374151;
     }
     p { margin: 0 0 8px 0; }
-    h1, h2, h3, h4, h5, h6 { margin: 16px 0 8px 0; }
+    h1, h2, h3, h4, h5, h6 { 
+      margin: 16px 0 8px 0; 
+      font-weight: bold;
+      color: #1f2937;
+    }
+    h1 { font-size: 1.5rem; }
+    h2 { font-size: 1.25rem; }
+    h3 { font-size: 1.125rem; }
     ul, ol { margin: 8px 0; padding-left: 20px; }
     li { margin: 4px 0; }
     a { color: #3b82f6; text-decoration: underline; }
-    img { max-width: 100%; height: auto; }
+    a:hover { color: #1d4ed8; }
+    blockquote { 
+      border-left: 4px solid #e5e7eb; 
+      padding-left: 16px; 
+      margin: 16px 0; 
+      font-style: italic; 
+      color: #6b7280;
+    }
+    strong { font-weight: bold; }
+    em { font-style: italic; }
+    u { text-decoration: underline; }
+    s { text-decoration: line-through; }
   `,
   setup: (editor) => {
-    // Custom setup if needed
     editor.on('init', () => {
-      console.log('TinyMCE Editor initialized')
+      console.log('TinyMCE Editor initialized (Local Mode)')
     })
   },
-  // Image upload configuration
-  images_upload_handler: async (blobInfo, success, failure) => {
-    try {
-      // For now, we'll use a simple base64 approach
-      // In production, you might want to upload to your server
-      const base64 = await new Promise((resolve) => {
-        const reader = new FileReader()
-        reader.onload = () => resolve(reader.result)
-        reader.readAsDataURL(blobInfo.blob())
-      })
-      success(base64)
-    } catch (error) {
-      failure('Image upload failed: ' + error.message)
-    }
-  },
-  // Paste configuration
-  paste_data_images: true,
+  // Paste configuration - local only
   paste_as_text: false,
   paste_auto_cleanup_on_paste: true,
   paste_remove_styles_if_webkit: true,
   paste_remove_empty_paragraphs: true,
-  // Word count
+  paste_merge_formats: true,
+  // Word count - local regex
   wordcount_countregex: /[\w\u2019\'-]+/g,
   // Accessibility
   accessibility_focus: true,
-  // Indonesian language (if available)
-  language: 'id',
-  // Custom styles
+  // Custom styles - local only
   style_formats: [
     { title: 'Heading 1', format: 'h1' },
     { title: 'Heading 2', format: 'h2' },
     { title: 'Heading 3', format: 'h3' },
     { title: 'Paragraph', format: 'p' },
-    { title: 'Blockquote', format: 'blockquote' }
+    { title: 'Blockquote', format: 'blockquote' },
+    { title: 'Bold', format: 'bold' },
+    { title: 'Italic', format: 'italic' },
+    { title: 'Underline', format: 'underline' },
+    { title: 'Strikethrough', format: 'strikethrough' }
+  ],
+  // Link configuration - local only
+  link_context_toolbar: true,
+  link_title: false,
+  // Remove external dependencies
+  automatic_uploads: false,
+  images_upload_url: false,
+  images_upload_handler: false,
+  // Disable cloud services
+  cloud_channel: false,
+  // Local language (fallback to English if Indonesian not available)
+  language: 'en',
+  // Custom help content
+  help_tabs: [
+    'shortcuts',
+    'keyboardnav'
   ]
 }
 
