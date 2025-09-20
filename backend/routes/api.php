@@ -18,6 +18,7 @@ use App\Http\Controllers\Api\ReferenceDataController;
 use App\Http\Controllers\Api\WhatsAppController;
 use App\Http\Controllers\Api\ImageController;
 use App\Http\Controllers\Api\DocumentationController;
+use App\Http\Controllers\Api\KategoriKreditPoinController;
 
 /*
 |--------------------------------------------------------------------------
@@ -138,6 +139,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('role:admin')->group(function () {
         Route::post('kredit-poin/{id}/approve', [KreditPoinController::class, 'approve']);
         Route::post('kredit-poin/{id}/reject', [KreditPoinController::class, 'reject']);
+    });
+
+    // Kategori Kredit Poin routes
+    Route::middleware('role:admin')->group(function () {
+        Route::apiResource('kategori-kredit-poin', KategoriKreditPoinController::class);
+        Route::get('kategori-kredit-poin-statistics', [KategoriKreditPoinController::class, 'statistics']);
     });
     
     // Notification routes
