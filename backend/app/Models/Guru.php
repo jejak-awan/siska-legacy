@@ -5,6 +5,34 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @OA\Schema(
+ *     schema="Guru",
+ *     type="object",
+ *     title="Guru",
+ *     description="Guru model",
+ *     @OA\Property(property="id", type="integer", example=1),
+ *     @OA\Property(property="user_id", type="integer", example=1),
+ *     @OA\Property(property="nip", type="string", example="196512121990031001"),
+ *     @OA\Property(property="nuptk", type="string", example="1234567890123456"),
+ *     @OA\Property(property="nama_lengkap", type="string", example="Dr. John Doe, S.Pd., M.Pd."),
+ *     @OA\Property(property="nama_panggilan", type="string", example="John"),
+ *     @OA\Property(property="jenis_kelamin", type="string", example="Laki-laki"),
+ *     @OA\Property(property="tempat_lahir", type="string", example="Jakarta"),
+ *     @OA\Property(property="tanggal_lahir", type="string", format="date", example="1990-01-01"),
+ *     @OA\Property(property="agama", type="string", example="Islam"),
+ *     @OA\Property(property="status_pernikahan", type="string", example="Menikah"),
+ *     @OA\Property(property="alamat_lengkap", type="string", example="Jl. Contoh No. 123"),
+ *     @OA\Property(property="nomor_hp", type="string", example="081234567890"),
+ *     @OA\Property(property="email", type="string", format="email", example="john@example.com"),
+ *     @OA\Property(property="jenis_ptk", type="string", example="Guru Mata Pelajaran"),
+ *     @OA\Property(property="status_kepegawaian", type="string", example="PNS"),
+ *     @OA\Property(property="golongan", type="string", example="IV/a"),
+ *     @OA\Property(property="jabatan", type="string", example="Guru Mata Pelajaran"),
+ *     @OA\Property(property="created_at", type="string", format="date-time"),
+ *     @OA\Property(property="updated_at", type="string", format="date-time")
+ * )
+ */
 class Guru extends Model
 {
     use HasFactory;

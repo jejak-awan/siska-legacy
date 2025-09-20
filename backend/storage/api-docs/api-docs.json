@@ -1,0 +1,701 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Sistem Manajemen Kesiswaan API",
+        "description": "API untuk Sistem Manajemen Kesiswaan Terintegrasi",
+        "contact": {
+            "name": "Awan Setiawan",
+            "email": "jejakawan007@gmail.com"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000/api",
+            "description": "Development Server"
+        }
+    ],
+    "paths": {
+        "/api/health": {
+            "get": {
+                "tags": [
+                    "System"
+                ],
+                "summary": "Health Check",
+                "description": "Check if the API is running",
+                "operationId": "cc64903d1df3e3a47e4eb003b883e9ed",
+                "responses": {
+                    "200": {
+                        "description": "API is healthy",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "ok"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "API is running"
+                                        },
+                                        "timestamp": {
+                                            "type": "string",
+                                            "format": "date-time"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/version": {
+            "get": {
+                "tags": [
+                    "System"
+                ],
+                "summary": "Get API Version",
+                "description": "Get the current API version information",
+                "operationId": "ac7dd8848eac4083813561c1375424d3",
+                "responses": {
+                    "200": {
+                        "description": "Version information",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "version": {
+                                            "type": "string",
+                                            "example": "1.0.0"
+                                        },
+                                        "laravel_version": {
+                                            "type": "string",
+                                            "example": "11.35"
+                                        },
+                                        "php_version": {
+                                            "type": "string",
+                                            "example": "8.3.0"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get all users",
+                "description": "Retrieve a list of all users with pagination",
+                "operationId": "566aed8efb436ca506e0ef51a032ecd9",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 15
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of users retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/User"
+                                            }
+                                        },
+                                        "current_page": {
+                                            "type": "integer"
+                                        },
+                                        "total": {
+                                            "type": "integer"
+                                        },
+                                        "per_page": {
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Create new user",
+                "description": "Create a new user account",
+                "operationId": "be551c1d694a01c164966f58bfa77013",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password",
+                                    "role_id"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "John Doe"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "john@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password123"
+                                    },
+                                    "role_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "081234567890"
+                                    },
+                                    "address": {
+                                        "type": "string",
+                                        "example": "Jl. Contoh No. 123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "User created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/users/{id}": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get user by ID",
+                "description": "Retrieve a specific user by their ID",
+                "operationId": "6f51bd5fa2dddcd25e44cfa53dcbd10a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "User ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Update user",
+                "description": "Update an existing user",
+                "operationId": "070e37fc9aff78ae73860751bc990ed3",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "User ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "John Doe Updated"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "john.updated@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "newpassword123"
+                                    },
+                                    "role_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "081234567890"
+                                    },
+                                    "address": {
+                                        "type": "string",
+                                        "example": "Jl. Contoh No. 123 Updated"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Delete user",
+                "description": "Delete a user account",
+                "operationId": "0b4133ed462528a5e648b88ead11e929",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "User ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "User deleted successfully"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Guru": {
+                "title": "Guru",
+                "description": "Guru model",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "user_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "nip": {
+                        "type": "string",
+                        "example": "196512121990031001"
+                    },
+                    "nuptk": {
+                        "type": "string",
+                        "example": "1234567890123456"
+                    },
+                    "nama_lengkap": {
+                        "type": "string",
+                        "example": "Dr. John Doe, S.Pd., M.Pd."
+                    },
+                    "nama_panggilan": {
+                        "type": "string",
+                        "example": "John"
+                    },
+                    "jenis_kelamin": {
+                        "type": "string",
+                        "example": "Laki-laki"
+                    },
+                    "tempat_lahir": {
+                        "type": "string",
+                        "example": "Jakarta"
+                    },
+                    "tanggal_lahir": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "1990-01-01"
+                    },
+                    "agama": {
+                        "type": "string",
+                        "example": "Islam"
+                    },
+                    "status_pernikahan": {
+                        "type": "string",
+                        "example": "Menikah"
+                    },
+                    "alamat_lengkap": {
+                        "type": "string",
+                        "example": "Jl. Contoh No. 123"
+                    },
+                    "nomor_hp": {
+                        "type": "string",
+                        "example": "081234567890"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "john@example.com"
+                    },
+                    "jenis_ptk": {
+                        "type": "string",
+                        "example": "Guru Mata Pelajaran"
+                    },
+                    "status_kepegawaian": {
+                        "type": "string",
+                        "example": "PNS"
+                    },
+                    "golongan": {
+                        "type": "string",
+                        "example": "IV/a"
+                    },
+                    "jabatan": {
+                        "type": "string",
+                        "example": "Guru Mata Pelajaran"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "Role": {
+                "title": "Role",
+                "description": "Role model",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "admin"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Administrator role"
+                    },
+                    "permissions": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "example": [
+                            "user.create",
+                            "user.read",
+                            "user.update",
+                            "user.delete"
+                        ]
+                    },
+                    "level": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "Siswa": {
+                "title": "Siswa",
+                "description": "Siswa model",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "user_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "nisn": {
+                        "type": "string",
+                        "example": "1234567890"
+                    },
+                    "nis": {
+                        "type": "string",
+                        "example": "2024001"
+                    },
+                    "nama_lengkap": {
+                        "type": "string",
+                        "example": "Ahmad Fauzi"
+                    },
+                    "nama_panggilan": {
+                        "type": "string",
+                        "example": "Ahmad"
+                    },
+                    "jenis_kelamin": {
+                        "type": "string",
+                        "example": "Laki-laki"
+                    },
+                    "tempat_lahir": {
+                        "type": "string",
+                        "example": "Jakarta"
+                    },
+                    "tanggal_lahir": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2005-01-01"
+                    },
+                    "agama": {
+                        "type": "string",
+                        "example": "Islam"
+                    },
+                    "kewarganegaraan": {
+                        "type": "string",
+                        "example": "Indonesia"
+                    },
+                    "nik": {
+                        "type": "string",
+                        "example": "1234567890123456"
+                    },
+                    "alamat_lengkap": {
+                        "type": "string",
+                        "example": "Jl. Contoh No. 123"
+                    },
+                    "nomor_hp": {
+                        "type": "string",
+                        "example": "081234567890"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "ahmad@example.com"
+                    },
+                    "kelas_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "tahun_ajaran_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "aktif"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "User": {
+                "title": "User",
+                "description": "User model",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "username": {
+                        "type": "string",
+                        "example": "johndoe"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "john@example.com"
+                    },
+                    "role_type": {
+                        "type": "string",
+                        "example": "guru"
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "aktif"
+                    },
+                    "email_verified_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "two_factor_enabled": {
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "roles": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Role"
+                        }
+                    },
+                    "guru": {
+                        "$ref": "#/components/schemas/Guru"
+                    },
+                    "siswa": {
+                        "$ref": "#/components/schemas/Siswa"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Users",
+            "description": "User management endpoints"
+        },
+        {
+            "name": "System",
+            "description": "System"
+        }
+    ]
+}

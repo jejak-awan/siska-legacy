@@ -5,289 +5,249 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rule;
+use Illuminate\Http\JsonResponse;
 
+/**
+ * @OA\Tag(
+ *     name="Users",
+ *     description="User management endpoints"
+ * )
+ */
 class UserController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *     path="/api/users",
+     *     summary="Get all users",
+     *     description="Retrieve a list of all users with pagination",
+     *     tags={"Users"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(
+     *         name="page",
+     *         in="query",
+     *         description="Page number",
+     *         required=false,
+     *         @OA\Schema(type="integer", default=1)
+     *     ),
+     *     @OA\Parameter(
+     *         name="per_page",
+     *         in="query",
+     *         description="Items per page",
+     *         required=false,
+     *         @OA\Schema(type="integer", default=15)
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="List of users retrieved successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/User")),
+     *             @OA\Property(property="current_page", type="integer"),
+     *             @OA\Property(property="total", type="integer"),
+     *             @OA\Property(property="per_page", type="integer")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized"
+     *     )
+     * )
      */
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
-        $query = User::query();
-
-        // Filter by role type
-        if ($request->has('role_type')) {
-            $query->where('role_type', $request->role_type);
-        }
-
-        // Filter by status
-        if ($request->has('status')) {
-            $query->where('status', $request->status);
-        }
-
-        // Search by username or email
-        if ($request->has('search')) {
-            $search = $request->search;
-            $query->where(function($q) use ($search) {
-                $q->where('username', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%");
-            });
-        }
-
-        $users = $query->paginate($request->get('per_page', 15));
-
-        return response()->json([
-            'message' => 'Users retrieved successfully',
-            'data' => $users
-        ], Response::HTTP_OK);
+        $perPage = $request->get('per_page', 15);
+        $users = User::with(['role'])->paginate($perPage);
+        
+        return response()->json($users);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * @OA\Get(
+     *     path="/api/users/{id}",
+     *     summary="Get user by ID",
+     *     description="Retrieve a specific user by their ID",
+     *     tags={"Users"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="User ID",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="User retrieved successfully",
+     *         @OA\JsonContent(ref="#/components/schemas/User")
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="User not found"
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized"
+     *     )
+     * )
      */
-    public function store(Request $request)
+    public function show(int $id): JsonResponse
     {
-        $request->validate([
-            'username' => 'required|string|max:50|unique:users',
-            'email' => 'required|string|email|max:100|unique:users',
+        $user = User::with(['role'])->findOrFail($id);
+        
+        return response()->json($user);
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/api/users",
+     *     summary="Create new user",
+     *     description="Create a new user account",
+     *     tags={"Users"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"name", "email", "password", "role_id"},
+     *             @OA\Property(property="name", type="string", example="John Doe"),
+     *             @OA\Property(property="email", type="string", format="email", example="john@example.com"),
+     *             @OA\Property(property="password", type="string", format="password", example="password123"),
+     *             @OA\Property(property="role_id", type="integer", example=1),
+     *             @OA\Property(property="phone", type="string", example="081234567890"),
+     *             @OA\Property(property="address", type="string", example="Jl. Contoh No. 123")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="User created successfully",
+     *         @OA\JsonContent(ref="#/components/schemas/User")
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error"
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized"
+     *     )
+     * )
+     */
+    public function store(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8',
-            'role_type' => 'required|in:admin,guru,siswa,tendik,bk,wali_kelas,osis,ekstrakurikuler,orang_tua',
-            'status' => 'sometimes|in:aktif,nonaktif,suspended',
-            'two_factor_enabled' => 'sometimes|boolean',
+            'role_id' => 'required|exists:roles,id',
+            'phone' => 'nullable|string|max:20',
+            'address' => 'nullable|string|max:500'
         ]);
 
-        $user = User::create([
-            'username' => $request->username,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role_type' => $request->role_type,
-            'status' => $request->get('status', 'aktif'),
-            'two_factor_enabled' => $request->get('two_factor_enabled', false),
-        ]);
+        $validated['password'] = bcrypt($validated['password']);
+        $user = User::create($validated);
+        $user->load('role');
 
-        return response()->json([
-            'message' => 'User created successfully',
-            'data' => $user
-        ], Response::HTTP_CREATED);
+        return response()->json($user, 201);
     }
 
     /**
-     * Display the specified resource.
+     * @OA\Put(
+     *     path="/api/users/{id}",
+     *     summary="Update user",
+     *     description="Update an existing user",
+     *     tags={"Users"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="User ID",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="name", type="string", example="John Doe Updated"),
+     *             @OA\Property(property="email", type="string", format="email", example="john.updated@example.com"),
+     *             @OA\Property(property="password", type="string", format="password", example="newpassword123"),
+     *             @OA\Property(property="role_id", type="integer", example=1),
+     *             @OA\Property(property="phone", type="string", example="081234567890"),
+     *             @OA\Property(property="address", type="string", example="Jl. Contoh No. 123 Updated")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="User updated successfully",
+     *         @OA\JsonContent(ref="#/components/schemas/User")
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="User not found"
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error"
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized"
+     *     )
+     * )
      */
-    public function show(User $user)
+    public function update(Request $request, int $id): JsonResponse
     {
-        $user->load(['roles', 'guru', 'siswa']);
-
-        return response()->json([
-            'message' => 'User retrieved successfully',
-            'data' => $user
-        ], Response::HTTP_OK);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, User $user)
-    {
-        $request->validate([
-            'username' => ['sometimes', 'string', 'max:50', Rule::unique('users')->ignore($user->id)],
-            'email' => ['sometimes', 'string', 'email', 'max:100', Rule::unique('users')->ignore($user->id)],
+        $user = User::findOrFail($id);
+        
+        $validated = $request->validate([
+            'name' => 'sometimes|string|max:255',
+            'email' => 'sometimes|email|unique:users,email,' . $id,
             'password' => 'sometimes|string|min:8',
-            'role_type' => 'sometimes|in:admin,guru,siswa,tendik,bk,wali_kelas,osis,ekstrakurikuler,orang_tua',
-            'status' => 'sometimes|in:aktif,nonaktif,suspended',
-            'two_factor_enabled' => 'sometimes|boolean',
+            'role_id' => 'sometimes|exists:roles,id',
+            'phone' => 'nullable|string|max:20',
+            'address' => 'nullable|string|max:500'
         ]);
 
-        $updateData = $request->only([
-            'username', 'email', 'role_type', 'status', 'two_factor_enabled'
-        ]);
-
-        if ($request->has('password')) {
-            $updateData['password'] = Hash::make($request->password);
+        if (isset($validated['password'])) {
+            $validated['password'] = bcrypt($validated['password']);
         }
 
-        $user->update($updateData);
+        $user->update($validated);
+        $user->load('role');
 
-        return response()->json([
-            'message' => 'User updated successfully',
-            'data' => $user
-        ], Response::HTTP_OK);
+        return response()->json($user);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @OA\Delete(
+     *     path="/api/users/{id}",
+     *     summary="Delete user",
+     *     description="Delete a user account",
+     *     tags={"Users"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="User ID",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=204,
+     *         description="User deleted successfully"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="User not found"
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized"
+     *     )
+     * )
      */
-    public function destroy(User $user)
+    public function destroy(int $id): JsonResponse
     {
-        // Prevent deleting admin users
-        if ($user->role_type === 'admin') {
-            return response()->json([
-                'message' => 'Cannot delete admin user'
-            ], Response::HTTP_FORBIDDEN);
-        }
-
+        $user = User::findOrFail($id);
         $user->delete();
 
-        return response()->json([
-            'message' => 'User deleted successfully'
-        ], Response::HTTP_OK);
-    }
-
-    /**
-     * Activate user
-     */
-    public function activate(User $user)
-    {
-        $user->update(['status' => 'aktif']);
-
-        return response()->json([
-            'message' => 'User activated successfully',
-            'data' => $user
-        ], Response::HTTP_OK);
-    }
-
-    /**
-     * Deactivate user
-     */
-    public function deactivate(User $user)
-    {
-        $user->update(['status' => 'nonaktif']);
-
-        return response()->json([
-            'message' => 'User deactivated successfully',
-            'data' => $user
-        ], Response::HTTP_OK);
-    }
-
-    /**
-     * Get users by role
-     */
-    public function byRole($role)
-    {
-        $users = User::where('role_type', $role)
-                    ->active()
-                    ->get();
-
-        return response()->json([
-            'message' => "Users with role {$role} retrieved successfully",
-            'data' => $users
-        ], Response::HTTP_OK);
-    }
-
-    /**
-     * Get user statistics
-     */
-    public function statistics()
-    {
-        $stats = [
-            'totalUsers' => User::count(),
-            'adminCount' => User::where('role_type', 'admin')->count(),
-            'staffCount' => User::whereIn('role_type', ['guru', 'tendik', 'bk', 'wali_kelas'])->count(),
-            'studentParentCount' => User::whereIn('role_type', ['siswa', 'orang_tua'])->count(),
-            'activeUsers' => User::where('status', 'aktif')->count(),
-            'inactiveUsers' => User::where('status', 'nonaktif')->count(),
-            'suspendedUsers' => User::where('status', 'suspended')->count(),
-            'recentUsers' => User::where('created_at', '>=', now()->subDays(7))->count(),
-        ];
-
-        return response()->json([
-            'message' => 'User statistics retrieved successfully',
-            'data' => $stats
-        ], Response::HTTP_OK);
-    }
-
-    /**
-     * Bulk operations
-     */
-    public function bulkAction(Request $request)
-    {
-        $request->validate([
-            'action' => 'required|in:activate,deactivate,suspend,delete',
-            'user_ids' => 'required|array|min:1',
-            'user_ids.*' => 'exists:users,id',
-        ]);
-
-        $userIds = $request->user_ids;
-        $action = $request->action;
-        
-        // Prevent bulk operations on admin users
-        $adminUsers = User::whereIn('id', $userIds)->where('role_type', 'admin')->count();
-        if ($adminUsers > 0 && in_array($action, ['deactivate', 'suspend', 'delete'])) {
-            return response()->json([
-                'message' => 'Cannot perform this action on admin users'
-            ], Response::HTTP_FORBIDDEN);
-        }
-
-        $affected = 0;
-        
-        switch ($action) {
-            case 'activate':
-                $affected = User::whereIn('id', $userIds)->update(['status' => 'aktif']);
-                break;
-            case 'deactivate':
-                $affected = User::whereIn('id', $userIds)->update(['status' => 'nonaktif']);
-                break;
-            case 'suspend':
-                $affected = User::whereIn('id', $userIds)->update(['status' => 'suspended']);
-                break;
-            case 'delete':
-                $affected = User::whereIn('id', $userIds)->delete();
-                break;
-        }
-
-        return response()->json([
-            'message' => "Bulk {$action} completed successfully",
-            'data' => [
-                'affected_count' => $affected,
-                'action' => $action
-            ]
-        ], Response::HTTP_OK);
-    }
-
-    /**
-     * Import users from CSV/Excel
-     */
-    public function import(Request $request)
-    {
-        $request->validate([
-            'file' => 'required|file|mimes:csv,xlsx,xls|max:2048',
-        ]);
-
-        // This is a placeholder for file import functionality
-        // In a real implementation, you would use Laravel Excel or similar
-        
-        return response()->json([
-            'message' => 'User import feature coming soon',
-            'data' => [
-                'file_name' => $request->file('file')->getClientOriginalName(),
-                'file_size' => $request->file('file')->getSize(),
-            ]
-        ], Response::HTTP_ACCEPTED);
-    }
-
-    /**
-     * Export users to CSV/Excel
-     */
-    public function export(Request $request)
-    {
-        $request->validate([
-            'format' => 'required|in:csv,xlsx',
-            'role_type' => 'sometimes|in:admin,guru,siswa,tendik,bk,wali_kelas,osis,ekstrakurikuler,orang_tua',
-            'status' => 'sometimes|in:aktif,nonaktif,suspended',
-        ]);
-
-        // This is a placeholder for file export functionality
-        // In a real implementation, you would use Laravel Excel or similar
-        
-        return response()->json([
-            'message' => 'User export feature coming soon',
-            'data' => [
-                'format' => $request->format,
-                'filters' => $request->only(['role_type', 'status']),
-            ]
-        ], Response::HTTP_ACCEPTED);
+        return response()->json(null, 204);
     }
 }

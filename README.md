@@ -425,19 +425,42 @@ docker-compose down
 
 ## 📖 Documentation
 
-### **Implementation Documentation**
+### **🔧 Automated Documentation Tools**
+
+#### **API Documentation (Swagger/OpenAPI)**
+- **Swagger UI**: `http://localhost:8000/api/documentation` (Backend running)
+- **OpenAPI Spec**: `http://localhost:8000/api/docs` (JSON format)
+- **Features**: Interactive API testing, Request/Response examples, Authentication testing
+
+#### **Frontend Component Documentation (Storybook)**
+- **Storybook UI**: `http://localhost:6006` (Frontend running)
+- **Features**: Component playground, Interactive testing, Design system documentation
+- **Available Stories**: Button, Card, StatCard, ChartCard, ThemeToggle
+
+#### **Quick Start Documentation**
+```bash
+# Start API Documentation
+cd backend && php artisan serve
+# Visit: http://localhost:8000/api/documentation
+
+# Start Component Documentation  
+cd frontend && npm run storybook
+# Visit: http://localhost:6006
+```
+
+### **📋 Manual Documentation**
 - [Rencana Implementasi Lengkap](docs/RENCANA_IMPLEMENTASI_LENGKAP.md)
 - [Project Timeline & Checklist](docs/PROJECT_TIMELINE_IMPLEMENTASI.md)
 - [Rekomendasi Tambahan & Best Practices](docs/REKOMENDASI_TAMBAHAN_BEST_PRACTICES.md)
 - [Skema Database Sesuai Format Data](docs/SKEMA_DATABASE_SESUAI_FORMAT_DATA.md)
 
-### **Data Format Templates**
+### **📊 Data Format Templates**
 - [Data Guru Template](docs/data%20format/Data%20Guru.xlsx)
 - [Data Siswa Template](docs/data%20format/Data%20Siswa.xlsx)
 - [Formulir Guru](docs/data%20format/Formulir%20Guru.xlsx)
 - [Formulir Siswa](docs/data%20format/Formulir%20Siswa.xlsx)
 
-### **Archived Documentation**
+### **📁 Archived Documentation**
 - [System Integration Guide](docs/arsip/SYSTEM_INTEGRATION.md)
 - [API Documentation](docs/arsip/API_DOCUMENTATION.md)
 - [Data Format Reference](docs/arsip/DATA_FORMAT_REFERENCE.md)

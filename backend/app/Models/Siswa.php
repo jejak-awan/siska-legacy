@@ -5,6 +5,34 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @OA\Schema(
+ *     schema="Siswa",
+ *     type="object",
+ *     title="Siswa",
+ *     description="Siswa model",
+ *     @OA\Property(property="id", type="integer", example=1),
+ *     @OA\Property(property="user_id", type="integer", example=1),
+ *     @OA\Property(property="nisn", type="string", example="1234567890"),
+ *     @OA\Property(property="nis", type="string", example="2024001"),
+ *     @OA\Property(property="nama_lengkap", type="string", example="Ahmad Fauzi"),
+ *     @OA\Property(property="nama_panggilan", type="string", example="Ahmad"),
+ *     @OA\Property(property="jenis_kelamin", type="string", example="Laki-laki"),
+ *     @OA\Property(property="tempat_lahir", type="string", example="Jakarta"),
+ *     @OA\Property(property="tanggal_lahir", type="string", format="date", example="2005-01-01"),
+ *     @OA\Property(property="agama", type="string", example="Islam"),
+ *     @OA\Property(property="kewarganegaraan", type="string", example="Indonesia"),
+ *     @OA\Property(property="nik", type="string", example="1234567890123456"),
+ *     @OA\Property(property="alamat_lengkap", type="string", example="Jl. Contoh No. 123"),
+ *     @OA\Property(property="nomor_hp", type="string", example="081234567890"),
+ *     @OA\Property(property="email", type="string", format="email", example="ahmad@example.com"),
+ *     @OA\Property(property="kelas_id", type="integer", example=1),
+ *     @OA\Property(property="tahun_ajaran_id", type="integer", example=1),
+ *     @OA\Property(property="status", type="string", example="aktif"),
+ *     @OA\Property(property="created_at", type="string", format="date-time"),
+ *     @OA\Property(property="updated_at", type="string", format="date-time")
+ * )
+ */
 class Siswa extends Model
 {
     use HasFactory;

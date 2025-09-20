@@ -5,6 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @OA\Schema(
+ *     schema="Role",
+ *     type="object",
+ *     title="Role",
+ *     description="Role model",
+ *     @OA\Property(property="id", type="integer", example=1),
+ *     @OA\Property(property="name", type="string", example="admin"),
+ *     @OA\Property(property="description", type="string", example="Administrator role"),
+ *     @OA\Property(property="permissions", type="array", @OA\Items(type="string"), example={"user.create", "user.read", "user.update", "user.delete"}),
+ *     @OA\Property(property="level", type="integer", example=1),
+ *     @OA\Property(property="created_at", type="string", format="date-time"),
+ *     @OA\Property(property="updated_at", type="string", format="date-time")
+ * )
+ */
 class Role extends Model
 {
     use HasFactory;

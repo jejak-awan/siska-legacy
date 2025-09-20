@@ -17,6 +17,7 @@ use App\Http\Controllers\Api\CharacterAssessmentController;
 use App\Http\Controllers\Api\ReferenceDataController;
 use App\Http\Controllers\Api\WhatsAppController;
 use App\Http\Controllers\Api\ImageController;
+use App\Http\Controllers\Api\DocumentationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,6 +45,10 @@ Route::get('/test', function () {
         'version' => '1.0.0'
     ]);
 });
+
+// Documentation routes (public)
+Route::get('/health', [DocumentationController::class, 'health']);
+Route::get('/version', [DocumentationController::class, 'version']);
 
 // Protected routes
 Route::middleware('auth:sanctum')->group(function () {
