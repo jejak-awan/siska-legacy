@@ -1,6 +1,6 @@
 <template>
   <div class="rich-text-editor">
-    <div class="toolbar border border-gray-300 border-b-0 rounded-t-md bg-gray-50 p-2 flex flex-wrap gap-1">
+    <div class="toolbar border border-gray-300 border-b-0 rounded-t-md bg-gray-50 p-2 flex flex-wrap gap-1 relative z-10">
       <!-- Bold -->
       <button
         @click="execCommand('bold')"
@@ -104,7 +104,7 @@
     <div
       ref="editor"
       :style="{ height: height + 'px' }"
-      class="editor-content border border-gray-300 rounded-b-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 overflow-y-auto"
+      class="editor-content border border-gray-300 rounded-b-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 overflow-y-auto relative z-0"
       contenteditable="true"
       @input="updateContent"
       @blur="updateContent"
@@ -113,7 +113,7 @@
       v-html="modelValue"
     ></div>
     
-    <div v-if="placeholder && !modelValue" class="placeholder absolute top-3 left-3 text-gray-400 pointer-events-none">
+    <div v-if="placeholder && !modelValue" class="placeholder absolute top-3 left-3 text-gray-400 pointer-events-none z-0">
       {{ placeholder }}
     </div>
     
@@ -238,11 +238,23 @@ onMounted(() => {
 <style scoped>
 .rich-text-editor {
   position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.toolbar {
+  position: relative;
+  z-index: 10;
+  background: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
 }
 
 .editor-content {
   min-height: 100px;
   line-height: 1.5;
+  position: relative;
+  z-index: 0;
+  background: white;
 }
 
 .editor-content:focus {
@@ -253,23 +265,32 @@ onMounted(() => {
   font-size: 1.5rem;
   font-weight: bold;
   margin: 0.5rem 0;
+  padding-top: 0.25rem;
 }
 
 .editor-content h2 {
   font-size: 1.25rem;
   font-weight: bold;
   margin: 0.5rem 0;
+  padding-top: 0.25rem;
 }
 
 .editor-content h3 {
   font-size: 1.125rem;
   font-weight: bold;
   margin: 0.5rem 0;
+  padding-top: 0.25rem;
+}
+
+.editor-content p {
+  margin: 0.5rem 0;
+  padding-top: 0.25rem;
 }
 
 .editor-content ul, .editor-content ol {
   margin: 0.5rem 0;
   padding-left: 1.5rem;
+  padding-top: 0.25rem;
 }
 
 .editor-content li {
