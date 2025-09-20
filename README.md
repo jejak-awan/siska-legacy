@@ -6,7 +6,7 @@ Sistem manajemen kesiswaan yang komprehensif dan terintegrasi, dirancang sesuai 
 ### **📊 PROJECT STATUS:**
 - **Current Phase**: Active Development - Core Features Implemented
 - **Overall Progress**: 75% COMPLETE (IN DEVELOPMENT)
-- **Last Updated**: 20 September 2025
+- **Last Updated: 2025-09-20 15:06:01
 
 ### **✅ IMPLEMENTED FEATURES:**
 - ✅ **Backend Foundation**: Laravel 11.35 with 20+ Models implemented
@@ -429,6 +429,7 @@ docker-compose down
 
 #### **API Documentation (Swagger/OpenAPI)**
 - **Swagger UI**: `http://localhost:8000/api/documentation` (Backend running)
+- **Swagger UI (Alt)**: `http://localhost:8080/api/documentation` (Alternative port)
 - **OpenAPI Spec**: `http://localhost:8000/api/docs` (JSON format)
 - **Features**: Interactive API testing, Request/Response examples, Authentication testing
 
