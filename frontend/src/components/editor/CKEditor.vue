@@ -64,6 +64,13 @@ const editorConfig = {
     'underline',
     'strikethrough',
     '|',
+    'fontSize',
+    'fontFamily',
+    'fontColor',
+    'fontBackgroundColor',
+    '|',
+    'alignment',
+    '|',
     'bulletedList',
     'numberedList',
     '|',
@@ -73,6 +80,12 @@ const editorConfig = {
     'blockQuote',
     'link',
     '|',
+    'insertTable',
+    '|',
+    'horizontalLine',
+    '|',
+    'sourceEditing',
+    '|',
     'undo',
     'redo'
   ],
@@ -81,12 +94,93 @@ const editorConfig = {
       { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
       { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
       { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
-      { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' }
+      { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
+      { model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' }
     ]
+  },
+  fontSize: {
+    options: [
+      9, 11, 13, 'default', 17, 19, 21
+    ],
+    supportAllValues: true
+  },
+  fontFamily: {
+    options: [
+      'default',
+      'Arial, Helvetica, sans-serif',
+      'Courier New, Courier, monospace',
+      'Georgia, serif',
+      'Lucida Sans Unicode, Lucida Grande, sans-serif',
+      'Tahoma, Geneva, sans-serif',
+      'Times New Roman, Times, serif',
+      'Trebuchet MS, Helvetica, sans-serif',
+      'Verdana, Geneva, sans-serif'
+    ],
+    supportAllValues: true
+  },
+  fontColor: {
+    colors: [
+      { color: 'hsl(0, 0%, 0%)', label: 'Black' },
+      { color: 'hsl(0, 0%, 30%)', label: 'Dim grey' },
+      { color: 'hsl(0, 0%, 60%)', label: 'Grey' },
+      { color: 'hsl(0, 0%, 90%)', label: 'Light grey' },
+      { color: 'hsl(0, 0%, 100%)', label: 'White', hasBorder: true },
+      { color: 'hsl(0, 75%, 60%)', label: 'Red' },
+      { color: 'hsl(30, 75%, 60%)', label: 'Orange' },
+      { color: 'hsl(60, 75%, 60%)', label: 'Yellow' },
+      { color: 'hsl(90, 75%, 60%)', label: 'Light green' },
+      { color: 'hsl(120, 75%, 60%)', label: 'Green' },
+      { color: 'hsl(150, 75%, 60%)', label: 'Aquamarine' },
+      { color: 'hsl(180, 75%, 60%)', label: 'Turquoise' },
+      { color: 'hsl(210, 75%, 60%)', label: 'Light blue' },
+      { color: 'hsl(240, 75%, 60%)', label: 'Blue' },
+      { color: 'hsl(270, 75%, 60%)', label: 'Purple' }
+    ]
+  },
+  fontBackgroundColor: {
+    colors: [
+      { color: 'hsl(0, 75%, 60%)', label: 'Red' },
+      { color: 'hsl(30, 75%, 60%)', label: 'Orange' },
+      { color: 'hsl(60, 75%, 60%)', label: 'Yellow' },
+      { color: 'hsl(90, 75%, 60%)', label: 'Light green' },
+      { color: 'hsl(120, 75%, 60%)', label: 'Green' },
+      { color: 'hsl(150, 75%, 60%)', label: 'Aquamarine' },
+      { color: 'hsl(180, 75%, 60%)', label: 'Turquoise' },
+      { color: 'hsl(210, 75%, 60%)', label: 'Light blue' },
+      { color: 'hsl(240, 75%, 60%)', label: 'Blue' },
+      { color: 'hsl(270, 75%, 60%)', label: 'Purple' },
+      { color: 'hsl(0, 0%, 0%)', label: 'Black' },
+      { color: 'hsl(0, 0%, 30%)', label: 'Dim grey' },
+      { color: 'hsl(0, 0%, 60%)', label: 'Grey' },
+      { color: 'hsl(0, 0%, 90%)', label: 'Light grey' },
+      { color: 'hsl(0, 0%, 100%)', label: 'White', hasBorder: true }
+    ]
+  },
+  alignment: {
+    options: ['left', 'center', 'right', 'justify']
   },
   link: {
     addTargetToExternalLinks: true,
-    defaultProtocol: 'https://'
+    defaultProtocol: 'https://',
+    decorators: {
+      openInNewTab: {
+        mode: 'manual',
+        label: 'Open in a new tab',
+        attributes: {
+          target: '_blank',
+          rel: 'noopener noreferrer'
+        }
+      }
+    }
+  },
+  table: {
+    contentToolbar: [
+      'tableColumn',
+      'tableRow',
+      'mergeTableCells',
+      'tableProperties',
+      'tableCellProperties'
+    ]
   },
   language: 'en'
 }
@@ -206,6 +300,13 @@ onMounted(() => {
   color: #1f2937;
 }
 
+:deep(.ck-editor__editable h4) {
+  font-size: 1rem;
+  font-weight: bold;
+  margin: 12px 0 6px 0;
+  color: #1f2937;
+}
+
 :deep(.ck-editor__editable p) {
   margin: 0 0 8px 0;
 }
@@ -234,5 +335,105 @@ onMounted(() => {
   margin: 16px 0;
   font-style: italic;
   color: #6b7280;
+}
+
+/* Text alignment */
+:deep(.ck-editor__editable .text-left) {
+  text-align: left;
+}
+
+:deep(.ck-editor__editable .text-center) {
+  text-align: center;
+}
+
+:deep(.ck-editor__editable .text-right) {
+  text-align: right;
+}
+
+:deep(.ck-editor__editable .text-justify) {
+  text-align: justify;
+}
+
+/* Table styling */
+:deep(.ck-editor__editable table) {
+  border-collapse: collapse;
+  margin: 16px 0;
+  width: 100%;
+  border: 1px solid #e5e7eb;
+}
+
+:deep(.ck-editor__editable table td, .ck-editor__editable table th) {
+  border: 1px solid #e5e7eb;
+  padding: 8px 12px;
+  text-align: left;
+}
+
+:deep(.ck-editor__editable table th) {
+  background-color: #f9fafb;
+  font-weight: bold;
+}
+
+/* Horizontal line */
+:deep(.ck-editor__editable hr) {
+  border: none;
+  border-top: 2px solid #e5e7eb;
+  margin: 16px 0;
+}
+
+/* Font size and family styling */
+:deep(.ck-editor__editable) {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Source editing modal styling */
+:deep(.ck-source-editing-area) {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+:deep(.ck-source-editing-area textarea) {
+  background: #1f2937;
+  color: #f9fafb;
+  border: 1px solid #374151;
+  border-radius: 4px;
+  padding: 12px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 13px;
+  line-height: 1.4;
+  resize: vertical;
+  min-height: 200px;
+}
+
+/* Toolbar dropdown styling */
+:deep(.ck-dropdown__panel) {
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+:deep(.ck-list__item) {
+  padding: 8px 12px;
+  color: #374151;
+}
+
+:deep(.ck-list__item:hover) {
+  background-color: #f3f4f6;
+}
+
+:deep(.ck-list__item.ck-on) {
+  background-color: #dbeafe;
+  color: #1d4ed8;
+}
+
+/* Color picker styling */
+:deep(.ck-color-grid__tile) {
+  border-radius: 4px;
+  margin: 2px;
+}
+
+:deep(.ck-color-grid__tile:hover) {
+  transform: scale(1.1);
+  transition: transform 0.1s ease;
 }
 </style>
