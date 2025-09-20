@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Public\PublicContentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,27 +12,15 @@ use App\Http\Controllers\Public\PublicContentController;
 |
 */
 
-// Public content routes
-Route::prefix('public')->group(function () {
-    
-    // Activities
-    Route::get('activities', [PublicContentController::class, 'getActivities']);
-    
-    // News/Posts
-    Route::get('news', [PublicContentController::class, 'getNews']);
-    
-    // Programs
-    Route::get('programs', [PublicContentController::class, 'getPrograms']);
-    
-    // Featured content
-    Route::get('featured', [PublicContentController::class, 'getFeaturedContent']);
-    
-    // Content statistics
-    Route::get('stats', [PublicContentController::class, 'getContentStats']);
-    
-    // Search
-    Route::get('search', [PublicContentController::class, 'search']);
-});
+// TODO: Implement PublicContentController
+// Route::prefix('public')->group(function () {
+//     Route::get('activities', [PublicContentController::class, 'getActivities']);
+//     Route::get('news', [PublicContentController::class, 'getNews']);
+//     Route::get('programs', [PublicContentController::class, 'getPrograms']);
+//     Route::get('featured', [PublicContentController::class, 'getFeaturedContent']);
+//     Route::get('stats', [PublicContentController::class, 'getContentStats']);
+//     Route::get('search', [PublicContentController::class, 'search']);
+// });
 
 // Health check for public API
 Route::get('health', function () {

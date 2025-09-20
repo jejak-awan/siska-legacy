@@ -157,9 +157,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Profile Sekolah routes
     Route::middleware('role:admin')->group(function () {
-        Route::apiResource('profile-sekolah', ProfileSekolahController::class);
         Route::put('profile-sekolah/basic-info', [ProfileSekolahController::class, 'updateBasicInfo']);
         Route::put('profile-sekolah/school-details', [ProfileSekolahController::class, 'updateSchoolDetails']);
+        Route::apiResource('profile-sekolah', ProfileSekolahController::class);
     });
     
     // Notification routes
