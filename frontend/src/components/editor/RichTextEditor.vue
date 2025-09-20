@@ -108,17 +108,24 @@
       contenteditable="true"
       @input="updateContent"
       @blur="updateContent"
+      @paste="handlePaste"
+      @keydown="handleKeydown"
       v-html="modelValue"
     ></div>
     
     <div v-if="placeholder && !modelValue" class="placeholder absolute top-3 left-3 text-gray-400 pointer-events-none">
       {{ placeholder }}
     </div>
+    
+    <!-- Character Counter -->
+    <div class="mt-1 text-xs text-gray-500 text-right">
+      {{ characterCount }} karakter
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick } from 'vue'
+import { ref, onMounted, nextTick, computed } from 'vue'
 
 const props = defineProps({
   modelValue: {
@@ -138,6 +145,14 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue'])
 
 const editor = ref(null)
+
+// Character count computed property
+const characterCount = computed(() => {
+  if (!props.modelValue) return 0
+  // Remove HTML tags for accurate character count
+  const textContent = props.modelValue.replace(/<[^>]*>/g, '')
+  return textContent.length
+})
 
 const execCommand = (command, value = null) => {
   document.execCommand(command, false, value)
@@ -167,10 +182,54 @@ const updateContent = () => {
   }
 }
 
+// Handle paste events to prevent dangerous content
+const handlePaste = (e) => {
+  e.preventDefault()
+  const text = e.clipboardData.getData('text/plain')
+  document.execCommand('insertText', false, text)
+}
+
+// Handle keyboard shortcuts
+const handleKeydown = (e) => {
+  if (e.ctrlKey || e.metaKey) {
+    switch (e.key) {
+      case 'b':
+        e.preventDefault()
+        execCommand('bold')
+        break
+      case 'i':
+        e.preventDefault()
+        execCommand('italic')
+        break
+      case 'u':
+        e.preventDefault()
+        execCommand('underline')
+        break
+    }
+  }
+}
+
 onMounted(() => {
   nextTick(() => {
-    if (editor.value && props.modelValue) {
-      editor.value.innerHTML = props.modelValue
+    if (editor.value) {
+      if (props.modelValue) {
+        editor.value.innerHTML = props.modelValue
+      } else if (props.placeholder) {
+        editor.value.innerHTML = `<div class="text-gray-400">${props.placeholder}</div>`
+      }
+      
+      // Handle focus/blur for placeholder
+      editor.value.addEventListener('focus', () => {
+        if (editor.value.innerHTML === `<div class="text-gray-400">${props.placeholder}</div>`) {
+          editor.value.innerHTML = ''
+        }
+      })
+      
+      editor.value.addEventListener('blur', () => {
+        if (!editor.value.innerHTML.trim()) {
+          editor.value.innerHTML = `<div class="text-gray-400">${props.placeholder}</div>`
+        }
+      })
     }
   })
 })

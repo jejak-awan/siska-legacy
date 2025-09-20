@@ -76,7 +76,7 @@
                 <p><span class="font-medium">Jenjang:</span> {{ schoolProfile.jenjang || '-' }}</p>
                 <p><span class="font-medium">Status:</span> {{ schoolProfile.status || '-' }}</p>
                 <p><span class="font-medium">Akreditasi:</span> {{ schoolProfile.akreditasi || '-' }}</p>
-              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -247,7 +247,7 @@
             <div class="space-y-6">
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Sejarah Sekolah</label>
-                <SimpleTextEditor 
+                <RichTextEditor 
                   v-model="form.sejarah"
                   placeholder="Masukkan sejarah sekolah"
                   :height="180"
@@ -255,7 +255,7 @@
         </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Prestasi Sekolah</label>
-                <SimpleTextEditor 
+                <RichTextEditor 
                   v-model="form.prestasi"
                   placeholder="Masukkan prestasi sekolah"
                   :height="180"
@@ -263,7 +263,7 @@
       </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Visi</label>
-                <SimpleTextEditor 
+                <RichTextEditor 
                   v-model="form.visi"
                   placeholder="Masukkan visi sekolah"
                   :height="120"
@@ -271,7 +271,7 @@
         </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Misi</label>
-                <SimpleTextEditor 
+                <RichTextEditor 
                   v-model="form.misi"
                   placeholder="Masukkan misi sekolah"
                   :height="180"
@@ -279,7 +279,7 @@
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Tujuan</label>
-                <SimpleTextEditor 
+                <RichTextEditor 
                   v-model="form.tujuan"
                   placeholder="Masukkan tujuan sekolah"
                   :height="120"
@@ -478,7 +478,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import api from '@/services/api'
-import SimpleTextEditor from '@/components/ui/SimpleTextEditor.vue'
+import RichTextEditor from '@/components/editor/RichTextEditor.vue'
 
 const authStore = useAuthStore()
 
