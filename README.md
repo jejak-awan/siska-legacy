@@ -253,19 +253,34 @@ php artisan storage:link
 ```bash
 cd frontend
 npm install
-npm run dev
+image.pngnpm run dev  # Runs on http://localhost:3000
 ```
 
-4. **Docker Setup (Optional)**
+4. **Development Servers**
 ```bash
-# Start all services with Docker
-docker-compose up -d
+# Backend API (Laravel)
+cd backend && php artisan serve --port=8000
+# Access: http://localhost:8000/api/
 
-# View logs
-docker-compose logs -f
+# Alternative Swagger Documentation
+cd backend && php artisan serve --port=8080
+# Access: http://localhost:8080/api/documentation
 
-# Stop services
-docker-compose down
+# Frontend Component Documentation
+cd frontend && npm run storybook
+# Access: http://localhost:6006
+```
+
+5. **Production Build (Nginx Native)**
+```bash
+# Build frontend for production
+cd frontend
+npm run build
+
+# Nginx configuration already set up at /etc/nginx/sites-available/siska
+# Frontend: https://siska.local (serves static files)
+# Backend API: https://siska.local/api/ (proxy to Laravel port 8000)
+# Swagger UI: https://siska.local/api/documentation
 ```
 
 5. **Configure Environment**
@@ -428,25 +443,33 @@ docker-compose down
 ### **🔧 Automated Documentation Tools**
 
 #### **API Documentation (Swagger/OpenAPI)**
-- **Swagger UI**: `http://localhost:8000/api/documentation` (Backend running)
-- **Swagger UI (Alt)**: `http://localhost:8080/api/documentation` (Alternative port)
+- **Swagger UI**: `http://localhost:8080/api/documentation` (Primary documentation port)
+- **Swagger UI (Alt)**: `http://localhost:8000/api/documentation` (Backend integrated)
 - **OpenAPI Spec**: `http://localhost:8000/api/docs` (JSON format)
 - **Features**: Interactive API testing, Request/Response examples, Authentication testing
 
 #### **Frontend Component Documentation (Storybook)**
-- **Storybook UI**: `http://localhost:6006` (Frontend running)
+- **Storybook UI**: `http://localhost:6006` (Component documentation)
 - **Features**: Component playground, Interactive testing, Design system documentation
 - **Available Stories**: Button, Card, StatCard, ChartCard, ThemeToggle
 
 #### **Quick Start Documentation**
 ```bash
-# Start API Documentation
-cd backend && php artisan serve
+# Development Environment
+# API Documentation (Primary)
+cd backend && php artisan serve --port=8000
 # Visit: http://localhost:8000/api/documentation
 
-# Start Component Documentation  
+# API Documentation (Alternative)
+cd backend && php artisan serve --port=8080
+# Visit: http://localhost:8080/api/documentation
+
+# Component Documentation
 cd frontend && npm run storybook
 # Visit: http://localhost:6006
+
+# Production Environment
+# All documentation available at: https://siska.local/api/documentation
 ```
 
 ### **📋 Manual Documentation**

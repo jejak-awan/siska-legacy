@@ -436,12 +436,19 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore()
   
+  console.log('🛣️ Router guard - navigating to:', to.path)
+  console.log('🛣️ Auth status:', authStore.isAuthenticated)
+  console.log('🛣️ User role:', authStore.userRole)
+  console.log('🛣️ Token exists:', !!authStore.token)
+  
   // Set page title
   document.title = to.meta.title || 'Sistem Kesiswaan'
   
   // Handle authentication
   if (to.meta.requiresAuth) {
+    console.log('🛣️ Route requires auth')
     if (!authStore.isAuthenticated) {
+      console.log('🛣️ Not authenticated, redirecting to login')
       // Not authenticated, redirect to login
       return next({
         path: '/login',
@@ -453,13 +460,15 @@ router.beforeEach(async (to, from, next) => {
     if (to.meta.roles && to.meta.roles.length > 0) {
       if (!authStore.hasAnyRole(to.meta.roles)) {
         // Access denied
-        console.warn(`Access denied to ${to.path} for role ${authStore.userRole}`)
+        console.warn(`🛣️ Access denied to ${to.path} for role ${authStore.userRole}`)
         return next('/dashboard')
       }
     }
   } else {
+    console.log('🛣️ Route does not require auth')
     // Route doesn't require auth
     if (to.path === '/login' && authStore.isAuthenticated) {
+      console.log('🛣️ Already authenticated, redirecting to dashboard')
       // Already authenticated, redirect to dashboard
       return next('/dashboard')
     }
@@ -467,6 +476,7 @@ router.beforeEach(async (to, from, next) => {
     // Let users stay on landing page even if authenticated
   }
   
+  console.log('🛣️ Navigation allowed')
   next()
 })
 

@@ -10,8 +10,10 @@ services:
       - ../backend:/var/www/backend
       - ../frontend:/var/www/frontend
     ports:
-      - "8000:8000" # Laravel
-      - "5173:5173" # Vite dev server
+      - "8000:8000" # Laravel Backend
+      - "3000:3000" # Frontend (Vite)
+      - "8080:8080" # Swagger Documentation
+      - "6006:6006" # Storybook
     environment:
       - DB_HOST=db
       - DB_DATABASE=kesiswaan

@@ -125,18 +125,20 @@ export const useAuthStore = defineStore('auth', () => {
   const initialize = async () => {
     console.log('🔐 Initializing auth store...')
     console.log('Token from localStorage:', token.value ? 'exists' : 'not found')
+    console.log('Token value:', token.value)
     
     if (token.value) {
       // Set authorization header
       api.defaults.headers.common['Authorization'] = `Bearer ${token.value}`
-      console.log('✅ Authorization header set')
+      console.log('✅ Authorization header set:', `Bearer ${token.value}`)
       
       // Try to restore user data from localStorage first
       const savedUserData = localStorage.getItem('user_data')
+      console.log('Saved user data from localStorage:', savedUserData ? 'exists' : 'not found')
       if (savedUserData) {
         try {
           user.value = JSON.parse(savedUserData)
-          console.log('✅ User data restored from localStorage')
+          console.log('✅ User data restored from localStorage:', user.value)
         } catch (error) {
           console.error('❌ Error parsing saved user data:', error)
         }
@@ -156,6 +158,7 @@ export const useAuthStore = defineStore('auth', () => {
       }
     } else {
       console.log('ℹ️ No token found, user not authenticated')
+      console.log('localStorage auth_token:', localStorage.getItem('auth_token'))
     }
   }
 
