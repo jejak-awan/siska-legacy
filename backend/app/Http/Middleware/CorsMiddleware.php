@@ -22,14 +22,12 @@ class CorsMiddleware
             'http://localhost:8000',  // Backend (Laravel)
             'http://localhost:8080',  // Swagger Documentation
             'http://localhost:6006',  // Storybook
-            'https://localhost',
-            'https://siska.sekolahk2.id',  // Production domain
-            'https://siska.local'  // Local production
+            'https://localhost'
         ]);
         $origin = $request->headers->get('Origin');
         
         // Check if origin is allowed
-        $allowedOrigin = in_array($origin, $allowedOrigins) ? $origin : 'https://siska.sekolahk2.id';
+        $allowedOrigin = in_array($origin, $allowedOrigins) ? $origin : 'http://localhost:3000';
         
         // Handle preflight requests
         if ($request->isMethod('OPTIONS')) {

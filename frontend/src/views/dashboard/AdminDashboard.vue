@@ -12,6 +12,18 @@
             <p class="text-sm text-muted-foreground">Kelola sistem kesiswaan dan penilaian karakter dinamis</p>
           </div>
           <div class="flex items-center space-x-4">
+            <!-- Real-time Connection Status -->
+            <div class="flex items-center space-x-2">
+              <div class="flex items-center space-x-1">
+                <div 
+                  class="w-2 h-2 rounded-full"
+                  :class="isConnected ? 'bg-green-500' : 'bg-red-500'"
+                ></div>
+                <span class="text-xs text-muted-foreground">
+                  {{ isConnected ? 'Live' : 'Offline' }}
+                </span>
+              </div>
+            </div>
             <div class="text-right">
               <p class="text-sm text-muted-foreground">Terakhir Update</p>
               <p class="text-sm font-medium text-foreground">{{ formatTime(new Date()) }}</p>
@@ -478,13 +490,17 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { useAuthStore } from '../../stores/auth'
+import { useRealtime } from '../../composables/useRealtime'
 import StatCard from '../../components/ui/StatCard.vue'
 import ChartCard from '../../components/ui/ChartCard.vue'
 import api from '../../services/api'
 
 const authStore = useAuthStore()
+
+// Real-time functionality
+const { isConnected, connectionError } = useRealtime()
 
 // State
 const stats = ref({
@@ -699,9 +715,61 @@ const formatTime = (date) => {
   }).format(new Date(date))
 }
 
+// Real-time event handlers
+const handleKreditPoinCreated = (event) => {
+  console.log('📊 Admin Dashboard: Kredit Poin Created', event.detail)
+  // Refresh stats when new kredit poin is created
+  fetchStats()
+  // Show notification
+  showNotification('Kredit Poin Baru', 'Kredit poin baru telah ditambahkan dan menunggu persetujuan')
+}
+
+const handlePresensiCreated = (event) => {
+  console.log('📅 Admin Dashboard: Presensi Created', event.detail)
+  // Refresh stats when new presensi is created
+  fetchStats()
+  // Show notification
+  showNotification('Presensi Baru', 'Data presensi baru telah ditambahkan')
+}
+
+const handleDashboardStatsUpdated = (event) => {
+  console.log('📈 Admin Dashboard: Stats Updated', event.detail)
+  // Update stats with real-time data
+  if (event.detail.stats) {
+    stats.value = { ...stats.value, ...event.detail.stats }
+  }
+}
+
+const showNotification = (title, message) => {
+  // Simple browser notification
+  if ('Notification' in window && Notification.permission === 'granted') {
+    new Notification(title, {
+      body: message,
+      icon: '/favicon.ico'
+    })
+  }
+}
+
 // Lifecycle
 onMounted(() => {
   fetchStats()
   fetchActivities()
+  
+  // Request notification permission
+  if ('Notification' in window && Notification.permission === 'default') {
+    Notification.requestPermission()
+  }
+  
+  // Add real-time event listeners
+  window.addEventListener('admin-kredit-poin-created', handleKreditPoinCreated)
+  window.addEventListener('admin-presensi-created', handlePresensiCreated)
+  window.addEventListener('admin-dashboard-stats-updated', handleDashboardStatsUpdated)
+})
+
+onUnmounted(() => {
+  // Remove event listeners
+  window.removeEventListener('admin-kredit-poin-created', handleKreditPoinCreated)
+  window.removeEventListener('admin-presensi-created', handlePresensiCreated)
+  window.removeEventListener('admin-dashboard-stats-updated', handleDashboardStatsUpdated)
 })
 </script>

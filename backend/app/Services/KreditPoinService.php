@@ -7,6 +7,7 @@ use App\Models\KategoriKreditPoin;
 use App\Models\Siswa;
 use App\Models\User;
 use App\Services\NotificationService;
+use App\Events\KreditPoinCreated;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -49,6 +50,9 @@ class KreditPoinService
 
             // Send notification to admin for approval
             $this->sendApprovalNotification($kreditPoin);
+
+            // Broadcast event for real-time updates
+            event(new KreditPoinCreated($kreditPoin));
 
             DB::commit();
             return $kreditPoin;

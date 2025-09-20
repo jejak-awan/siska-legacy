@@ -6,6 +6,7 @@ use App\Models\Presensi;
 use App\Models\JadwalPresensi;
 use App\Models\User;
 use App\Services\NotificationService;
+use App\Events\PresensiCreated;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -61,6 +62,9 @@ class PresensiService
 
             // Send notification if late or absent
             $this->sendAttendanceNotification($presensi);
+
+            // Broadcast event for real-time updates
+            event(new PresensiCreated($presensi));
 
             DB::commit();
             return $presensi;

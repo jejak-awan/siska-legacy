@@ -10,6 +10,7 @@ use App\Models\Presensi;
 use App\Models\KreditPoin;
 use App\Models\Notifikasi;
 use App\Models\Kelas;
+use App\Events\DashboardStatsUpdated;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -70,6 +71,9 @@ class DashboardController extends Controller
                     'today' => Notifikasi::whereDate('created_at', today())->count(),
                 ]
             ];
+
+            // Broadcast stats update for real-time dashboard
+            event(new DashboardStatsUpdated($stats, 'admin'));
 
             return response()->json([
                 'message' => 'Admin dashboard statistics retrieved successfully',
