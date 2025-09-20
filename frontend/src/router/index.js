@@ -1,11 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 
-// Import views
+// Import critical views (loaded immediately)
 import LoginView from '../views/auth/LoginView.vue'
 import DashboardView from '../views/dashboard/DashboardView.vue'
 
-// Import dashboard components for different roles
+// Import dashboard components for different roles (critical for initial load)
 import AdminDashboard from '../views/dashboard/AdminDashboard.vue'
 import GuruDashboard from '../views/dashboard/GuruDashboard.vue'
 import SiswaDashboard from '../views/dashboard/SiswaDashboard.vue'
@@ -14,6 +14,30 @@ import BKDashboard from '../views/dashboard/BKDashboard.vue'
 import OSISDashboard from '../views/dashboard/OSISDashboard.vue'
 import EkstrakurikulerDashboard from '../views/dashboard/EkstrakurikulerDashboard.vue'
 import OrangTuaDashboard from '../views/dashboard/OrangTuaDashboard.vue'
+
+// Lazy loading functions with preloading
+const lazyLoad = (path) => () => import(/* webpackChunkName: "views" */ `../views/${path}.vue`)
+
+// Preload critical routes after initial load
+const preloadCriticalRoutes = () => {
+  // Preload commonly used routes after 2 seconds
+  setTimeout(() => {
+    import('../views/users/UsersView.vue')
+    import('../views/siswa/SiswaView.vue')
+    import('../views/presensi/PresensiView.vue')
+    import('../views/kredit-poin/KreditPoinView.vue')
+  }, 2000)
+}
+
+// Preload secondary routes after 5 seconds
+const preloadSecondaryRoutes = () => {
+  setTimeout(() => {
+    import('../views/guru/GuruView.vue')
+    import('../views/bk/BKView.vue')
+    import('../views/osis/OSISView.vue')
+    import('../views/ekstrakurikuler/EkstrakurikulerView.vue')
+  }, 5000)
+}
 
 const routes = [
   {
@@ -61,7 +85,7 @@ const routes = [
       {
         path: 'users',
         name: 'Users',
-        component: () => import('../views/users/UsersView.vue'),
+        component: lazyLoad('users/UsersView'),
         meta: { 
           requiresAuth: true,
           roles: ['admin'],
@@ -81,7 +105,7 @@ const routes = [
       {
         path: 'siswa',
         name: 'Siswa',
-        component: () => import('../views/siswa/SiswaView.vue'),
+        component: lazyLoad('siswa/SiswaView'),
         meta: { 
           requiresAuth: true,
           roles: ['admin', 'guru', 'wali_kelas', 'bk', 'osis', 'ekstrakurikuler'],
@@ -214,7 +238,7 @@ const routes = [
       {
         path: 'presensi',
         name: 'Presensi',
-        component: () => import('../views/presensi/PresensiView.vue'),
+        component: lazyLoad('presensi/PresensiView'),
         meta: { 
           requiresAuth: true,
           roles: ['admin', 'guru', 'wali_kelas', 'bk'],
@@ -224,7 +248,7 @@ const routes = [
       {
         path: 'kredit-poin',
         name: 'KreditPoin',
-        component: () => import('../views/kredit-poin/KreditPoinView.vue'),
+        component: lazyLoad('kredit-poin/KreditPoinView'),
         meta: { 
           requiresAuth: true,
           roles: ['admin', 'wali_kelas', 'bk'],
@@ -478,6 +502,12 @@ router.beforeEach(async (to, from, next) => {
   
   console.log('🛣️ Navigation allowed')
   next()
+})
+
+// Initialize preloading after router is created
+router.onReady(() => {
+  preloadCriticalRoutes()
+  preloadSecondaryRoutes()
 })
 
 export default router

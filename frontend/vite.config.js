@@ -25,19 +25,67 @@ export default defineConfig({
     }
   },
   build: {
-    commonjsOptions: {
-      transformMixedEsModules: true,
-      include: [/node_modules/]
-    },
+    target: 'es2015',
+    minify: 'terser',
+    sourcemap: false,
     rollupOptions: {
       external: ['fs', 'path'],
       output: {
         globals: {
           fs: 'fs',
           path: 'path'
+        },
+        manualChunks: {
+          // Vendor chunks
+          'vue-vendor': ['vue', 'vue-router', 'pinia'],
+          'ui-vendor': ['@headlessui/vue', 'lucide-vue-next', '@heroicons/vue'],
+          'chart-vendor': ['chart.js', 'vue-chartjs'],
+          'form-vendor': ['vee-validate', 'yup'],
+          'utils-vendor': ['axios', 'date-fns', 'lodash-es'],
+          'editor-vendor': ['quill', 'vue-quill-editor'],
+          'pdf-vendor': ['jspdf', 'jspdf-autotable'],
+          'realtime-vendor': ['laravel-echo', 'pusher-js']
+        },
+        chunkFileNames: (chunkInfo) => {
+          const facadeModuleId = chunkInfo.facadeModuleId
+          if (facadeModuleId) {
+            const fileName = facadeModuleId.split('/').pop().replace('.vue', '')
+            return `js/[name]-[hash].js`
+          }
+          return `js/[name]-[hash].js`
+        },
+        entryFileNames: 'js/[name]-[hash].js',
+        assetFileNames: (assetInfo) => {
+          const info = assetInfo.name.split('.')
+          const ext = info[info.length - 1]
+          if (/\.(css)$/.test(assetInfo.name)) {
+            return `css/[name]-[hash].${ext}`
+          }
+          if (/\.(png|jpe?g|svg|gif|tiff|bmp|ico)$/i.test(assetInfo.name)) {
+            return `images/[name]-[hash].${ext}`
+          }
+          if (/\.(woff2?|eot|ttf|otf)$/i.test(assetInfo.name)) {
+            return `fonts/[name]-[hash].${ext}`
+          }
+          return `assets/[name]-[hash].${ext}`
         }
       }
-    }
+    },
+    commonjsOptions: {
+      transformMixedEsModules: true,
+      include: [/node_modules/]
+    },
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+        pure_funcs: ['console.log', 'console.info', 'console.debug', 'console.warn']
+      },
+      mangle: {
+        safari10: true
+      }
+    },
+    chunkSizeWarningLimit: 1000
   },
   optimizeDeps: {
     exclude: ['image-compression']
