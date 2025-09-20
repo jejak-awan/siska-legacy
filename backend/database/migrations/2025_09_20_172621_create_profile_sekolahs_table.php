@@ -32,6 +32,7 @@ return new class extends Migration
             $table->json('sosial_media')->nullable(); // JSON untuk sosial media
             $table->text('sejarah')->nullable();
             $table->text('prestasi')->nullable();
+            $table->json('struktur_organisasi')->nullable(); // JSON untuk struktur organisasi
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });

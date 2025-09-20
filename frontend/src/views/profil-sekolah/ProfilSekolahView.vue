@@ -15,10 +15,10 @@
     <!-- Main Content -->
     <div v-else class="space-y-6">
       <!-- School Profile Overview -->
-      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <div class="flex items-center space-x-6">
-          <!-- School Logo -->
-          <div class="flex-shrink-0">
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div class="flex items-center space-x-6">
+            <!-- School Logo -->
+            <div class="flex-shrink-0">
             <div 
               class="w-24 h-24 bg-gray-100 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-300 cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-colors"
               @click="triggerLogoUpload"
@@ -59,14 +59,16 @@
               class="hidden"
             >
             <p class="text-xs text-gray-500 mt-1 text-center">Click or drag to upload</p>
-          </div>
-          
-          <!-- Basic Info -->
-          <div class="flex-1">
-            <h2 class="text-2xl font-bold text-gray-900 mb-2">{{ schoolProfile.nama || 'Nama Sekolah' }}</h2>
-            <p class="text-gray-600 mb-1">{{ schoolProfile.npsn || 'NPSN: -' }}</p>
-            <p class="text-gray-600 mb-1">{{ schoolProfile.alamat || 'Alamat belum diisi' }}</p>
-            <p class="text-gray-600">{{ schoolProfile.telepon || 'Telepon: -' }}</p>
+            <p class="text-xs text-gray-400 mt-1 text-center">Max 2MB • JPG, PNG, GIF</p>
+            <p class="text-xs text-gray-400 text-center">Recommended: 200x200px</p>
+            </div>
+            
+            <!-- Basic Info -->
+            <div class="flex-1">
+              <h2 class="text-2xl font-bold text-gray-900 mb-2">{{ schoolProfile.nama || 'Nama Sekolah' }}</h2>
+              <p class="text-gray-600 mb-1">{{ schoolProfile.npsn || 'NPSN: -' }}</p>
+              <p class="text-gray-600 mb-1">{{ schoolProfile.alamat || 'Alamat belum diisi' }}</p>
+              <p class="text-gray-600">{{ schoolProfile.telepon || 'Telepon: -' }}</p>
           </div>
         </div>
       </div>
@@ -119,43 +121,43 @@
                     required
                   >
                 </div>
-                <div>
+            <div>
                   <label class="block text-sm font-medium text-gray-700 mb-2">NPSN</label>
-                  <input 
-                    v-model="form.npsn"
-                    type="text" 
+              <input
+                v-model="form.npsn"
+                type="text"
                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                    placeholder="Masukkan NPSN"
-                  >
-                </div>
-                <div>
+                placeholder="Masukkan NPSN"
+              >
+            </div>
+            <div>
                   <label class="block text-sm font-medium text-gray-700 mb-2">Alamat</label>
-                  <textarea 
-                    v-model="form.alamat"
+              <textarea
+                v-model="form.alamat"
                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                    rows="3" 
+                rows="3"
                     placeholder="Masukkan alamat sekolah"
-                  ></textarea>
-                </div>
+              ></textarea>
+            </div>
               </div>
               <div class="space-y-4">
-                <div>
+              <div>
                   <label class="block text-sm font-medium text-gray-700 mb-2">Telepon</label>
-                  <input 
-                    v-model="form.telepon"
-                    type="text" 
+                <input
+                  v-model="form.telepon"
+                  type="text"
                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                    placeholder="Masukkan nomor telepon"
-                  >
-                </div>
-                <div>
+                  placeholder="Masukkan nomor telepon"
+                >
+              </div>
+              <div>
                   <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                  <input 
-                    v-model="form.email"
-                    type="email" 
+                <input
+                  v-model="form.email"
+                  type="email"
                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                    placeholder="Masukkan email sekolah"
-                  >
+                  placeholder="Masukkan email sekolah"
+                >
                 </div>
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-2">Website</label>
@@ -208,9 +210,9 @@
                   </select>
                 </div>
               </div>
+              </div>
             </div>
-          </div>
-
+            
           <!-- Visi Misi & Program Unggulan Tab -->
           <div v-if="activeTab === 'visi-misi'" class="space-y-6">
             <div class="flex justify-between items-center">
@@ -227,115 +229,226 @@
             
             <div class="space-y-6">
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Kepala Sekolah</label>
-                <input 
-                  v-model="form.kepala_sekolah"
-                  type="text" 
-                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                  placeholder="Masukkan nama kepala sekolah"
-                >
-              </div>
-              
-              <!-- Foto Kepala Sekolah -->
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Foto Kepala Sekolah</label>
-                <div class="flex items-center space-x-4">
-                  <div 
-                    class="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-300 cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-colors"
-                    @click="triggerHeadmasterUpload"
-                    @dragover.prevent
-                    @drop.prevent="handleHeadmasterDrop"
-                  >
-                    <div v-if="headmasterUploading" class="flex flex-col items-center">
-                      <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
-                    </div>
-                    <div v-else-if="!schoolProfile.foto_kepala_sekolah && !headmasterPreview" class="flex flex-col items-center">
-                      <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                      </svg>
-                    </div>
-                    <div v-else class="relative group">
-                      <img 
-                        :src="headmasterPreview || schoolProfile.foto_kepala_sekolah" 
-                        :alt="form.kepala_sekolah" 
-                        class="w-full h-full object-cover rounded-lg"
-                      >
-                      <div class="absolute inset-0 bg-black bg-opacity-50 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button 
-                          @click.stop="triggerHeadmasterUpload"
-                          class="text-white text-xs bg-blue-600 px-2 py-1 rounded hover:bg-blue-700"
-                        >
-                          Change
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="flex-1">
-                    <p class="text-sm text-gray-600">Upload foto kepala sekolah</p>
-                    <p class="text-xs text-gray-500">Format: JPG, PNG, GIF (Max 2MB)</p>
-                  </div>
-                </div>
-                <input 
-                  ref="headmasterInput"
-                  type="file" 
-                  accept="image/*" 
-                  @change="handleHeadmasterUpload"
-                  class="hidden"
-                >
-              </div>
-              <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Visi</label>
-                <textarea 
+                <RichTextEditor 
                   v-model="form.visi"
-                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                  rows="4" 
                   placeholder="Masukkan visi sekolah"
-                ></textarea>
-              </div>
+                  :height="120"
+                />
+        </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Misi</label>
-                <textarea 
+                <RichTextEditor 
                   v-model="form.misi"
-                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                  rows="6" 
                   placeholder="Masukkan misi sekolah"
-                ></textarea>
-              </div>
+                  :height="180"
+                />
+      </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Tujuan</label>
-                <textarea 
+                <RichTextEditor 
                   v-model="form.tujuan"
-                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                  rows="4" 
                   placeholder="Masukkan tujuan sekolah"
-                ></textarea>
-              </div>
-              <div>
+                  :height="120"
+                />
+        </div>
+            <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Sejarah</label>
-                <textarea 
+                <RichTextEditor 
                   v-model="form.sejarah"
-                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                  rows="4" 
                   placeholder="Masukkan sejarah sekolah"
-                ></textarea>
-              </div>
-              <div>
+                  :height="180"
+                />
+            </div>
+            <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Prestasi</label>
-                <textarea 
+                <RichTextEditor 
                   v-model="form.prestasi"
-                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                  rows="4" 
                   placeholder="Masukkan prestasi sekolah"
-                ></textarea>
+                  :height="180"
+                />
               </div>
             </div>
-          </div>
-
+            </div>
+            
           <!-- Struktur Organisasi Tab -->
           <div v-if="activeTab === 'struktur'" class="space-y-6">
-            <h3 class="text-lg font-semibold text-gray-900">Struktur Organisasi</h3>
-            <div class="bg-gray-50 p-4 rounded-lg">
-              <p class="text-gray-600">Fitur struktur organisasi akan segera tersedia. Anda dapat mengelola hierarki organisasi sekolah di sini.</p>
+            <!-- Kepala Sekolah Section -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <h3 class="text-lg font-semibold text-gray-900 mb-4">Kepala Sekolah</h3>
+              <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Nama Kepala Sekolah</label>
+              <input
+                    v-model="form.kepala_sekolah"
+                type="text"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                placeholder="Masukkan nama kepala sekolah"
+              >
+            </div>
+            <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Foto Kepala Sekolah</label>
+                  <div class="flex items-center space-x-4">
+                    <div 
+                      class="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-300 cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-colors"
+                      @click="triggerHeadmasterUpload"
+                      @dragover.prevent
+                      @drop.prevent="handleHeadmasterDrop"
+                    >
+                      <div v-if="headmasterUploading" class="flex flex-col items-center">
+                        <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+                      </div>
+                      <div v-else-if="!schoolProfile.foto_kepala_sekolah && !headmasterPreview" class="flex flex-col items-center">
+                        <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                        </svg>
+                      </div>
+                      <div v-else class="relative group">
+                        <img 
+                          :src="headmasterPreview || schoolProfile.foto_kepala_sekolah" 
+                          :alt="form.kepala_sekolah" 
+                          class="w-full h-full object-cover rounded-lg"
+                        >
+                        <div class="absolute inset-0 bg-black bg-opacity-50 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                          <button 
+                            @click.stop="triggerHeadmasterUpload"
+                            class="text-white text-xs bg-blue-600 px-2 py-1 rounded hover:bg-blue-700"
+                          >
+                            Change
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="flex-1">
+                      <p class="text-sm text-gray-600">Upload foto kepala sekolah</p>
+                      <p class="text-xs text-gray-500">Format: JPG, PNG, GIF (Max 2MB)</p>
+                      <p class="text-xs text-gray-400">Recommended: 150x150px</p>
+                    </div>
+                  </div>
+                  <input 
+                    ref="headmasterInput"
+                    type="file" 
+                    accept="image/*" 
+                    @change="handleHeadmasterUpload"
+                    class="hidden"
+                  >
+                </div>
+              </div>
+            </div>
+            
+            <!-- Struktur Organisasi Management -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-gray-900">Struktur Organisasi</h3>
+                <button 
+                  @click="addStructurePosition"
+                  class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                >
+                  <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                  </svg>
+                  Tambah Jabatan
+                </button>
+              </div>
+
+              <!-- Structure Positions Table -->
+              <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                  <thead class="bg-gray-50">
+                    <tr>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jabatan</th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Level</th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody class="bg-white divide-y divide-gray-200">
+                    <tr v-for="(position, index) in structurePositions" :key="index">
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <input 
+                          v-model="position.jabatan"
+                          type="text"
+                          class="w-full px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                          placeholder="Nama jabatan"
+                        >
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <input 
+                          v-model="position.nama"
+                          type="text"
+                          class="w-full px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                          placeholder="Nama lengkap"
+                        >
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <select 
+                          v-model="position.level"
+                          class="w-full px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        >
+                          <option value="1">Level 1 (Pimpinan)</option>
+                          <option value="2">Level 2 (Wakil)</option>
+                          <option value="3">Level 3 (Kepala Bagian)</option>
+                          <option value="4">Level 4 (Staff)</option>
+                        </select>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <select 
+                          v-model="position.status"
+                          class="w-full px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        >
+                          <option value="aktif">Aktif</option>
+                          <option value="tidak_aktif">Tidak Aktif</option>
+                        </select>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <button 
+                          @click="removeStructurePosition(index)"
+                          class="text-red-600 hover:text-red-900"
+                        >
+                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                          </svg>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Auto Design Preview -->
+              <div class="mt-6">
+                <div class="flex items-center justify-between mb-4">
+                  <h4 class="text-md font-medium text-gray-900">Preview Struktur Organisasi</h4>
+                  <button 
+                    @click="generateStructurePreview"
+                    class="px-3 py-1 bg-green-600 text-white rounded text-sm hover:bg-green-700 transition-colors"
+                  >
+                    Generate Preview
+                  </button>
+                </div>
+                <div class="bg-gray-50 rounded-lg p-4 min-h-[200px]">
+                  <div v-if="structurePreview" v-html="structurePreview" class="structure-preview"></div>
+                  <div v-else class="text-center text-gray-500 py-8">
+                    <svg class="w-12 h-12 mx-auto mb-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                    </svg>
+                    <p>Klik "Generate Preview" untuk melihat struktur organisasi</p>
+                  </div>
+                </div>
+            </div>
+            
+              <!-- Save Structure Button -->
+              <div class="mt-6 flex justify-end">
+              <button
+                  @click="saveStructure"
+                :disabled="loading"
+                  class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <span v-if="loading">Menyimpan...</span>
+                  <span v-else>Simpan Struktur</span>
+              </button>
+              </div>
             </div>
           </div>
         </div>
@@ -348,6 +461,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import api from '@/services/api'
+import RichTextEditor from '@/components/editor/RichTextEditor.vue'
 
 const authStore = useAuthStore()
 
@@ -361,6 +475,8 @@ const logoPreview = ref(null)
 const headmasterPreview = ref(null)
 const logoInput = ref(null)
 const headmasterInput = ref(null)
+const structurePositions = ref([])
+const structurePreview = ref('')
 
 const form = reactive({
   nama: '',
@@ -601,6 +717,129 @@ const uploadHeadmasterPhoto = async (file) => {
     headmasterPreview.value = null
   } finally {
     headmasterUploading.value = false
+  }
+}
+
+// Structure Organization Methods
+const addStructurePosition = () => {
+  structurePositions.value.push({
+    jabatan: '',
+    nama: '',
+    level: '4',
+    status: 'aktif'
+  })
+}
+
+const removeStructurePosition = (index) => {
+  structurePositions.value.splice(index, 1)
+  generateStructurePreview() // Auto update preview
+}
+
+const generateStructurePreview = () => {
+  if (structurePositions.value.length === 0) {
+    structurePreview.value = ''
+    return
+  }
+
+  // Group by level
+  const groupedByLevel = structurePositions.value
+    .filter(pos => pos.jabatan && pos.nama && pos.status === 'aktif')
+    .reduce((acc, pos) => {
+      if (!acc[pos.level]) acc[pos.level] = []
+      acc[pos.level].push(pos)
+      return acc
+    }, {})
+
+  // Generate HTML structure
+  let html = '<div class="structure-org">'
+  
+  // Level 1 (Pimpinan) - Center top
+  if (groupedByLevel['1']) {
+    html += '<div class="level-1 flex justify-center mb-8">'
+    groupedByLevel['1'].forEach(pos => {
+      html += `
+        <div class="position-card bg-blue-100 border-2 border-blue-300 rounded-lg p-4 mx-2 text-center min-w-[200px]">
+          <div class="font-bold text-blue-800">${pos.jabatan}</div>
+          <div class="text-sm text-blue-600 mt-1">${pos.nama}</div>
+        </div>
+      `
+    })
+    html += '</div>'
+  }
+
+  // Level 2 (Wakil) - Below level 1
+  if (groupedByLevel['2']) {
+    html += '<div class="level-2 flex justify-center mb-6">'
+    groupedByLevel['2'].forEach(pos => {
+      html += `
+        <div class="position-card bg-green-100 border-2 border-green-300 rounded-lg p-3 mx-2 text-center min-w-[180px]">
+          <div class="font-semibold text-green-800">${pos.jabatan}</div>
+          <div class="text-sm text-green-600 mt-1">${pos.nama}</div>
+        </div>
+      `
+    })
+    html += '</div>'
+  }
+
+  // Level 3 (Kepala Bagian) - Below level 2
+  if (groupedByLevel['3']) {
+    html += '<div class="level-3 flex justify-center mb-4">'
+    groupedByLevel['3'].forEach(pos => {
+      html += `
+        <div class="position-card bg-yellow-100 border-2 border-yellow-300 rounded-lg p-3 mx-2 text-center min-w-[160px]">
+          <div class="font-medium text-yellow-800">${pos.jabatan}</div>
+          <div class="text-sm text-yellow-600 mt-1">${pos.nama}</div>
+        </div>
+      `
+    })
+    html += '</div>'
+  }
+
+  // Level 4 (Staff) - Bottom
+  if (groupedByLevel['4']) {
+    html += '<div class="level-4 flex justify-center flex-wrap">'
+    groupedByLevel['4'].forEach(pos => {
+      html += `
+        <div class="position-card bg-gray-100 border-2 border-gray-300 rounded-lg p-2 mx-1 mb-2 text-center min-w-[140px]">
+          <div class="font-medium text-gray-800 text-sm">${pos.jabatan}</div>
+          <div class="text-xs text-gray-600 mt-1">${pos.nama}</div>
+        </div>
+      `
+    })
+    html += '</div>'
+  }
+
+  html += '</div>'
+  structurePreview.value = html
+}
+
+const saveStructure = async () => {
+  try {
+    loading.value = true
+    
+    const response = await api.put('/profile-sekolah/school-details', {
+      kepala_sekolah: form.kepala_sekolah,
+      visi: form.visi,
+      misi: form.misi,
+      tujuan: form.tujuan,
+      sejarah: form.sejarah,
+      prestasi: form.prestasi,
+      kontak_lain: form.kontakLain,
+      sosial_media: form.sosialMedia,
+      struktur_organisasi: structurePositions.value
+    })
+    
+    schoolProfile.value = response.data.data
+    showNotification('Berhasil', 'Struktur organisasi berhasil disimpan', 'success')
+  } catch (error) {
+    console.error('Error saving structure:', error)
+    if (error.response?.status === 422) {
+      showNotification('Validasi Error', 'Mohon periksa kembali data yang diisi', 'error')
+    } else {
+      showNotification('Error', 'Gagal menyimpan struktur organisasi', 'error')
+    }
+  } finally {
+    loading.value = false
   }
 }
 

@@ -29,12 +29,14 @@ class ProfileSekolah extends Model
         'sosial_media',
         'sejarah',
         'prestasi',
+        'struktur_organisasi',
         'is_active'
     ];
 
     protected $casts = [
         'kontak_lain' => 'array',
         'sosial_media' => 'array',
+        'struktur_organisasi' => 'array',
         'is_active' => 'boolean'
     ];
 

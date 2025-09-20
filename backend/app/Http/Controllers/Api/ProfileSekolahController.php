@@ -273,7 +273,8 @@ class ProfileSekolahController extends Controller
             'sejarah' => 'nullable|string',
             'prestasi' => 'nullable|string',
             'kontak_lain' => 'nullable|array',
-            'sosial_media' => 'nullable|array'
+            'sosial_media' => 'nullable|array',
+            'struktur_organisasi' => 'nullable|array'
         ]);
 
         if ($validator->fails()) {
@@ -295,7 +296,7 @@ class ProfileSekolahController extends Controller
             
             $profile->update($request->only([
                 'kepala_sekolah', 'visi', 'misi', 'tujuan', 
-                'sejarah', 'prestasi', 'kontak_lain', 'sosial_media'
+                'sejarah', 'prestasi', 'kontak_lain', 'sosial_media', 'struktur_organisasi'
             ]));
             
             return response()->json([
