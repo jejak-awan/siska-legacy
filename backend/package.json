@@ -1,0 +1,8 @@
+{
+  "name": "kesiswaan-backend",
+  "private": true,
+  "scripts": {
+    "postinstall": "echo 'Laravel backend dependencies installed.'"
+  },
+  "devDependencies": {}
+}
