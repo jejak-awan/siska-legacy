@@ -55,7 +55,7 @@ class UserController extends Controller
     public function index(Request $request): JsonResponse
     {
         $perPage = $request->get('per_page', 15);
-        $users = User::with(['role'])->paginate($perPage);
+        $users = User::with(['roles', 'guru', 'siswa'])->paginate($perPage);
         
         return response()->json($users);
     }
@@ -91,7 +91,7 @@ class UserController extends Controller
      */
     public function show(int $id): JsonResponse
     {
-        $user = User::with(['role'])->findOrFail($id);
+        $user = User::with(['roles', 'guru', 'siswa'])->findOrFail($id);
         
         return response()->json($user);
     }
