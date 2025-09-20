@@ -69,10 +69,10 @@
             :defaultOpen="true"
           >
             <SidebarItem
-              :to="'/dashboard/data-sekolah'"
+              :to="'/dashboard/profil-sekolah'"
               icon="building"
-              label="Data Sekolah"
-              :active="$route.path === '/dashboard/data-sekolah'"
+              label="Profil Sekolah"
+              :active="$route.path === '/dashboard/profil-sekolah'"
               :collapsed="sidebarCollapsed"
             />
             <SidebarItem

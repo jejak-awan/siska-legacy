@@ -2,7 +2,7 @@
   <div class="p-6">
     <!-- Header -->
     <div class="mb-6">
-      <h1 class="text-2xl font-bold text-gray-900 mb-2">Data Sekolah</h1>
+      <h1 class="text-2xl font-bold text-gray-900 mb-2">Profil Sekolah</h1>
       <p class="text-gray-600">Kelola informasi profil, visi misi, dan struktur organisasi sekolah</p>
     </div>
 

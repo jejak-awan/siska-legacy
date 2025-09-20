@@ -121,15 +121,15 @@ const routes = [
           title: 'Profil - Sistem Kesiswaan'
         }
       },
-      // Manajemen Data Sekolah
+      // Manajemen Profil Sekolah
       {
-        path: 'data-sekolah',
-        name: 'DataSekolah',
-        component: () => import('../views/data-sekolah/DataSekolahView.vue'),
+        path: 'profil-sekolah',
+        name: 'ProfilSekolah',
+        component: () => import('../views/profil-sekolah/ProfilSekolahView.vue'),
         meta: { 
           requiresAuth: true,
           roles: ['admin'],
-          title: 'Data Sekolah - Sistem Kesiswaan'
+          title: 'Profil Sekolah - Sistem Kesiswaan'
         }
       },
       {
