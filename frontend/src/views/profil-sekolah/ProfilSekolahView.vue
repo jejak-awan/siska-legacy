@@ -257,6 +257,7 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
+import api from '@/services/api'
 
 const authStore = useAuthStore()
 
@@ -275,42 +276,47 @@ const form = reactive({
   alamat: '',
   telepon: '',
   email: '',
+  website: '',
   jenjang: '',
   status: '',
   akreditasi: '',
-  kepalaSekolah: '',
+  kepala_sekolah: '',
   visi: '',
-  misi: ''
+  misi: '',
+  tujuan: '',
+  sejarah: '',
+  prestasi: '',
+  kontakLain: {},
+  sosialMedia: {}
 })
 
 // Methods
+const showNotification = (title, message, type = 'info') => {
+  // Simple browser notification
+  if ('Notification' in window && Notification.permission === 'granted') {
+    new Notification(title, {
+      body: message,
+      icon: '/favicon.ico'
+    })
+  }
+  
+  // Console log for debugging
+  console.log(`${type.toUpperCase()}: ${title} - ${message}`)
+}
+
 const loadSchoolProfile = async () => {
   try {
     loading.value = true
-    // TODO: Implement API call to load school profile
-    // const response = await api.get('/school/profile')
-    // schoolProfile.value = response.data
-    
-    // Mock data for now
-    schoolProfile.value = {
-      nama: 'SMA Negeri 1 Jakarta',
-      npsn: '20100123',
-      alamat: 'Jl. Budi Utomo No. 1, Jakarta Pusat',
-      telepon: '(021) 1234567',
-      email: 'info@sman1jakarta.sch.id',
-      jenjang: 'SMA',
-      status: 'Negeri',
-      akreditasi: 'A',
-      kepalaSekolah: 'Dr. John Doe, M.Pd',
-      visi: 'Menjadi sekolah unggulan yang menghasilkan lulusan berkarakter dan berprestasi',
-      misi: 'Menyelenggarakan pendidikan berkualitas dengan mengembangkan potensi siswa secara optimal'
-    }
+    const response = await api.get('/profile-sekolah')
+    schoolProfile.value = response.data.data
     
     // Populate form
     Object.assign(form, schoolProfile.value)
     
   } catch (error) {
     console.error('Error loading school profile:', error)
+    // Show error message
+    showNotification('Error', 'Gagal memuat profil sekolah', 'error')
   } finally {
     loading.value = false
   }
@@ -336,14 +342,27 @@ const loadStats = async () => {
 const updateBasicInfo = async () => {
   try {
     loading.value = true
-    // TODO: Implement API call to update basic info
-    // await api.put('/school/profile/basic', form)
+    const response = await api.put('/profile-sekolah/basic-info', {
+      nama: form.nama,
+      npsn: form.npsn,
+      alamat: form.alamat,
+      telepon: form.telepon,
+      email: form.email,
+      website: form.website,
+      jenjang: form.jenjang,
+      status: form.status,
+      akreditasi: form.akreditasi
+    })
     
-    console.log('Basic info updated:', form)
-    // Show success message
+    schoolProfile.value = response.data.data
+    showNotification('Berhasil', 'Informasi dasar sekolah berhasil diperbarui', 'success')
   } catch (error) {
     console.error('Error updating basic info:', error)
-    // Show error message
+    if (error.response?.status === 422) {
+      showNotification('Validasi Error', 'Mohon periksa kembali data yang diisi', 'error')
+    } else {
+      showNotification('Error', 'Gagal memperbarui informasi dasar sekolah', 'error')
+    }
   } finally {
     loading.value = false
   }
@@ -352,14 +371,26 @@ const updateBasicInfo = async () => {
 const updateSchoolDetails = async () => {
   try {
     loading.value = true
-    // TODO: Implement API call to update school details
-    // await api.put('/school/profile/details', form)
+    const response = await api.put('/profile-sekolah/school-details', {
+      kepala_sekolah: form.kepala_sekolah,
+      visi: form.visi,
+      misi: form.misi,
+      tujuan: form.tujuan,
+      sejarah: form.sejarah,
+      prestasi: form.prestasi,
+      kontak_lain: form.kontakLain,
+      sosial_media: form.sosialMedia
+    })
     
-    console.log('School details updated:', form)
-    // Show success message
+    schoolProfile.value = response.data.data
+    showNotification('Berhasil', 'Detail sekolah berhasil diperbarui', 'success')
   } catch (error) {
     console.error('Error updating school details:', error)
-    // Show error message
+    if (error.response?.status === 422) {
+      showNotification('Validasi Error', 'Mohon periksa kembali data yang diisi', 'error')
+    } else {
+      showNotification('Error', 'Gagal memperbarui detail sekolah', 'error')
+    }
   } finally {
     loading.value = false
   }

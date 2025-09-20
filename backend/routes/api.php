@@ -20,6 +20,7 @@ use App\Http\Controllers\Api\ImageController;
 use App\Http\Controllers\Api\DocumentationController;
 use App\Http\Controllers\Api\KategoriKreditPoinController;
 use App\Http\Controllers\Api\KelasController;
+use App\Http\Controllers\Api\ProfileSekolahController;
 
 /*
 |--------------------------------------------------------------------------
@@ -152,6 +153,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('role:admin,guru,wali_kelas,bk,osis,ekstrakurikuler')->group(function () {
         Route::apiResource('kelas', KelasController::class);
         Route::get('kelas-statistics', [KelasController::class, 'statistics']);
+    });
+
+    // Profile Sekolah routes
+    Route::middleware('role:admin')->group(function () {
+        Route::apiResource('profile-sekolah', ProfileSekolahController::class);
+        Route::put('profile-sekolah/basic-info', [ProfileSekolahController::class, 'updateBasicInfo']);
+        Route::put('profile-sekolah/school-details', [ProfileSekolahController::class, 'updateSchoolDetails']);
     });
     
     // Notification routes
