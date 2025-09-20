@@ -1,9 +1,5 @@
 <template>
-  <div>
-    <!-- School Header -->
-    <SchoolHeader />
-    
-    <div class="py-6">
+  <div class="py-6">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Page Header -->
         <div class="mb-8">
@@ -499,7 +495,7 @@ import { useAuthStore } from '../../stores/auth'
 import { useRealtime } from '../../composables/useRealtime'
 import StatCard from '../../components/ui/StatCard.vue'
 import ChartCard from '../../components/ui/ChartCard.vue'
-import SchoolHeader from '../../components/layout/SchoolHeader.vue'
+// import SchoolHeader from '../../components/layout/SchoolHeader.vue'
 import api from '../../services/api'
 
 const authStore = useAuthStore()

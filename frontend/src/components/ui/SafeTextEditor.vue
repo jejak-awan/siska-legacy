@@ -19,7 +19,7 @@
 
 <script setup>
 import { ref, onMounted, watch, nextTick } from 'vue'
-import Editor from '@tinymce/tinymce-vue'
+// import Editor from '@tinymce/tinymce-vue'
 
 const props = defineProps({
   modelValue: {

@@ -67,9 +67,16 @@
             <div class="flex-1">
               <h2 class="text-2xl font-bold text-gray-900 mb-2">{{ schoolProfile.nama || 'Nama Sekolah' }}</h2>
               <p v-if="schoolProfile.slogan" class="text-lg text-blue-600 font-medium mb-3 italic">"{{ schoolProfile.slogan }}"</p>
-              <p class="text-gray-600 mb-1">{{ schoolProfile.npsn || 'NPSN: -' }}</p>
-              <p class="text-gray-600 mb-1">{{ schoolProfile.alamat || 'Alamat belum diisi' }}</p>
-              <p class="text-gray-600">{{ schoolProfile.telepon || 'Telepon: -' }}</p>
+              <div class="space-y-1 text-sm text-gray-600">
+                <p><span class="font-medium">NPSN:</span> {{ schoolProfile.npsn || '-' }}</p>
+                <p><span class="font-medium">Alamat:</span> {{ schoolProfile.alamat || '-' }}</p>
+                <p><span class="font-medium">Telepon:</span> {{ schoolProfile.telepon || '-' }}</p>
+                <p><span class="font-medium">Email:</span> {{ schoolProfile.email || '-' }}</p>
+                <p><span class="font-medium">Website:</span> {{ schoolProfile.website || '-' }}</p>
+                <p><span class="font-medium">Jenjang:</span> {{ schoolProfile.jenjang || '-' }}</p>
+                <p><span class="font-medium">Status:</span> {{ schoolProfile.status || '-' }}</p>
+                <p><span class="font-medium">Akreditasi:</span> {{ schoolProfile.akreditasi || '-' }}</p>
+              </div>
           </div>
         </div>
       </div>
@@ -240,46 +247,46 @@
             <div class="space-y-6">
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Sejarah Sekolah</label>
-                <SafeTextEditor 
+                <SimpleTextEditor 
                   v-model="form.sejarah"
                   placeholder="Masukkan sejarah sekolah"
                   :height="180"
                 />
-              </div>
+        </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Prestasi Sekolah</label>
-                <SafeTextEditor 
+                <SimpleTextEditor 
                   v-model="form.prestasi"
                   placeholder="Masukkan prestasi sekolah"
                   :height="180"
                 />
-              </div>
+      </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Visi</label>
-                <SafeTextEditor 
+                <SimpleTextEditor 
                   v-model="form.visi"
                   placeholder="Masukkan visi sekolah"
                   :height="120"
                 />
-              </div>
-              <div>
+        </div>
+            <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Misi</label>
-                <SafeTextEditor 
+                <SimpleTextEditor 
                   v-model="form.misi"
                   placeholder="Masukkan misi sekolah"
                   :height="180"
                 />
-              </div>
-              <div>
+            </div>
+            <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Tujuan</label>
-                <SafeTextEditor 
+                <SimpleTextEditor 
                   v-model="form.tujuan"
                   placeholder="Masukkan tujuan sekolah"
                   :height="120"
                 />
               </div>
             </div>
-          </div>
+            </div>
             
           <!-- Struktur Organisasi Tab -->
           <div v-if="activeTab === 'struktur'" class="space-y-6">
@@ -471,7 +478,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import api from '@/services/api'
-import SafeTextEditor from '@/components/ui/SafeTextEditor.vue'
+import SimpleTextEditor from '@/components/ui/SimpleTextEditor.vue'
 
 const authStore = useAuthStore()
 
