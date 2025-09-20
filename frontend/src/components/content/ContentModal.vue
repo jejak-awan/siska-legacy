@@ -111,7 +111,7 @@
                 <label class="block text-sm font-medium text-foreground mb-2">
                   Konten *
                 </label>
-                <TiptapEditor
+                <CKEditor
                   v-model="form.content"
                   placeholder="Masukkan konten lengkap..."
                 />
@@ -196,7 +196,7 @@
 import { ref, reactive, watch, onMounted } from 'vue'
 import { useToast } from '../../plugins/toast.js'
 import Button from '../ui/Button.vue'
-import TiptapEditor from '../editor/TiptapEditor.vue'
+import CKEditor from '../editor/CKEditor.vue'
 import ImageUpload from '../upload/ImageUpload.vue'
 
 const props = defineProps({
