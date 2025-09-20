@@ -11,7 +11,16 @@
 
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted, nextTick } from 'vue'
-import tinymce from 'tinymce/tinymce'
+import tinymce from 'tinymce'
+
+// Import required plugins
+import 'tinymce/plugins/lists'
+import 'tinymce/plugins/link'
+import 'tinymce/plugins/paste'
+import 'tinymce/plugins/wordcount'
+
+// Import theme
+import 'tinymce/themes/silver'
 
 const props = defineProps({
   modelValue: {
@@ -55,14 +64,20 @@ const characterCount = computed(() => {
 
 // Initialize TinyMCE
 const initEditor = () => {
-  if (!editorElement.value) return
+  if (!editorElement.value) {
+    console.error('TinyMCE: Editor element not found')
+    return
+  }
 
+  console.log('TinyMCE: Initializing editor...')
+  
   tinymce.init({
     target: editorElement.value,
     height: props.height,
     menubar: false,
     toolbar: 'undo redo | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | removeformat',
     plugins: 'lists link paste wordcount',
+    theme: 'silver',
     placeholder: props.placeholder,
     branding: false,
     promotion: false,
@@ -123,6 +138,10 @@ const initEditor = () => {
         emit('update:modelValue', newContent)
         emit('change', newContent)
       })
+    },
+    // Error handling
+    init_instance_callback: (editor) => {
+      console.log('TinyMCE: Instance callback triggered')
     },
     // Paste configuration - local only
     paste_as_text: false,
