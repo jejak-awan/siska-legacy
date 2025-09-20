@@ -478,7 +478,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import api from '@/services/api'
-import TinyMCEEditor from '@/components/editor/TinyMCEEditor.vue'
+import TiptapEditor from '@/components/editor/TiptapEditor.vue'
 
 const authStore = useAuthStore()
 

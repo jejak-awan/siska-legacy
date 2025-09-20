@@ -42,7 +42,6 @@ export default defineConfig({
           'chart-vendor': ['chart.js', 'vue-chartjs'],
           'form-vendor': ['vee-validate', 'yup'],
           'utils-vendor': ['axios', 'date-fns', 'lodash-es'],
-          'editor-vendor': ['quill', 'vue-quill-editor'],
           'pdf-vendor': ['jspdf', 'jspdf-autotable'],
           'realtime-vendor': ['laravel-echo', 'pusher-js']
         },
