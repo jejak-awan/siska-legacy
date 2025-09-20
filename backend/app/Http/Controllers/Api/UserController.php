@@ -250,4 +250,35 @@ class UserController extends Controller
 
         return response()->json(null, 204);
     }
+
+    /**
+     * Get user statistics
+     */
+    public function statistics(): JsonResponse
+    {
+        try {
+        $stats = [
+                'total' => User::count(),
+                'active' => User::where('status', 'aktif')->count(),
+                'inactive' => User::where('status', 'tidak_aktif')->count(),
+                'by_role' => User::selectRaw('role_type, count(*) as count')
+                    ->groupBy('role_type')
+                    ->get()
+                    ->pluck('count', 'role_type'),
+                'recent_registrations' => User::where('created_at', '>=', now()->subDays(30))->count(),
+                'verified_users' => User::whereNotNull('email_verified_at')->count(),
+                'unverified_users' => User::whereNull('email_verified_at')->count()
+        ];
+
+        return response()->json([
+            'message' => 'User statistics retrieved successfully',
+            'data' => $stats
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Failed to retrieve user statistics',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 }

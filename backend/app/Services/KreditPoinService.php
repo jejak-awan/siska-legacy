@@ -182,7 +182,7 @@ class KreditPoinService
                 ->groupBy('status')
                 ->pluck('count', 'status')
                 ->toArray(),
-            'by_month' => KreditPoin::selectRaw('strftime("%Y-%m", created_at) as month, count(*) as count')
+            'by_month' => KreditPoin::selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, count(*) as count')
                 ->groupBy('month')
                 ->orderBy('month')
                 ->pluck('count', 'month')
