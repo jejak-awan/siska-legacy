@@ -203,6 +203,9 @@ if [ "$START_SERVERS" = true ]; then
     kill_port $ALT_PORT
     kill_port 6006  # Storybook port
     
+    # Create logs directory if it doesn't exist
+    mkdir -p logs
+    
     # Start backend server on main port
     print_info "Starting backend server on port $BACKEND_PORT..."
     cd backend
@@ -223,9 +226,6 @@ if [ "$START_SERVERS" = true ]; then
     nohup npm run storybook > ../logs/storybook.log 2>&1 &
     STORYBOOK_PID=$!
     cd ..
-    
-    # Create logs directory if it doesn't exist
-    mkdir -p logs
     
     # Wait a moment for servers to start
     sleep 5
