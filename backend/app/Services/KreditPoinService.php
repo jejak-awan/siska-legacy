@@ -7,6 +7,7 @@ use App\Models\KategoriKreditPoin;
 use App\Models\Siswa;
 use App\Models\User;
 use App\Services\NotificationService;
+use App\Services\CacheService;
 use App\Events\KreditPoinCreated;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -53,6 +54,10 @@ class KreditPoinService
 
             // Broadcast event for real-time updates
             event(new KreditPoinCreated($kreditPoin));
+
+            // Invalidate related caches
+            CacheService::invalidateKreditPoinCache();
+            CacheService::invalidateDashboardCache();
 
             DB::commit();
             return $kreditPoin;

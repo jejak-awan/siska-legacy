@@ -11,6 +11,7 @@ use App\Models\KreditPoin;
 use App\Models\Notifikasi;
 use App\Models\Kelas;
 use App\Events\DashboardStatsUpdated;
+use App\Services\CacheService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -24,53 +25,55 @@ class DashboardController extends Controller
     public function adminStats(): JsonResponse
     {
         try {
-            $stats = [
-                'users' => [
-                    'total' => User::count(),
-                    'active' => User::where('status', 'aktif')->count(),
-                    'inactive' => User::where('status', 'tidak_aktif')->count(),
-                    'by_role' => User::select('role_type', DB::raw('count(*) as count'))
-                                   ->groupBy('role_type')
-                                   ->get()
-                                   ->pluck('count', 'role_type')
-                ],
-                'guru' => [
-                    'total' => Guru::count(),
-                    'active' => Guru::where('status_aktif', true)->count(),
-                    'wali_kelas' => Guru::where('is_wali_kelas', true)->count(),
-                    'bk' => Guru::where('is_konselor_bk', true)->count(),
-                ],
-                'siswa' => [
-                    'total' => Siswa::count(),
-                    'active' => Siswa::where('status_aktif', true)->count(),
-                    'by_kelas' => Siswa::select('kelas_id', DB::raw('count(*) as count'))
-                                     ->where('status_aktif', true)
-                                     ->groupBy('kelas_id')
-                                     ->get()
-                                     ->pluck('count', 'kelas_id')
-                ],
-                'presensi' => [
-                    'today' => Presensi::whereDate('tanggal', today())->count(),
-                    'hadir_today' => Presensi::whereDate('tanggal', today())->where('status', 'hadir')->count(),
-                    'terlambat_today' => Presensi::whereDate('tanggal', today())->where('status', 'terlambat')->count(),
-                    'alpha_today' => Presensi::whereDate('tanggal', today())->where('status', 'alpha')->count(),
-                ],
-                'kredit_poin' => [
-                    'pending' => KreditPoin::where('status', 'pending')->count(),
-                    'approved_today' => KreditPoin::whereDate('created_at', today())->where('status', 'approved')->count(),
-                    'total_positif' => KreditPoin::whereHas('kategori', function($q) {
-                        $q->where('jenis', 'positif');
-                    })->where('status', 'approved')->sum('nilai'),
-                    'total_negatif' => KreditPoin::whereHas('kategori', function($q) {
-                        $q->where('jenis', 'negatif');
-                    })->where('status', 'approved')->sum('nilai'),
-                ],
-                'notifications' => [
-                    'total' => Notifikasi::count(),
-                    'unread' => Notifikasi::where('status', 'unread')->count(),
-                    'today' => Notifikasi::whereDate('created_at', today())->count(),
-                ]
-            ];
+            $stats = CacheService::getDashboardStats('admin', function() {
+                return [
+                    'users' => [
+                        'total' => User::count(),
+                        'active' => User::where('status', 'aktif')->count(),
+                        'inactive' => User::where('status', 'tidak_aktif')->count(),
+                        'by_role' => User::select('role_type', DB::raw('count(*) as count'))
+                                       ->groupBy('role_type')
+                                       ->get()
+                                       ->pluck('count', 'role_type')
+                    ],
+                    'guru' => [
+                        'total' => Guru::count(),
+                        'active' => Guru::where('status_aktif', true)->count(),
+                        'wali_kelas' => Guru::where('is_wali_kelas', true)->count(),
+                        'bk' => Guru::where('is_konselor_bk', true)->count(),
+                    ],
+                    'siswa' => [
+                        'total' => Siswa::count(),
+                        'active' => Siswa::where('status_aktif', true)->count(),
+                        'by_kelas' => Siswa::select('kelas_id', DB::raw('count(*) as count'))
+                                         ->where('status_aktif', true)
+                                         ->groupBy('kelas_id')
+                                         ->get()
+                                         ->pluck('count', 'kelas_id')
+                    ],
+                    'presensi' => [
+                        'today' => Presensi::whereDate('tanggal', today())->count(),
+                        'hadir_today' => Presensi::whereDate('tanggal', today())->where('status', 'hadir')->count(),
+                        'terlambat_today' => Presensi::whereDate('tanggal', today())->where('status', 'terlambat')->count(),
+                        'alpha_today' => Presensi::whereDate('tanggal', today())->where('status', 'alpha')->count(),
+                    ],
+                    'kredit_poin' => [
+                        'pending' => KreditPoin::where('status', 'pending')->count(),
+                        'approved_today' => KreditPoin::whereDate('created_at', today())->where('status', 'approved')->count(),
+                        'total_positif' => KreditPoin::whereHas('kategori', function($q) {
+                            $q->where('jenis', 'positif');
+                        })->where('status', 'approved')->sum('nilai'),
+                        'total_negatif' => KreditPoin::whereHas('kategori', function($q) {
+                            $q->where('jenis', 'negatif');
+                        })->where('status', 'approved')->sum('nilai'),
+                    ],
+                    'notifications' => [
+                        'total' => Notifikasi::count(),
+                        'unread' => Notifikasi::where('status', 'unread')->count(),
+                        'today' => Notifikasi::whereDate('created_at', today())->count(),
+                    ]
+                ];
+            });
 
             // Broadcast stats update for real-time dashboard
             event(new DashboardStatsUpdated($stats, 'admin'));
