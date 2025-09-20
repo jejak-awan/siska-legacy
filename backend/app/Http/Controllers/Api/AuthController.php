@@ -40,8 +40,8 @@ class AuthController extends Controller
             ]);
         }
 
-        // Create token
-        $token = $user->createToken('auth-token')->plainTextToken;
+        // Create token with expiration (24 hours)
+        $token = $user->createToken('auth-token', ['*'], now()->addHours(24))->plainTextToken;
 
         // Get user profile based on role
         $profile = $this->getUserProfile($user);
@@ -103,8 +103,8 @@ class AuthController extends Controller
         // Revoke current token
         $request->user()->currentAccessToken()->delete();
         
-        // Create new token
-        $token = $user->createToken('auth-token')->plainTextToken;
+        // Create new token with expiration (24 hours)
+        $token = $user->createToken('auth-token', ['*'], now()->addHours(24))->plainTextToken;
 
         return response()->json([
             'message' => 'Token berhasil diperbarui',
