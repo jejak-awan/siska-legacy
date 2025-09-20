@@ -133,6 +133,16 @@ const routes = [
         }
       },
       {
+        path: 'editor-demo',
+        name: 'EditorDemo',
+        component: () => import('../views/EditorDemo.vue'),
+        meta: { 
+          requiresAuth: true,
+          roles: ['admin'],
+          title: 'Editor Demo - Sistem Kesiswaan'
+        }
+      },
+      {
         path: 'data-pegawai',
         name: 'DataPegawai',
         component: () => import('../views/data-pegawai/DataPegawaiView.vue'),
