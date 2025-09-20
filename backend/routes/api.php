@@ -159,6 +159,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('role:admin')->group(function () {
         Route::put('profile-sekolah/basic-info', [ProfileSekolahController::class, 'updateBasicInfo']);
         Route::put('profile-sekolah/school-details', [ProfileSekolahController::class, 'updateSchoolDetails']);
+        Route::post('profile-sekolah/upload-logo', [ProfileSekolahController::class, 'uploadLogo']);
+        Route::post('profile-sekolah/upload-headmaster', [ProfileSekolahController::class, 'uploadHeadmaster']);
         Route::apiResource('profile-sekolah', ProfileSekolahController::class);
     });
     

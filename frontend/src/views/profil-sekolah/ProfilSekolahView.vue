@@ -19,12 +19,46 @@
         <div class="flex items-center space-x-6">
           <!-- School Logo -->
           <div class="flex-shrink-0">
-            <div class="w-24 h-24 bg-gray-100 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-300">
-              <svg v-if="!schoolProfile.logo" class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-              </svg>
-              <img v-else :src="schoolProfile.logo" :alt="schoolProfile.nama" class="w-full h-full object-cover rounded-lg">
+            <div 
+              class="w-24 h-24 bg-gray-100 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-300 cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-colors"
+              @click="triggerLogoUpload"
+              @dragover.prevent
+              @drop.prevent="handleLogoDrop"
+            >
+              <div v-if="logoUploading" class="flex flex-col items-center">
+                <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+                <span class="text-xs text-gray-500 mt-1">Uploading...</span>
+              </div>
+              <div v-else-if="!schoolProfile.logo && !logoPreview" class="flex flex-col items-center">
+                <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+                <span class="text-xs text-gray-500 mt-1">Upload Logo</span>
+              </div>
+              <div v-else class="relative group">
+                <img 
+                  :src="logoPreview || schoolProfile.logo" 
+                  :alt="schoolProfile.nama" 
+                  class="w-full h-full object-cover rounded-lg"
+                >
+                <div class="absolute inset-0 bg-black bg-opacity-50 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button 
+                    @click.stop="triggerLogoUpload"
+                    class="text-white text-xs bg-blue-600 px-2 py-1 rounded hover:bg-blue-700"
+                  >
+                    Change
+                  </button>
+                </div>
+              </div>
             </div>
+            <input 
+              ref="logoInput"
+              type="file" 
+              accept="image/*" 
+              @change="handleLogoUpload"
+              class="hidden"
+            >
+            <p class="text-xs text-gray-500 mt-1 text-center">Click or drag to upload</p>
           </div>
           
           <!-- Basic Info -->
@@ -201,6 +235,54 @@
                   placeholder="Masukkan nama kepala sekolah"
                 >
               </div>
+              
+              <!-- Foto Kepala Sekolah -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Foto Kepala Sekolah</label>
+                <div class="flex items-center space-x-4">
+                  <div 
+                    class="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-300 cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-colors"
+                    @click="triggerHeadmasterUpload"
+                    @dragover.prevent
+                    @drop.prevent="handleHeadmasterDrop"
+                  >
+                    <div v-if="headmasterUploading" class="flex flex-col items-center">
+                      <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+                    </div>
+                    <div v-else-if="!schoolProfile.foto_kepala_sekolah && !headmasterPreview" class="flex flex-col items-center">
+                      <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                      </svg>
+                    </div>
+                    <div v-else class="relative group">
+                      <img 
+                        :src="headmasterPreview || schoolProfile.foto_kepala_sekolah" 
+                        :alt="form.kepala_sekolah" 
+                        class="w-full h-full object-cover rounded-lg"
+                      >
+                      <div class="absolute inset-0 bg-black bg-opacity-50 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button 
+                          @click.stop="triggerHeadmasterUpload"
+                          class="text-white text-xs bg-blue-600 px-2 py-1 rounded hover:bg-blue-700"
+                        >
+                          Change
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex-1">
+                    <p class="text-sm text-gray-600">Upload foto kepala sekolah</p>
+                    <p class="text-xs text-gray-500">Format: JPG, PNG, GIF (Max 2MB)</p>
+                  </div>
+                </div>
+                <input 
+                  ref="headmasterInput"
+                  type="file" 
+                  accept="image/*" 
+                  @change="handleHeadmasterUpload"
+                  class="hidden"
+                >
+              </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Visi</label>
                 <textarea 
@@ -273,6 +355,12 @@ const authStore = useAuthStore()
 const loading = ref(false)
 const activeTab = ref('profile')
 const schoolProfile = ref({})
+const logoUploading = ref(false)
+const headmasterUploading = ref(false)
+const logoPreview = ref(null)
+const headmasterPreview = ref(null)
+const logoInput = ref(null)
+const headmasterInput = ref(null)
 
 const form = reactive({
   nama: '',
@@ -385,6 +473,134 @@ const updateSchoolDetails = async () => {
     }
   } finally {
     loading.value = false
+  }
+}
+
+// Logo Upload Methods
+const triggerLogoUpload = () => {
+  logoInput.value?.click()
+}
+
+const handleLogoUpload = async (event) => {
+  const file = event.target.files[0]
+  if (file) {
+    await uploadLogo(file)
+  }
+}
+
+const handleLogoDrop = async (event) => {
+  const file = event.dataTransfer.files[0]
+  if (file && file.type.startsWith('image/')) {
+    await uploadLogo(file)
+  }
+}
+
+const uploadLogo = async (file) => {
+  // Validate file size (2MB max)
+  if (file.size > 2 * 1024 * 1024) {
+    showNotification('Error', 'Ukuran file maksimal 2MB', 'error')
+    return
+  }
+
+  // Validate file type
+  if (!file.type.startsWith('image/')) {
+    showNotification('Error', 'File harus berupa gambar', 'error')
+    return
+  }
+
+  try {
+    logoUploading.value = true
+    
+    // Create preview
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      logoPreview.value = e.target.result
+    }
+    reader.readAsDataURL(file)
+
+    // Upload to server
+    const formData = new FormData()
+    formData.append('logo', file)
+    
+    const response = await api.post('/profile-sekolah/upload-logo', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+    
+    schoolProfile.value = response.data.data
+    showNotification('Berhasil', 'Logo sekolah berhasil diupload', 'success')
+    
+  } catch (error) {
+    console.error('Error uploading logo:', error)
+    showNotification('Error', 'Gagal mengupload logo', 'error')
+    logoPreview.value = null
+  } finally {
+    logoUploading.value = false
+  }
+}
+
+// Headmaster Photo Upload Methods
+const triggerHeadmasterUpload = () => {
+  headmasterInput.value?.click()
+}
+
+const handleHeadmasterUpload = async (event) => {
+  const file = event.target.files[0]
+  if (file) {
+    await uploadHeadmasterPhoto(file)
+  }
+}
+
+const handleHeadmasterDrop = async (event) => {
+  const file = event.dataTransfer.files[0]
+  if (file && file.type.startsWith('image/')) {
+    await uploadHeadmasterPhoto(file)
+  }
+}
+
+const uploadHeadmasterPhoto = async (file) => {
+  // Validate file size (2MB max)
+  if (file.size > 2 * 1024 * 1024) {
+    showNotification('Error', 'Ukuran file maksimal 2MB', 'error')
+    return
+  }
+
+  // Validate file type
+  if (!file.type.startsWith('image/')) {
+    showNotification('Error', 'File harus berupa gambar', 'error')
+    return
+  }
+
+  try {
+    headmasterUploading.value = true
+    
+    // Create preview
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      headmasterPreview.value = e.target.result
+    }
+    reader.readAsDataURL(file)
+
+    // Upload to server
+    const formData = new FormData()
+    formData.append('foto_kepala_sekolah', file)
+    
+    const response = await api.post('/profile-sekolah/upload-headmaster', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+    
+    schoolProfile.value = response.data.data
+    showNotification('Berhasil', 'Foto kepala sekolah berhasil diupload', 'success')
+    
+  } catch (error) {
+    console.error('Error uploading headmaster photo:', error)
+    showNotification('Error', 'Gagal mengupload foto kepala sekolah', 'error')
+    headmasterPreview.value = null
+  } finally {
+    headmasterUploading.value = false
   }
 }
 

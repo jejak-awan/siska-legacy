@@ -311,6 +311,100 @@ class ProfileSekolahController extends Controller
     }
 
     /**
+     * Upload school logo
+     */
+    public function uploadLogo(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'logo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation failed',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        try {
+            $profile = ProfileSekolah::getActive();
+            
+            if (!$profile) {
+                return response()->json([
+                    'message' => 'No active school profile found',
+                    'error' => 'Profile not found'
+                ], 404);
+            }
+
+            // Delete old logo if exists
+            if ($profile->logo && Storage::disk('public')->exists($profile->logo)) {
+                Storage::disk('public')->delete($profile->logo);
+            }
+
+            // Store new logo
+            $logoPath = $request->file('logo')->store('school/logos', 'public');
+            $profile->update(['logo' => $logoPath]);
+
+            return response()->json([
+                'message' => 'Logo uploaded successfully',
+                'data' => $profile->fresh()
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Failed to upload logo',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Upload headmaster photo
+     */
+    public function uploadHeadmaster(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'foto_kepala_sekolah' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation failed',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        try {
+            $profile = ProfileSekolah::getActive();
+            
+            if (!$profile) {
+                return response()->json([
+                    'message' => 'No active school profile found',
+                    'error' => 'Profile not found'
+                ], 404);
+            }
+
+            // Delete old photo if exists
+            if ($profile->foto_kepala_sekolah && Storage::disk('public')->exists($profile->foto_kepala_sekolah)) {
+                Storage::disk('public')->delete($profile->foto_kepala_sekolah);
+            }
+
+            // Store new photo
+            $photoPath = $request->file('foto_kepala_sekolah')->store('school/headmaster', 'public');
+            $profile->update(['foto_kepala_sekolah' => $photoPath]);
+
+            return response()->json([
+                'message' => 'Headmaster photo uploaded successfully',
+                'data' => $profile->fresh()
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Failed to upload headmaster photo',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id): JsonResponse

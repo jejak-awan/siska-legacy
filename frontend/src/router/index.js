@@ -505,7 +505,7 @@ router.beforeEach(async (to, from, next) => {
 })
 
 // Initialize preloading after router is created
-router.isReady().then(() => {
+router.onReady(() => {
   preloadCriticalRoutes()
   preloadSecondaryRoutes()
 })
