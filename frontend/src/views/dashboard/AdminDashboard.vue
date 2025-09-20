@@ -1,16 +1,20 @@
 <template>
-  <div class="py-6">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <!-- Page Header -->
-      <div class="mb-8">
-        <div class="flex items-center justify-between">
-          <div>
-            <h1 class="text-3xl font-bold text-foreground">Dashboard Admin</h1>
-            <p class="mt-2 text-lg text-muted-foreground">
-              Selamat datang, <span class="font-semibold text-primary">{{ authStore.user?.username }}</span>
-            </p>
-            <p class="text-sm text-muted-foreground">Kelola sistem kesiswaan dan penilaian karakter dinamis</p>
-          </div>
+  <div>
+    <!-- School Header -->
+    <SchoolHeader />
+    
+    <div class="py-6">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Page Header -->
+        <div class="mb-8">
+          <div class="flex items-center justify-between">
+            <div>
+              <h1 class="text-3xl font-bold text-foreground">Dashboard Admin</h1>
+              <p class="mt-2 text-lg text-muted-foreground">
+                Selamat datang, <span class="font-semibold text-primary">{{ authStore.user?.username }}</span>
+              </p>
+              <p class="text-sm text-muted-foreground">Kelola sistem kesiswaan dan penilaian karakter dinamis</p>
+            </div>
           <div class="flex items-center space-x-4">
             <!-- Real-time Connection Status -->
             <div class="flex items-center space-x-2">
@@ -495,6 +499,7 @@ import { useAuthStore } from '../../stores/auth'
 import { useRealtime } from '../../composables/useRealtime'
 import StatCard from '../../components/ui/StatCard.vue'
 import ChartCard from '../../components/ui/ChartCard.vue'
+import SchoolHeader from '../../components/layout/SchoolHeader.vue'
 import api from '../../services/api'
 
 const authStore = useAuthStore()

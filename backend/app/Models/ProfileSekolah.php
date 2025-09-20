@@ -11,6 +11,7 @@ class ProfileSekolah extends Model
 
     protected $fillable = [
         'nama',
+        'slogan',
         'npsn',
         'alamat',
         'telepon',

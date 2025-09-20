@@ -66,6 +66,7 @@
             <!-- Basic Info -->
             <div class="flex-1">
               <h2 class="text-2xl font-bold text-gray-900 mb-2">{{ schoolProfile.nama || 'Nama Sekolah' }}</h2>
+              <p v-if="schoolProfile.slogan" class="text-lg text-blue-600 font-medium mb-3 italic">"{{ schoolProfile.slogan }}"</p>
               <p class="text-gray-600 mb-1">{{ schoolProfile.npsn || 'NPSN: -' }}</p>
               <p class="text-gray-600 mb-1">{{ schoolProfile.alamat || 'Alamat belum diisi' }}</p>
               <p class="text-gray-600">{{ schoolProfile.telepon || 'Telepon: -' }}</p>
@@ -119,6 +120,15 @@
                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
                     placeholder="Masukkan nama sekolah"
                     required
+                  >
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Slogan/Jargon</label>
+                  <input 
+                    v-model="form.slogan"
+                    type="text" 
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                    placeholder="Masukkan slogan atau jargon sekolah"
                   >
                 </div>
             <div>
@@ -216,7 +226,7 @@
           <!-- Visi Misi & Program Unggulan Tab -->
           <div v-if="activeTab === 'visi-misi'" class="space-y-6">
             <div class="flex justify-between items-center">
-              <h3 class="text-lg font-semibold text-gray-900">Visi, Misi & Detail Sekolah</h3>
+              <h3 class="text-lg font-semibold text-gray-900">Visi & Misi</h3>
               <button
                 @click="updateSchoolDetails"
                 :disabled="loading"
@@ -229,47 +239,47 @@
             
             <div class="space-y-6">
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Visi</label>
-                <RichTextEditor 
-                  v-model="form.visi"
-                  placeholder="Masukkan visi sekolah"
-                  :height="120"
-                />
-        </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Misi</label>
-                <RichTextEditor 
-                  v-model="form.misi"
-                  placeholder="Masukkan misi sekolah"
-                  :height="180"
-                />
-      </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Tujuan</label>
-                <RichTextEditor 
-                  v-model="form.tujuan"
-                  placeholder="Masukkan tujuan sekolah"
-                  :height="120"
-                />
-        </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Sejarah</label>
-                <RichTextEditor 
+                <label class="block text-sm font-medium text-gray-700 mb-2">Sejarah Sekolah</label>
+                <SafeTextEditor 
                   v-model="form.sejarah"
                   placeholder="Masukkan sejarah sekolah"
                   :height="180"
                 />
-            </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Prestasi</label>
-                <RichTextEditor 
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Prestasi Sekolah</label>
+                <SafeTextEditor 
                   v-model="form.prestasi"
                   placeholder="Masukkan prestasi sekolah"
                   :height="180"
                 />
               </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Visi</label>
+                <SafeTextEditor 
+                  v-model="form.visi"
+                  placeholder="Masukkan visi sekolah"
+                  :height="120"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Misi</label>
+                <SafeTextEditor 
+                  v-model="form.misi"
+                  placeholder="Masukkan misi sekolah"
+                  :height="180"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Tujuan</label>
+                <SafeTextEditor 
+                  v-model="form.tujuan"
+                  placeholder="Masukkan tujuan sekolah"
+                  :height="120"
+                />
+              </div>
             </div>
-            </div>
+          </div>
             
           <!-- Struktur Organisasi Tab -->
           <div v-if="activeTab === 'struktur'" class="space-y-6">
@@ -461,7 +471,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import api from '@/services/api'
-import RichTextEditor from '@/components/editor/RichTextEditor.vue'
+import SafeTextEditor from '@/components/ui/SafeTextEditor.vue'
 
 const authStore = useAuthStore()
 
@@ -480,6 +490,7 @@ const structurePreview = ref('')
 
 const form = reactive({
   nama: '',
+  slogan: '',
   npsn: '',
   alamat: '',
   telepon: '',
@@ -500,7 +511,7 @@ const form = reactive({
 
 const tabs = [
   { id: 'profile', name: 'Profile Sekolah' },
-  { id: 'visi-misi', name: 'Visi & Misi + Program Unggulan' },
+  { id: 'visi-misi', name: 'Visi & Misi' },
   { id: 'struktur', name: 'Struktur Organisasi' }
 ]
 
@@ -527,6 +538,7 @@ const loadSchoolProfile = async () => {
     // Populate form with existing data
     Object.assign(form, {
       nama: schoolProfile.value.nama || '',
+      slogan: schoolProfile.value.slogan || '',
       npsn: schoolProfile.value.npsn || '',
       alamat: schoolProfile.value.alamat || '',
       telepon: schoolProfile.value.telepon || '',
@@ -567,6 +579,7 @@ const updateBasicInfo = async () => {
     loading.value = true
     const response = await api.put('/profile-sekolah/basic-info', {
       nama: form.nama,
+      slogan: form.slogan,
       npsn: form.npsn,
       alamat: form.alamat,
       telepon: form.telepon,

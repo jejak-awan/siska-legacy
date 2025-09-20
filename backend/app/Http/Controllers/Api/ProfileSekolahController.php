@@ -23,6 +23,7 @@ class ProfileSekolahController extends Controller
                 // Create default profile if none exists
                 $profile = ProfileSekolah::create([
                     'nama' => 'Nama Sekolah',
+                    'slogan' => 'Slogan Sekolah',
                     'npsn' => '',
                     'alamat' => '',
                     'telepon' => '',
@@ -66,6 +67,7 @@ class ProfileSekolahController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'nama' => 'required|string|max:255',
+            'slogan' => 'nullable|string|max:255',
             'npsn' => 'nullable|string|max:20',
             'alamat' => 'nullable|string',
             'telepon' => 'nullable|string|max:20',
@@ -224,6 +226,7 @@ class ProfileSekolahController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'nama' => 'required|string|max:255',
+            'slogan' => 'nullable|string|max:255',
             'npsn' => 'nullable|string|max:20',
             'alamat' => 'nullable|string',
             'telepon' => 'nullable|string|max:20',
@@ -252,7 +255,7 @@ class ProfileSekolahController extends Controller
             }
             
             $profile->update($request->only([
-                'nama', 'npsn', 'alamat', 'telepon', 'email', 
+                'nama', 'slogan', 'npsn', 'alamat', 'telepon', 'email', 
                 'website', 'jenjang', 'status', 'akreditasi'
             ]));
             
