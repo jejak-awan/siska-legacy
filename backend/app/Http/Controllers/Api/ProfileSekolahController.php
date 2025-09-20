@@ -39,6 +39,14 @@ class ProfileSekolahController extends Controller
                 ]);
             }
             
+            // Add URL attributes for images
+            if ($profile->logo) {
+                $profile->logo_url = asset('storage/' . $profile->logo);
+            }
+            if ($profile->foto_kepala_sekolah) {
+                $profile->foto_kepala_sekolah_url = asset('storage/' . $profile->foto_kepala_sekolah);
+            }
+            
             return response()->json([
                 'message' => 'School profile retrieved successfully',
                 'data' => $profile
@@ -346,9 +354,15 @@ class ProfileSekolahController extends Controller
             $logoPath = $request->file('logo')->store('school/logos', 'public');
             $profile->update(['logo' => $logoPath]);
 
+            $profile = $profile->fresh();
+            // Ensure logo URL is properly formatted
+            if ($profile->logo) {
+                $profile->logo_url = asset('storage/' . $profile->logo);
+            }
+            
             return response()->json([
                 'message' => 'Logo uploaded successfully',
-                'data' => $profile->fresh()
+                'data' => $profile
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -393,9 +407,15 @@ class ProfileSekolahController extends Controller
             $photoPath = $request->file('foto_kepala_sekolah')->store('school/headmaster', 'public');
             $profile->update(['foto_kepala_sekolah' => $photoPath]);
 
+            $profile = $profile->fresh();
+            // Ensure headmaster photo URL is properly formatted
+            if ($profile->foto_kepala_sekolah) {
+                $profile->foto_kepala_sekolah_url = asset('storage/' . $profile->foto_kepala_sekolah);
+            }
+            
             return response()->json([
                 'message' => 'Headmaster photo uploaded successfully',
-                'data' => $profile->fresh()
+                'data' => $profile
             ]);
         } catch (\Exception $e) {
             return response()->json([

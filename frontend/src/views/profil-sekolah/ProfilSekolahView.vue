@@ -37,7 +37,7 @@
               </div>
               <div v-else class="relative group">
                 <img 
-                  :src="logoPreview || schoolProfile.logo" 
+                  :src="logoPreview || schoolProfile.logo_url || (schoolProfile.logo ? `/storage/${schoolProfile.logo}` : '')" 
                   :alt="schoolProfile.nama" 
                   class="w-full h-full object-cover rounded-lg"
                 >
@@ -58,9 +58,9 @@
               @change="handleLogoUpload"
               class="hidden"
             >
-            <p class="text-xs text-gray-500 mt-1 text-center">Click or drag to upload</p>
-            <p class="text-xs text-gray-400 mt-1 text-center">Max 2MB • JPG, PNG, GIF</p>
-            <p class="text-xs text-gray-400 text-center">Recommended: 200x200px</p>
+            <p class="text-xs text-gray-500 mt-1 text-center">Klik atau seret untuk mengunggah</p>
+            <p class="text-xs text-gray-400 mt-1 text-center">Maksimal 2MB • JPG, PNG, GIF</p>
+            <p class="text-xs text-gray-400 text-center">Disarankan: 200x200px</p>
             </div>
             
             <!-- Basic Info -->
@@ -305,7 +305,7 @@
                       </div>
                       <div v-else class="relative group">
                         <img 
-                          :src="headmasterPreview || schoolProfile.foto_kepala_sekolah" 
+                          :src="headmasterPreview || schoolProfile.foto_kepala_sekolah_url || (schoolProfile.foto_kepala_sekolah ? `/storage/${schoolProfile.foto_kepala_sekolah}` : '')" 
                           :alt="form.kepala_sekolah" 
                           class="w-full h-full object-cover rounded-lg"
                         >
@@ -320,9 +320,9 @@
                       </div>
                     </div>
                     <div class="flex-1">
-                      <p class="text-sm text-gray-600">Upload foto kepala sekolah</p>
-                      <p class="text-xs text-gray-500">Format: JPG, PNG, GIF (Max 2MB)</p>
-                      <p class="text-xs text-gray-400">Recommended: 150x150px</p>
+                      <p class="text-sm text-gray-600">Unggah foto kepala sekolah</p>
+                      <p class="text-xs text-gray-500">Format: JPG, PNG, GIF (Maksimal 2MB)</p>
+                      <p class="text-xs text-gray-400">Disarankan: 150x150px</p>
                     </div>
                   </div>
                   <input 
@@ -524,8 +524,35 @@ const loadSchoolProfile = async () => {
     const response = await api.get('/profile-sekolah')
     schoolProfile.value = response.data.data
     
-    // Populate form
-    Object.assign(form, schoolProfile.value)
+    // Populate form with existing data
+    Object.assign(form, {
+      nama: schoolProfile.value.nama || '',
+      npsn: schoolProfile.value.npsn || '',
+      alamat: schoolProfile.value.alamat || '',
+      telepon: schoolProfile.value.telepon || '',
+      email: schoolProfile.value.email || '',
+      website: schoolProfile.value.website || '',
+      jenjang: schoolProfile.value.jenjang || '',
+      status: schoolProfile.value.status || '',
+      akreditasi: schoolProfile.value.akreditasi || '',
+      kepala_sekolah: schoolProfile.value.kepala_sekolah || '',
+      visi: schoolProfile.value.visi || '',
+      misi: schoolProfile.value.misi || '',
+      tujuan: schoolProfile.value.tujuan || '',
+      sejarah: schoolProfile.value.sejarah || '',
+      prestasi: schoolProfile.value.prestasi || '',
+      kontakLain: schoolProfile.value.kontak_lain || {},
+      sosialMedia: schoolProfile.value.sosial_media || {}
+    })
+    
+    // Load struktur organisasi if exists
+    if (schoolProfile.value.struktur_organisasi) {
+      structurePositions.value = schoolProfile.value.struktur_organisasi
+    }
+    
+    // Clear previews when loading existing data
+    logoPreview.value = null
+    headmasterPreview.value = null
     
   } catch (error) {
     console.error('Error loading school profile:', error)
@@ -645,7 +672,8 @@ const uploadLogo = async (file) => {
     })
     
     schoolProfile.value = response.data.data
-    showNotification('Berhasil', 'Logo sekolah berhasil diupload', 'success')
+    logoPreview.value = null // Clear preview since we now have the real URL
+    showNotification('Berhasil', 'Logo sekolah berhasil diunggah', 'success')
     
   } catch (error) {
     console.error('Error uploading logo:', error)
@@ -709,7 +737,8 @@ const uploadHeadmasterPhoto = async (file) => {
     })
     
     schoolProfile.value = response.data.data
-    showNotification('Berhasil', 'Foto kepala sekolah berhasil diupload', 'success')
+    headmasterPreview.value = null // Clear preview since we now have the real URL
+    showNotification('Berhasil', 'Foto kepala sekolah berhasil diunggah', 'success')
     
   } catch (error) {
     console.error('Error uploading headmaster photo:', error)
