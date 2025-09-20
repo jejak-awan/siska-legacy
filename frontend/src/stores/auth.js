@@ -65,14 +65,25 @@ export const useAuthStore = defineStore('auth', () => {
 
   const fetchUser = async () => {
     try {
-      if (!token.value) return false
+      if (!token.value) {
+        console.log('❌ No token available for fetchUser')
+        return false
+      }
 
+      console.log('🔄 Fetching user data from /auth/me...')
       const response = await api.get('/auth/me')
+      console.log('✅ User data fetched successfully:', response.data.user)
+      
       user.value = response.data.user
       localStorage.setItem('user_data', JSON.stringify(response.data.user))
       return true
     } catch (err) {
-      console.error('Fetch user error:', err)
+      console.error('❌ Fetch user error:', err)
+      console.error('Error details:', {
+        status: err.response?.status,
+        message: err.response?.data?.message,
+        url: err.config?.url
+      })
       // If token is invalid, logout
       await logout()
       return false
@@ -112,29 +123,39 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   const initialize = async () => {
+    console.log('🔐 Initializing auth store...')
+    console.log('Token from localStorage:', token.value ? 'exists' : 'not found')
+    
     if (token.value) {
       // Set authorization header
       api.defaults.headers.common['Authorization'] = `Bearer ${token.value}`
+      console.log('✅ Authorization header set')
       
       // Try to restore user data from localStorage first
       const savedUserData = localStorage.getItem('user_data')
       if (savedUserData) {
         try {
           user.value = JSON.parse(savedUserData)
+          console.log('✅ User data restored from localStorage')
         } catch (error) {
-          console.error('Error parsing saved user data:', error)
+          console.error('❌ Error parsing saved user data:', error)
         }
       }
       
       // Verify token and fetch fresh user data
+      console.log('🔄 Verifying token with server...')
       const success = await fetchUser()
       if (!success) {
+        console.log('❌ Token verification failed, logging out')
         // Token is invalid, clear everything
         await logout()
       } else {
+        console.log('✅ Token verified, starting auto-refresh')
         // Start automatic token refresh
         startTokenRefresh()
       }
+    } else {
+      console.log('ℹ️ No token found, user not authenticated')
     }
   }
 

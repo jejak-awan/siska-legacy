@@ -17,11 +17,16 @@ class CorsMiddleware
     public function handle(Request $request, Closure $next)
     {
         // Get allowed origins from config
-        $allowedOrigins = config('cors.allowed_origins', ['https://localhost']);
+        $allowedOrigins = config('cors.allowed_origins', [
+            'http://localhost:5173',
+            'http://localhost:3000', 
+            'http://localhost:8080',
+            'https://localhost'
+        ]);
         $origin = $request->headers->get('Origin');
         
         // Check if origin is allowed
-        $allowedOrigin = in_array($origin, $allowedOrigins) ? $origin : 'https://localhost';
+        $allowedOrigin = in_array($origin, $allowedOrigins) ? $origin : 'http://localhost:5173';
         
         // Handle preflight requests
         if ($request->isMethod('OPTIONS')) {
