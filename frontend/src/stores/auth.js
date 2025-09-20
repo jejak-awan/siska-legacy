@@ -27,6 +27,7 @@ export const useAuthStore = defineStore('auth', () => {
       token.value = authToken
       user.value = userData
       localStorage.setItem('auth_token', authToken)
+      localStorage.setItem('user_data', JSON.stringify(userData))
 
       // Set default authorization header
       api.defaults.headers.common['Authorization'] = `Bearer ${authToken}`
@@ -52,7 +53,13 @@ export const useAuthStore = defineStore('auth', () => {
       token.value = null
       user.value = null
       localStorage.removeItem('auth_token')
+      localStorage.removeItem('user_data')
       delete api.defaults.headers.common['Authorization']
+      
+      // Redirect to login if not already there
+      if (window.location.pathname !== '/login') {
+        window.location.href = '/login'
+      }
     }
   }
 
@@ -62,6 +69,7 @@ export const useAuthStore = defineStore('auth', () => {
 
       const response = await api.get('/auth/me')
       user.value = response.data.user
+      localStorage.setItem('user_data', JSON.stringify(response.data.user))
       return true
     } catch (err) {
       console.error('Fetch user error:', err)
@@ -108,13 +116,43 @@ export const useAuthStore = defineStore('auth', () => {
       // Set authorization header
       api.defaults.headers.common['Authorization'] = `Bearer ${token.value}`
       
-      // Verify token and fetch user data
+      // Try to restore user data from localStorage first
+      const savedUserData = localStorage.getItem('user_data')
+      if (savedUserData) {
+        try {
+          user.value = JSON.parse(savedUserData)
+        } catch (error) {
+          console.error('Error parsing saved user data:', error)
+        }
+      }
+      
+      // Verify token and fetch fresh user data
       const success = await fetchUser()
       if (!success) {
         // Token is invalid, clear everything
         await logout()
+      } else {
+        // Start automatic token refresh
+        startTokenRefresh()
       }
     }
+  }
+
+  const startTokenRefresh = () => {
+    // Refresh token every 23 hours (before 24h expiration)
+    const refreshInterval = 23 * 60 * 60 * 1000 // 23 hours in milliseconds
+    
+    setInterval(async () => {
+      if (token.value && user.value) {
+        try {
+          await refreshToken()
+          console.log('Token refreshed automatically')
+        } catch (error) {
+          console.error('Auto token refresh failed:', error)
+          await logout()
+        }
+      }
+    }, refreshInterval)
   }
 
   const clearError = () => {

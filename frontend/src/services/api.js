@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { useAuthStore } from '../stores/auth'
 
 // Create axios instance
 const api = axios.create({
@@ -53,11 +54,9 @@ api.interceptors.response.use(
 
       switch (status) {
         case 401:
-          // Unauthorized - redirect to login
-          localStorage.removeItem('auth_token')
-          if (window.location.pathname !== '/login') {
-            window.location.href = '/login'
-          }
+          // Unauthorized - handle token expiration
+          const authStore = useAuthStore()
+          authStore.logout()
           break
         
         case 403:
