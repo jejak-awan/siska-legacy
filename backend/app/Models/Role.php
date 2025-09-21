@@ -87,6 +87,47 @@ class Role extends Model
     }
 
     /**
+     * Get the permissions for this role.
+     */
+    public function permissions()
+    {
+        return $this->belongsToMany(Permission::class, 'role_permissions')
+                    ->withPivot('granted')
+                    ->withTimestamps();
+    }
+
+    /**
+     * Check if role has permission.
+     */
+    public function hasPermission($permissionName): bool
+    {
+        return $this->permissions()
+            ->where('name', $permissionName)
+            ->wherePivot('granted', true)
+            ->exists();
+    }
+
+    /**
+     * Grant permission to role.
+     */
+    public function grantPermission($permissionId): void
+    {
+        $this->permissions()->syncWithoutDetaching([
+            $permissionId => ['granted' => true]
+        ]);
+    }
+
+    /**
+     * Revoke permission from role.
+     */
+    public function revokePermission($permissionId): void
+    {
+        $this->permissions()->syncWithoutDetaching([
+            $permissionId => ['granted' => false]
+        ]);
+    }
+
+    /**
      * Scope to filter by level.
      */
     public function scopeByLevel($query, $level)

@@ -242,6 +242,7 @@
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
+import api from '@/services/api'
 
 // Reactive data
 const loading = ref(false)
@@ -267,12 +268,15 @@ const roleForm = reactive({
 const loadHakAkses = async () => {
   try {
     loading.value = true
-    // TODO: Implement API calls
-    // const [rolesRes, modulesRes, permissionsRes] = await Promise.all([
-    //   api.get('/roles'),
-    //   api.get('/modules'),
-    //   api.get('/permissions')
-    // ])
+    // Load hak akses data from API
+    const response = await api.get('/hak-akses')
+    
+    roles.value = response.data.data.roles
+    modules.value = Object.keys(response.data.data.modules).map(moduleId => ({
+      id: moduleId,
+      name: moduleId.charAt(0).toUpperCase() + moduleId.slice(1).replace('-', ' '),
+      description: `Module ${moduleId}`
+    }))
     
     // Mock data
     roles.value = [
@@ -408,8 +412,24 @@ const getRoleBadgeClass = (roleId) => {
 const savePermissions = async () => {
   try {
     loading.value = true
-    // TODO: Implement API call
-    // await api.put('/permissions', permissions.value)
+    // Update permissions via API
+    const currentRole = roles.value.find(r => r.id === activeRole.value)
+    if (currentRole) {
+      const permissionUpdates = []
+      Object.keys(permissions.value[activeRole.value]).forEach(moduleId => {
+        Object.keys(permissions.value[activeRole.value][moduleId]).forEach(action => {
+          permissionUpdates.push({
+            permission_id: permissions.value[activeRole.value][moduleId][action].permission_id,
+            granted: permissions.value[activeRole.value][moduleId][action]
+          })
+        })
+      })
+      
+      await api.put('/hak-akses/permissions', {
+        role_id: currentRole.id,
+        permissions: permissionUpdates
+      })
+    }
     
     console.log('Permissions saved:', permissions.value)
     // Show success message

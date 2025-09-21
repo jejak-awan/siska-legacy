@@ -20,6 +20,7 @@ use App\Http\Controllers\Api\GalleryController;
 use App\Http\Controllers\Api\ContentController;
 use App\Http\Controllers\Api\MataPelajaranController;
 use App\Http\Controllers\Api\TahunAjaranController;
+use App\Http\Controllers\Api\HakAksesController;
 use App\Http\Controllers\Api\ImageController;
 use App\Http\Controllers\Api\DocumentationController;
 use App\Http\Controllers\Api\KategoriKreditPoinController;
@@ -320,6 +321,19 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('tahun-ajaran-current', [TahunAjaranController::class, 'current']);
         Route::get('tahun-ajaran-active', [TahunAjaranController::class, 'active']);
         Route::post('tahun-ajaran/{tahunAjaran}/activate', [TahunAjaranController::class, 'activate']);
+    });
+
+    // Hak Akses routes
+    Route::middleware('role:admin')->group(function () {
+        Route::get('hak-akses', [HakAksesController::class, 'index']);
+        Route::get('hak-akses/roles', [HakAksesController::class, 'getRoles']);
+        Route::get('hak-akses/permissions', [HakAksesController::class, 'getPermissions']);
+        Route::get('hak-akses/roles/{roleId}/permissions', [HakAksesController::class, 'getRolePermissions']);
+        Route::put('hak-akses/permissions', [HakAksesController::class, 'updatePermissions']);
+        Route::post('hak-akses/grant', [HakAksesController::class, 'grantPermission']);
+        Route::post('hak-akses/revoke', [HakAksesController::class, 'revokePermission']);
+        Route::get('hak-akses/statistics', [HakAksesController::class, 'statistics']);
+        Route::post('hak-akses/check', [HakAksesController::class, 'checkPermission']);
     });
     
     // WhatsApp webhook routes (public)
