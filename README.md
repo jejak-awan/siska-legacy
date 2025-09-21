@@ -449,7 +449,7 @@ docker-compose down
 - **Features**: Interactive API testing, Request/Response examples, Authentication testing
 
 #### **Frontend Component Documentation**
-- **Component Documentation**: Removed Storybook, using inline component documentation
+- **Component Documentation**: Using inline component documentation and JSDoc comments
 - **Features**: Inline component documentation, JSDoc comments, Component examples
 
 #### **Quick Start Documentation**

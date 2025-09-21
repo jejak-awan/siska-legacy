@@ -156,7 +156,7 @@ else
     print_warning "Backend directory not found, skipping Swagger generation"
 fi
 
-print_status "Frontend Component Documentation (Storybook) has been removed from the project"
+print_status "Frontend Component Documentation: Using inline JSDoc comments"
 
 print_status "Updating README documentation links..."
 
