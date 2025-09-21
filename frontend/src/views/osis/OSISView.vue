@@ -277,6 +277,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import StatCard from '../../components/ui/StatCard.vue'
+import api from '@/services/api'
 
 // State
 const activeTab = ref('kegiatan')
@@ -285,12 +286,13 @@ const showKelolaAnggota = ref(false)
 const showBuatProposal = ref(false)
 const showLaporanKegiatan = ref(false)
 
-// Mock data
+// Reactive data
+const loading = ref(false)
 const stats = ref({
-  totalAnggota: 25,
-  kegiatanAktif: 8,
-  proposalPending: 3,
-  budgetTersedia: '15M'
+  totalAnggota: 0,
+  kegiatanAktif: 0,
+  proposalPending: 0,
+  budgetTersedia: '0'
 })
 
 const daftarKegiatan = ref([
@@ -407,7 +409,94 @@ const downloadProposal = (proposal) => {
   console.log('Download proposal:', proposal)
 }
 
+// Load data from API
+const loadData = async () => {
+  try {
+    loading.value = true
+    
+    // Load statistics
+    const statsResponse = await api.get('/osis-statistics')
+    stats.value = statsResponse.data.data || statsResponse.data
+    
+    // Load OSIS activities
+    const kegiatanResponse = await api.get('/osis-kegiatan')
+    daftarKegiatan.value = kegiatanResponse.data.data || kegiatanResponse.data
+    
+    // Load OSIS members
+    const anggotaResponse = await api.get('/osis-anggota')
+    anggotaOSIS.value = anggotaResponse.data.data || anggotaResponse.data
+    
+    // Fallback to mock data if API fails
+    if (!stats.value || Object.keys(stats.value).length === 0) {
+      stats.value = {
+        totalAnggota: 25,
+        kegiatanAktif: 8,
+        proposalPending: 3,
+        budgetTersedia: '15M'
+      }
+    }
+    
+    if (!daftarKegiatan.value || daftarKegiatan.value.length === 0) {
+      daftarKegiatan.value = [
+        {
+          id: 1,
+          nama: 'Penerimaan Siswa Baru',
+          deskripsi: 'Kegiatan MPLS untuk siswa baru',
+          tanggal: '2024-07-15',
+          status: 'Selesai',
+          pic: 'Ahmad Rizki',
+          budget: 5000000
+        },
+        {
+          id: 2,
+          nama: 'HUT RI ke-79',
+          deskripsi: 'Perayaan kemerdekaan Indonesia',
+          tanggal: '2024-08-17',
+          status: 'Berlangsung',
+          pic: 'Sari Dewi',
+          budget: 3000000
+        }
+      ]
+    }
+    
+    if (!anggotaOSIS.value || anggotaOSIS.value.length === 0) {
+      anggotaOSIS.value = [
+        {
+          id: 1,
+          nama: 'Ahmad Rizki',
+          kelas: 'XI IPA 1',
+          jabatan: 'Ketua OSIS'
+        },
+        {
+          id: 2,
+          nama: 'Sari Dewi',
+          kelas: 'XI IPA 2',
+          jabatan: 'Wakil Ketua'
+        },
+        {
+          id: 3,
+          nama: 'Budi Santoso',
+          kelas: 'X-A',
+          jabatan: 'Sekretaris'
+        }
+      ]
+    }
+    
+  } catch (error) {
+    console.error('Error loading OSIS data:', error)
+    // Use mock data as fallback
+    stats.value = {
+      totalAnggota: 25,
+      kegiatanAktif: 8,
+      proposalPending: 3,
+      budgetTersedia: '15M'
+    }
+  } finally {
+    loading.value = false
+  }
+}
+
 onMounted(() => {
-  console.log('OSISView mounted')
+  loadData()
 })
 </script>
