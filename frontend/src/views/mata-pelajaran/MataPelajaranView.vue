@@ -296,6 +296,7 @@
 
 <script setup>
 import { ref, reactive, computed, onMounted } from 'vue'
+import api from '@/services/api'
 
 // Reactive data
 const loading = ref(false)
@@ -333,13 +334,25 @@ const filteredMataPelajaran = computed(() => {
 const loadMataPelajaran = async () => {
   try {
     loading.value = true
-    // TODO: Implement API calls
-    // const [mapelRes, guruRes] = await Promise.all([
-    //   api.get('/mata-pelajaran'),
-    //   api.get('/guru')
-    // ])
     
-    // Mock data
+    // Load mata pelajaran from API
+    const [mapelRes, guruRes] = await Promise.all([
+      api.get('/mata-pelajaran', {
+        params: {
+          per_page: 100,
+          kelompok: filterKelompok.value
+        }
+      }),
+      api.get('/guru')
+    ])
+    
+    mataPelajaranList.value = mapelRes.data.data.data || mapelRes.data.data
+    guruList.value = guruRes.data.data || guruRes.data
+    
+    calculateStats()
+  } catch (error) {
+    console.error('Error loading mata pelajaran:', error)
+    // Fallback to mock data if API fails
     mataPelajaranList.value = [
       {
         id: 1,
@@ -349,7 +362,7 @@ const loadMataPelajaran = async () => {
         kelompok: 'A',
         jam_per_minggu: 4,
         guru: 'Dr. Ahmad Fauzi, S.Pd',
-        status: true
+        status_aktif: true
       },
       {
         id: 2,
@@ -359,51 +372,16 @@ const loadMataPelajaran = async () => {
         kelompok: 'A',
         jam_per_minggu: 4,
         guru: 'Siti Aminah, S.Pd',
-        status: true
-      },
-      {
-        id: 3,
-        kode: 'ING-001',
-        nama: 'Bahasa Inggris',
-        deskripsi: 'Mata pelajaran bahasa Inggris',
-        kelompok: 'A',
-        jam_per_minggu: 3,
-        guru: 'John Doe, S.Pd',
-        status: true
-      },
-      {
-        id: 4,
-        kode: 'FIS-001',
-        nama: 'Fisika',
-        deskripsi: 'Mata pelajaran fisika untuk peminatan IPA',
-        kelompok: 'C',
-        jam_per_minggu: 3,
-        guru: 'Rina Sari, S.Pd',
-        status: true
-      },
-      {
-        id: 5,
-        kode: 'KIM-001',
-        nama: 'Kimia',
-        deskripsi: 'Mata pelajaran kimia untuk peminatan IPA',
-        kelompok: 'C',
-        jam_per_minggu: 3,
-        guru: 'Budi Santoso, S.Pd',
-        status: true
+        status_aktif: true
       }
     ]
     
     guruList.value = [
       { id: 1, nama: 'Dr. Ahmad Fauzi, S.Pd' },
-      { id: 2, nama: 'Siti Aminah, S.Pd' },
-      { id: 3, nama: 'John Doe, S.Pd' },
-      { id: 4, nama: 'Rina Sari, S.Pd' },
-      { id: 5, nama: 'Budi Santoso, S.Pd' }
+      { id: 2, nama: 'Siti Aminah, S.Pd' }
     ]
     
     calculateStats()
-  } catch (error) {
-    console.error('Error loading mata pelajaran:', error)
   } finally {
     loading.value = false
   }
@@ -438,8 +416,7 @@ const editMataPelajaran = (mapel) => {
 const deleteMataPelajaran = async (id) => {
   if (confirm('Apakah Anda yakin ingin menghapus mata pelajaran ini?')) {
     try {
-      // TODO: Implement API call
-      // await api.delete(`/mata-pelajaran/${id}`)
+      await api.delete(`/mata-pelajaran/${id}`)
       
       mataPelajaranList.value = mataPelajaranList.value.filter(m => m.id !== id)
       calculateStats()
@@ -454,22 +431,16 @@ const saveMataPelajaran = async () => {
     loading.value = true
     
     if (showEditModal.value) {
-      // TODO: Implement API call for update
-      // await api.put(`/mata-pelajaran/${editingMataPelajaran.value.id}`, form)
-      
+      // Update existing mata pelajaran
+      const response = await api.put(`/mata-pelajaran/${editingMataPelajaran.value.id}`, form)
       const index = mataPelajaranList.value.findIndex(m => m.id === editingMataPelajaran.value.id)
       if (index !== -1) {
-        mataPelajaranList.value[index] = { ...editingMataPelajaran.value, ...form }
+        mataPelajaranList.value[index] = response.data.data
       }
     } else {
-      // TODO: Implement API call for create
-      // const response = await api.post('/mata-pelajaran', form)
-      
-      const newMataPelajaran = {
-        id: Date.now(),
-        ...form
-      }
-      mataPelajaranList.value.push(newMataPelajaran)
+      // Create new mata pelajaran
+      const response = await api.post('/mata-pelajaran', form)
+      mataPelajaranList.value.push(response.data.data)
     }
     
     calculateStats()

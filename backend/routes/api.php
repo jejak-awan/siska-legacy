@@ -18,6 +18,7 @@ use App\Http\Controllers\Api\ReferenceDataController;
 use App\Http\Controllers\Api\WhatsAppController;
 use App\Http\Controllers\Api\GalleryController;
 use App\Http\Controllers\Api\ContentController;
+use App\Http\Controllers\Api\MataPelajaranController;
 use App\Http\Controllers\Api\ImageController;
 use App\Http\Controllers\Api\DocumentationController;
 use App\Http\Controllers\Api\KategoriKreditPoinController;
@@ -303,6 +304,12 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Public content routes (no authentication required)
     Route::get('content/public', [ContentController::class, 'public']);
+
+    // Mata Pelajaran routes
+    Route::middleware('role:admin,guru,wali_kelas,bk,osis,ekstrakurikuler')->group(function () {
+        Route::apiResource('mata-pelajaran', MataPelajaranController::class);
+        Route::get('mata-pelajaran-statistics', [MataPelajaranController::class, 'statistics']);
+    });
     
     // WhatsApp webhook routes (public)
     Route::get('whatsapp/webhook', [WhatsAppController::class, 'webhookVerify']);
