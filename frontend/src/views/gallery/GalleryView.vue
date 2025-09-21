@@ -375,13 +375,14 @@ const editImage = (image) => {
 const deleteImage = async (image) => {
   if (confirm(`Apakah Anda yakin ingin menghapus "${image.title}"?`)) {
     try {
-      // TODO: Implement delete API call
+      await api.delete(`/galleries/${image.id}`)
       const index = images.value.findIndex(item => item.id === image.id)
       if (index > -1) {
         images.value.splice(index, 1)
         toast.success('Foto berhasil dihapus')
       }
     } catch (error) {
+      console.error('Delete error:', error)
       toast.error('Gagal menghapus foto')
     }
   }
@@ -402,8 +403,28 @@ const handleImageUpdated = (updatedImage) => {
   toast.success('Foto berhasil diperbarui')
 }
 
+// Load images from API
+const loadImages = async () => {
+  try {
+    loading.value = true
+    const response = await api.get('/galleries', {
+      params: {
+        per_page: 50,
+        category: selectedCategory.value,
+        status: 'published'
+      }
+    })
+    images.value = response.data.data
+  } catch (error) {
+    console.error('Failed to load images:', error)
+    toast.error('Gagal memuat galeri')
+  } finally {
+    loading.value = false
+  }
+}
+
 // Lifecycle
 onMounted(() => {
-  // Load images from API
+  loadImages()
 })
 </script>

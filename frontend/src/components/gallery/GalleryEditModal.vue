@@ -267,10 +267,21 @@ const handleSubmit = async () => {
       updated_at: new Date().toISOString()
     }
 
-    // TODO: Replace with actual API call
-    await new Promise(resolve => setTimeout(resolve, 1000)) // Mock delay
+    // Update via API
+    const updateData = {
+      title: form.title,
+      description: form.description,
+      category: form.category,
+      subcategory: form.subcategory,
+      tags: form.tags,
+      is_featured: form.is_featured,
+      is_public: form.is_public,
+      status: 'published'
+    }
 
-    emit('updated', updatedImage)
+    const response = await api.put(`/galleries/${props.image.id}`, updateData)
+
+    emit('updated', response.data.data)
   } catch (error) {
     toast.error('Gagal memperbarui foto')
     console.error('Update error:', error)

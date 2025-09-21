@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\EkstrakurikulerController;
 use App\Http\Controllers\Api\CharacterAssessmentController;
 use App\Http\Controllers\Api\ReferenceDataController;
 use App\Http\Controllers\Api\WhatsAppController;
+use App\Http\Controllers\Api\GalleryController;
 use App\Http\Controllers\Api\ImageController;
 use App\Http\Controllers\Api\DocumentationController;
 use App\Http\Controllers\Api\KategoriKreditPoinController;
@@ -279,6 +280,15 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('delete', [ImageController::class, 'delete']);
         Route::get('info', [ImageController::class, 'info']);
     });
+
+    // Gallery routes
+    Route::middleware('role:admin,guru,wali_kelas,bk,osis,ekstrakurikuler')->group(function () {
+        Route::apiResource('galleries', GalleryController::class);
+        Route::get('galleries-statistics', [GalleryController::class, 'statistics']);
+    });
+
+    // Public gallery routes (no authentication required)
+    Route::get('galleries/public', [GalleryController::class, 'public']);
     
     // WhatsApp webhook routes (public)
     Route::get('whatsapp/webhook', [WhatsAppController::class, 'webhookVerify']);

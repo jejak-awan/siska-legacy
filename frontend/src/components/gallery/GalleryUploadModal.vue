@@ -241,10 +241,25 @@ const handleSubmit = async () => {
       updated_at: new Date().toISOString()
     }
 
-    // TODO: Replace with actual API call
-    await new Promise(resolve => setTimeout(resolve, 2000)) // Mock upload delay
+    // Upload to API
+    const formData = new FormData()
+    formData.append('title', form.title)
+    formData.append('description', form.description)
+    formData.append('category', form.category)
+    formData.append('subcategory', form.subcategory)
+    formData.append('image', selectedFile.value)
+    formData.append('tags', JSON.stringify(form.tags))
+    formData.append('is_featured', form.is_featured)
+    formData.append('is_public', form.is_public)
+    formData.append('status', 'published')
 
-    emit('uploaded', imageData)
+    const response = await api.post('/galleries', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+
+    emit('uploaded', response.data.data)
   } catch (error) {
     toast.error('Gagal mengupload foto')
     console.error('Upload error:', error)
