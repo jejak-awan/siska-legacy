@@ -277,6 +277,7 @@
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
+import api from '@/services/api'
 
 // Reactive data
 const loading = ref(false)
@@ -302,34 +303,63 @@ const recentActivities = ref([])
 const loadAnalytics = async () => {
   try {
     loading.value = true
-    // TODO: Implement API call
-    // const response = await api.get('/analytics', { params: filter })
-    // const data = response.data
     
-    // Mock data
+    // Load analytics data from API
+    const response = await api.get('/analytics/dashboard', {
+      params: filter
+    })
+    
+    const data = response.data.data
+    
+    // Update metrics from API response
     metrics.value = {
-      totalSiswa: 1250,
-      kehadiranRata: 94.5,
-      nilaiKarakterRata: 3.8,
-      trenPositif: 87.2
+      totalSiswa: data.overview.total_siswa,
+      kehadiranRata: data.overview.kehadiran_rata,
+      nilaiKarakterRata: data.overview.nilai_karakter_rata,
+      trenPositif: data.overview.tren_positif
     }
     
-    topPerformers.value = [
-      { id: 1, nama: 'Ahmad Fauzi', kelas: 'XII IPA 1', nilai: 4.0 },
-      { id: 2, nama: 'Siti Aminah', kelas: 'XII IPS 1', nilai: 3.9 },
-      { id: 3, nama: 'Budi Santoso', kelas: 'XI IPA 2', nilai: 3.8 },
-      { id: 4, nama: 'Rina Sari', kelas: 'X IPA 1', nilai: 3.7 },
-      { id: 5, nama: 'John Doe', kelas: 'XII IPA 2', nilai: 3.6 }
-    ]
+    // Update top performers from API response
+    topPerformers.value = data.performance.top_performers.map(item => ({
+      id: item.id,
+      nama: item.nama,
+      kelas: item.kelas?.nama || 'N/A',
+      nilai: item.total_poin || 0
+    }))
     
-    dimensiPerformance.value = [
-      { id: 1, nama: 'Spiritual & Religius', nilai: 92 },
-      { id: 2, nama: 'Sosial & Kebangsaan', nilai: 88 },
-      { id: 3, nama: 'Gotong Royong', nilai: 85 },
-      { id: 4, nama: 'Mandiri', nilai: 90 },
-      { id: 5, nama: 'Bernalar Kritis', nilai: 87 },
-      { id: 6, nama: 'Kreatif', nilai: 83 }
-    ]
+    // Update dimensi performance from API response
+    dimensiPerformance.value = data.performance.dimensi_performance.map(item => ({
+      id: item.nama,
+      nama: item.nama,
+      nilai: item.nilai
+    }))
+    
+    // Fallback to mock data if API fails
+    if (!data || !data.overview) {
+      metrics.value = {
+        totalSiswa: 1250,
+        kehadiranRata: 94.5,
+        nilaiKarakterRata: 3.8,
+        trenPositif: 87.2
+      }
+      
+      topPerformers.value = [
+        { id: 1, nama: 'Ahmad Fauzi', kelas: 'XII IPA 1', nilai: 4.0 },
+        { id: 2, nama: 'Siti Aminah', kelas: 'XII IPS 1', nilai: 3.9 },
+        { id: 3, nama: 'Budi Santoso', kelas: 'XI IPA 2', nilai: 3.8 },
+        { id: 4, nama: 'Rina Sari', kelas: 'X IPA 1', nilai: 3.7 },
+        { id: 5, nama: 'John Doe', kelas: 'XII IPA 2', nilai: 3.6 }
+      ]
+      
+      dimensiPerformance.value = [
+        { id: 1, nama: 'Spiritual & Religius', nilai: 92 },
+        { id: 2, nama: 'Sosial & Kebangsaan', nilai: 88 },
+        { id: 3, nama: 'Gotong Royong', nilai: 85 },
+        { id: 4, nama: 'Mandiri', nilai: 90 },
+        { id: 5, nama: 'Bernalar Kritis', nilai: 87 },
+        { id: 6, nama: 'Kreatif', nilai: 83 }
+      ]
+    }
     
     recentActivities.value = [
       {

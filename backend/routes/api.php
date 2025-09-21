@@ -21,6 +21,7 @@ use App\Http\Controllers\Api\ContentController;
 use App\Http\Controllers\Api\MataPelajaranController;
 use App\Http\Controllers\Api\TahunAjaranController;
 use App\Http\Controllers\Api\HakAksesController;
+use App\Http\Controllers\Api\AnalyticsController;
 use App\Http\Controllers\Api\ImageController;
 use App\Http\Controllers\Api\DocumentationController;
 use App\Http\Controllers\Api\KategoriKreditPoinController;
@@ -334,6 +335,19 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('hak-akses/revoke', [HakAksesController::class, 'revokePermission']);
         Route::get('hak-akses/statistics', [HakAksesController::class, 'statistics']);
         Route::post('hak-akses/check', [HakAksesController::class, 'checkPermission']);
+    });
+
+    // Analytics routes
+    Route::middleware('role:admin,guru,wali_kelas,bk,osis,ekstrakurikuler')->group(function () {
+        Route::get('analytics/dashboard', [AnalyticsController::class, 'dashboard']);
+        Route::get('analytics/overview', [AnalyticsController::class, 'overview']);
+        Route::get('analytics/presensi', [AnalyticsController::class, 'presensi']);
+        Route::get('analytics/kredit-poin', [AnalyticsController::class, 'kreditPoin']);
+        Route::get('analytics/konseling', [AnalyticsController::class, 'konseling']);
+        Route::get('analytics/kegiatan', [AnalyticsController::class, 'kegiatan']);
+        Route::get('analytics/performance', [AnalyticsController::class, 'performance']);
+        Route::get('analytics/trends', [AnalyticsController::class, 'trends']);
+        Route::get('analytics/export', [AnalyticsController::class, 'export']);
     });
     
     // WhatsApp webhook routes (public)
