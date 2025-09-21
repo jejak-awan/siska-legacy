@@ -10,6 +10,9 @@ use App\Models\Guru;
 use App\Models\Kelas;
 use App\Models\Presensi;
 use App\Models\KreditPoin;
+use App\Models\Public\PublicActivity;
+use App\Models\Public\GeneralPost;
+use App\Models\Public\Program;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
@@ -22,23 +25,27 @@ class PublicContentController extends Controller
     public function getActivities(): JsonResponse
     {
         try {
-            // TODO: Implement activities/events model
-            $activities = [
-                [
-                    'id' => 1,
-                    'title' => 'Upacara Bendera',
-                    'description' => 'Upacara bendera setiap hari Senin',
-                    'date' => '2024-01-15',
-                    'type' => 'rutin'
-                ],
-                [
-                    'id' => 2,
-                    'title' => 'Pertandingan Olahraga',
-                    'description' => 'Lomba olahraga antar kelas',
-                    'date' => '2024-01-20',
-                    'type' => 'kompetisi'
-                ]
-            ];
+            $activities = PublicActivity::published()
+                ->orderBy('activity_date', 'desc')
+                ->limit(10)
+                ->get()
+                ->map(function ($activity) {
+                    return [
+                        'id' => $activity->id,
+                        'title' => $activity->title,
+                        'description' => $activity->excerpt,
+                        'date' => $activity->activity_date->format('Y-m-d'),
+                        'formatted_date' => $activity->formatted_date,
+                        'category' => $activity->category,
+                        'subcategory' => $activity->subcategory,
+                        'location' => $activity->location,
+                        'participant_count' => $activity->participant_count,
+                        'gallery_count' => $activity->gallery_count,
+                        'is_featured' => $activity->is_featured,
+                        'category_display' => $activity->getCategoryDisplayName(),
+                        'subcategory_display' => $activity->getSubcategoryDisplayName(),
+                    ];
+                });
             
             return response()->json([
                 'message' => 'Activities retrieved successfully',
@@ -58,23 +65,29 @@ class PublicContentController extends Controller
     public function getNews(): JsonResponse
     {
         try {
-            // TODO: Implement news/posts model
-            $news = [
-                [
-                    'id' => 1,
-                    'title' => 'Penerimaan Siswa Baru 2024',
-                    'content' => 'Pendaftaran siswa baru telah dibuka...',
-                    'published_at' => '2024-01-10',
-                    'author' => 'Admin Sekolah'
-                ],
-                [
-                    'id' => 2,
-                    'title' => 'Hasil Ujian Semester',
-                    'content' => 'Hasil ujian semester telah diumumkan...',
-                    'published_at' => '2024-01-08',
-                    'author' => 'Wakil Kepala Sekolah'
-                ]
-            ];
+            $news = GeneralPost::published()
+                ->orderBy('published_at', 'desc')
+                ->limit(10)
+                ->get()
+                ->map(function ($post) {
+                    return [
+                        'id' => $post->id,
+                        'title' => $post->title,
+                        'content' => $post->excerpt,
+                        'full_content' => $post->content,
+                        'published_at' => $post->published_at->format('Y-m-d H:i:s'),
+                        'formatted_date' => $post->published_at->format('d F Y'),
+                        'author_role' => $post->author_role,
+                        'author_id' => $post->author_id,
+                        'category' => $post->category,
+                        'subcategory' => $post->subcategory,
+                        'tags' => $post->tags,
+                        'formatted_tags' => $post->formatted_tags,
+                        'is_featured' => $post->is_featured,
+                        'is_pinned' => $post->is_pinned,
+                        'attachments' => $post->attachments,
+                    ];
+                });
             
             return response()->json([
                 'message' => 'News retrieved successfully',
@@ -94,21 +107,30 @@ class PublicContentController extends Controller
     public function getPrograms(): JsonResponse
     {
         try {
-            // TODO: Implement programs model
-            $programs = [
-                [
-                    'id' => 1,
-                    'name' => 'Program Unggulan',
-                    'description' => 'Program khusus untuk siswa berprestasi',
-                    'type' => 'akademik'
-                ],
-                [
-                    'id' => 2,
-                    'name' => 'Ekstrakurikuler',
-                    'description' => 'Berbagai kegiatan ekstrakurikuler',
-                    'type' => 'non_akademik'
-                ]
-            ];
+            $programs = Program::active()
+                ->orderBy('start_date', 'desc')
+                ->limit(10)
+                ->get()
+                ->map(function ($program) {
+                    return [
+                        'id' => $program->id,
+                        'name' => $program->name,
+                        'description' => $program->description,
+                        'category' => $program->category,
+                        'status' => $program->status,
+                        'start_date' => $program->start_date->format('Y-m-d'),
+                        'end_date' => $program->end_date->format('Y-m-d'),
+                        'duration' => $program->duration,
+                        'objectives' => $program->objectives,
+                        'formatted_objectives' => $program->formatted_objectives,
+                        'target_audience' => $program->target_audience,
+                        'responsible_role' => $program->responsible_role,
+                        'responsible_id' => $program->responsible_id,
+                        'completion_percentage' => $program->completion_percentage,
+                        'is_active' => $program->is_active,
+                        'is_completed' => $program->is_completed,
+                    ];
+                });
             
             return response()->json([
                 'message' => 'Programs retrieved successfully',
