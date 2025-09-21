@@ -74,7 +74,7 @@ const routes = [
       },
       // All feature pages as children of dashboard
       {
-        path: 'users',
+        path: '/users',
         name: 'Users',
         component: lazyLoad('users/UsersView'),
         meta: { 

@@ -55,15 +55,6 @@ class Role extends Model
     }
 
     /**
-     * Check if role has a specific permission.
-     */
-    public function hasPermission($permission)
-    {
-        $permissions = $this->permissions ?? [];
-        return in_array($permission, $permissions);
-    }
-
-    /**
      * Add permission to role.
      */
     public function addPermission($permission)
