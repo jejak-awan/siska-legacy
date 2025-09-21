@@ -5,7 +5,9 @@ return [
     'documentations' => [
         'default' => [
             'api' => [
-                'title' => 'L5 Swagger UI',
+                'title' => env('SWAGGER_TITLE', 'Sistem Kesiswaan API'),
+                'description' => env('SWAGGER_DESCRIPTION', 'API Documentation for Sistem Kesiswaan'),
+                'version' => env('SWAGGER_VERSION', '1.0.0'),
             ],
 
             'routes' => [
