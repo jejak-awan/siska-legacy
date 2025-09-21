@@ -1,18 +1,128 @@
-# Agent Instructions - Sistem Manajemen Kesiswaan Terintegrasi
+# Agent Instructions - Sistem Manajemen Kesiswaan Terintegrasi (SISKA)
 
 ## 🎯 Project Overview
 
-**Sistem Manajemen Kesiswaan Terintegrasi** adalah aplikasi web yang dirancang untuk mengelola data kesiswaan sekolah dengan standar nasional Indonesia.
+**SISKA** adalah sistem manajemen kesiswaan terintegrasi yang dibangun dengan Laravel (Backend) dan Vue.js (Frontend). Sistem ini dirancang untuk mengelola seluruh aspek kesiswaan sekolah mulai dari manajemen siswa, guru, presensi, penilaian karakter, hingga ekstrakurikuler dan OSIS.
 
 ### **Key Information:**
 - **Project Path**: `/opt/kesiswaan`
-- **Backend**: Laravel 11 LTS (PHP 8.3+)
-- **Frontend**: Vue.js 3 LTS dengan Composition API
+- **Backend**: Laravel 11.35 (PHP 8.3+)
+- **Frontend**: Vue.js 3.5.21 dengan Composition API
+- **Database**: MySQL dengan 20+ migrations
+- **Authentication**: Laravel Sanctum
+- **API Documentation**: Swagger/OpenAPI
 - **Database**: MySQL 8.0 dengan skema sesuai format data Indonesia
 - **Status**: READY FOR IMPLEMENTATION
 - **Timeline**: 10 weeks implementation
 
-## 📋 Current Project Status (REALITY CHECK)
+## 👥 User Roles & Permissions
+
+### 1. **Admin**
+- Full system access
+- User management
+- System configuration
+- School profile management
+
+### 2. **Guru**
+- Student management
+- Attendance tracking
+- Character assessment
+- Class management
+
+### 3. **Siswa**
+- Personal profile
+- Attendance view
+- Credit point tracking
+- Academic progress
+
+### 4. **Wali Kelas**
+- Class student management
+- Attendance monitoring
+- Parent communication
+
+### 5. **BK (Bimbingan Konseling)**
+- Student counseling
+- Character assessment
+- Home visit management
+
+### 6. **OSIS**
+- OSIS member management
+- Activity organization
+- Achievement tracking
+
+### 7. **Ekstrakurikuler**
+- Extracurricular management
+- Schedule management
+- Member management
+
+### 8. **Orang Tua**
+- Child's academic progress
+- Attendance monitoring
+- Communication with school
+
+## 🎯 Core Features
+
+### 1. **User Management System**
+- Multi-role authentication
+- User profile management
+- Role-based access control
+
+### 2. **Student Management**
+- Student registration and profiles
+- Class assignment
+- Academic year management
+
+### 3. **Attendance System**
+- Daily attendance tracking
+- QR code attendance
+- Attendance reports
+
+### 4. **Credit Point System**
+- Point-based behavior tracking
+- Category management
+- Point history
+
+### 5. **Character Assessment**
+- Multi-dimensional character evaluation
+- Assessment indicators
+- Progress tracking
+
+### 6. **Academic Management**
+- Class scheduling
+- Subject management
+- Academic year configuration
+
+### 7. **Extracurricular Management**
+- Activity organization
+- Member management
+- Schedule coordination
+
+### 8. **OSIS Management**
+- Member management
+- Activity planning
+- Leadership tracking
+
+### 9. **School Profile**
+- School information management
+- Logo and branding
+- Organizational structure
+
+### 10. **Content Management**
+- Gallery management
+- Content publishing
+- Media upload
+
+### 11. **Communication**
+- WhatsApp integration
+- Notification system
+- Parent communication
+
+### 12. **Reporting & Analytics**
+- Dashboard analytics
+- Role-based reports
+- Data visualization
+
+## 📋 Current Project Status
 
 ### ✅ **COMPLETED PHASES (Partial):**
 1. **✅ Phase 1: Database & Core Models** - PARTIAL (40% - Basic tables only)

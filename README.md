@@ -1,542 +1,262 @@
-# README - Sistem Manajemen Kesiswaan Terintegrasi
+# 🎓 SISKA - Sistem Manajemen Kesiswaan Terintegrasi
 
-## 🎯 Gambaran Umum
-Sistem manajemen kesiswaan yang komprehensif dan terintegrasi, dirancang sesuai standar nasional Indonesia dengan struktur modular yang terorganisir.
+[![Laravel](https://img.shields.io/badge/Laravel-11.35-red.svg)](https://laravel.com)
+[![Vue.js](https://img.shields.io/badge/Vue.js-3.5.21-green.svg)](https://vuejs.org)
+[![PHP](https://img.shields.io/badge/PHP-8.3+-blue.svg)](https://php.net)
+[![MySQL](https://img.shields.io/badge/MySQL-8.0+-orange.svg)](https://mysql.com)
 
-### **📊 PROJECT STATUS:**
-- **Current Phase**: Active Development - Core Features Implemented
-- **Overall Progress**: 75% COMPLETE (IN DEVELOPMENT)
-- **Last Updated: 2025-09-20 15:06:01
+**SISKA** adalah sistem manajemen kesiswaan terintegrasi yang dirancang untuk mengelola seluruh aspek kesiswaan sekolah dengan standar nasional Indonesia. Sistem ini menyediakan solusi komprehensif untuk manajemen siswa, guru, presensi, penilaian karakter, ekstrakurikuler, dan OSIS.
 
-### **✅ IMPLEMENTED FEATURES:**
-- ✅ **Backend Foundation**: Laravel 11.35 with 20+ Models implemented
-- ✅ **Frontend Structure**: Vue.js 3.5.21 with comprehensive component library
-- ✅ **Database Models**: User, Guru, Siswa, Presensi, KreditPoin, Konseling, dll
-- ✅ **Authentication**: Laravel Sanctum integration
-- ✅ **UI Components**: Tailwind CSS + Headless UI components
-- ✅ **Form Validation**: VeeValidate + Yup integration
-- ✅ **Charts & Analytics**: Chart.js integration
-- ✅ **File Management**: Image compression, PDF generation
-- ✅ **Real-time Features**: Laravel Echo + Pusher setup
-- ✅ **QR Code System**: HTML5-QRCode scanner implementation
-- ✅ **Rich Text Editor**: Quill editor integration
-- ✅ **Docker Support**: Complete Docker configuration
+## 🌟 Fitur Utama
 
-### **📋 Modul Utama:**
-- **Dashboard**: Role-based dashboard untuk semua pengguna
-- **Manajemen Pengguna**: Pengguna, Guru, Siswa, Tendik, Role
-- **Kesiswaan**: Program, Agenda, Laporan
-- **Manajemen Surat**: Sistem surat menyurat digital
-- **Presensi**: Sistem presensi real-time dengan QR code
-- **Kredit Poin Siswa**: Sistem reward & punishment terintegrasi
-- **Bimbingan Konseling**: Konseling, home visit, tindak lanjut otomatis
-- **Wali Kelas**: Manajemen siswa per kelas, koordinasi dengan BK
-- **OSIS**: Manajemen organisasi siswa, tracking kepemimpinan
-- **Ekstrakurikuler**: Kegiatan ekstrakurikuler, pencapaian, sertifikasi
-- **Piket**: Sistem piket guru dan kebersihan siswa
-- **Data Referensi**: Data sekolah, kelas, mata pelajaran, ekstrakurikuler, humas
-- **Pengaturan**: Konfigurasi sistem
+### 👥 **Manajemen Pengguna Multi-Role**
+- **Admin**: Kontrol penuh sistem dan konfigurasi
+- **Guru**: Manajemen siswa dan penilaian akademik
+- **Siswa**: Akses profil dan kemajuan akademik
+- **Wali Kelas**: Monitoring kelas dan komunikasi orang tua
+- **BK**: Bimbingan konseling dan penilaian karakter
+- **OSIS**: Manajemen organisasi dan kegiatan
+- **Ekstrakurikuler**: Koordinasi kegiatan ekstrakurikuler
+- **Orang Tua**: Monitoring kemajuan anak
 
-## 🔄 Alur Kerja Sistem
+### 📚 **Manajemen Akademik**
+- **Data Siswa**: Registrasi, profil, dan data akademik
+- **Data Guru**: Manajemen tenaga pendidik
+- **Kelas & Jadwal**: Pengaturan kelas dan jadwal pelajaran
+- **Tahun Ajaran**: Manajemen periode akademik
+- **Mata Pelajaran**: Konfigurasi kurikulum
 
-### **Sistem Kredit Poin Terintegrasi**
-```
-Presensi → Kredit Poin → Auto Trigger → BK (Counseling) 
-    ↓           ↓              ↓
-Dashboard Analytics → WhatsApp Notifications → Parent Alerts
-    ↓
-OSIS/Ekskul (Positive Points) → Leadership Tracking
-```
+### 📊 **Sistem Presensi**
+- **Presensi Harian**: Pencatatan kehadiran siswa
+- **QR Code**: Presensi dengan teknologi QR
+- **Laporan Presensi**: Analisis kehadiran dan ketidakhadiran
+- **Notifikasi**: Pemberitahuan ke orang tua
 
-### **Kriteria Rujukan Otomatis:**
-- 🟡 **10-25 poin**: Peringatan tertulis
-- 🟠 **26-50 poin**: Rujukan ke BK
-- 🔴 **51-75 poin**: Panggilan orang tua + BK intensif  
-- ⚫ **>75 poin**: Tindakan khusus/skorsing
+### ⭐ **Sistem Kredit Poin**
+- **Penilaian Perilaku**: Sistem poin untuk perilaku siswa
+- **Kategori Poin**: Berbagai kategori penilaian
+- **Riwayat Poin**: Tracking perubahan poin
+- **Pencapaian**: Sistem reward dan recognition
 
-### **Flow Presensi:**
-```
-Siswa Scan QR → Validasi GPS → Presensi Tercatat → Auto Notifikasi
-```
+### 🎯 **Penilaian Karakter**
+- **Asesmen Multidimensi**: Penilaian karakter komprehensif
+- **Indikator Karakter**: Berbagai aspek penilaian
+- **Progress Tracking**: Monitoring perkembangan karakter
+- **Laporan Karakter**: Analisis perkembangan siswa
 
-### **Flow Kredit Poin:**
-```
-Guru Input Poin → Validasi → Update Total → Cek Threshold → Auto Action
-```
+### 🏃 **Ekstrakurikuler & OSIS**
+- **Manajemen Kegiatan**: Organisasi kegiatan ekstrakurikuler
+- **Keanggotaan**: Manajemen anggota OSIS dan ekstrakurikuler
+- **Jadwal Kegiatan**: Koordinasi jadwal dan tempat
+- **Pencapaian**: Tracking prestasi dan pencapaian
 
-## 🛠️ Technology Stack
+### 🏫 **Profil Sekolah**
+- **Informasi Sekolah**: Data lengkap sekolah
+- **Logo & Branding**: Manajemen identitas sekolah
+- **Struktur Organisasi**: Hierarki dan jabatan
+- **Sejarah & Visi Misi**: Dokumentasi sekolah
 
-### Backend (Laravel 11 LTS)
-- **Framework**: Laravel 11.35 (PHP 8.3+)
-- **Database**: MySQL 8.0 LTS dengan skema sesuai format data Indonesia
-- **Authentication**: Laravel Sanctum 4.1 dengan JWT tokens
-- **Real-time**: Laravel Broadcasting + Pusher/Redis
-- **QR Code**: SimpleSoftwareIO/simple-qrcode 4.2 untuk presensi
-- **Notifications**: WhatsApp Business API + Laravel Notifications
-- **Excel Import/Export**: PhpSpreadsheet 2.4 untuk data management
-- **Image Processing**: Intervention Image 3.11
-- **HTTP Client**: Guzzle HTTP 7.9
-- **Testing**: PHPUnit 11.5 + Laravel Testing
+### 📱 **Komunikasi & Notifikasi**
+- **WhatsApp Integration**: Notifikasi via WhatsApp
+- **Sistem Notifikasi**: Pemberitahuan real-time
+- **Komunikasi Orang Tua**: Kanal komunikasi dengan wali
+- **Pengumuman**: Sistem broadcast pesan
 
-### Frontend (Vue.js 3 LTS)
-- **Framework**: Vue.js 3.5.21 + Composition API
-- **Build Tool**: Vite 5.4.20 (Modern & Fast)
-- **UI Framework**: Tailwind CSS 3.4.17 + Headless UI 1.7.23
-- **State Management**: Pinia 3.0.3
-- **Routing**: Vue Router 4.5.1
-- **Form Validation**: VeeValidate 4.15.1 + Yup 1.7.0
-- **Charts**: Chart.js 4.5.0 + Vue-ChartJS 5.3.2
-- **QR Code Scanner**: HTML5-QRCode 2.3.8
-- **Rich Text Editor**: Quill 2.0.3 + Vue-Quill-Editor 3.0.6
-- **PDF Generation**: jsPDF 3.0.3 + jsPDF-AutoTable 5.0.2
-- **Image Compression**: Image-Compression 0.0.6
-- **Real-time**: Laravel Echo 2.2.0 + Pusher-JS 8.4.0
-- **Icons**: Lucide Vue Next 0.544.0 + Heroicons 2.2.0
-- **Notifications**: Vue Toast Notification 3.1.3
-- **Date Picker**: Vue Datepicker 11.0.2
-- **Utilities**: VueUse 13.9.0 + Class Variance Authority 0.7.1
-- **Package Manager**: npm
-
-## 📁 Project Structure
-
-```
-kesiswaan/
-├── 📂 app/                     # Laravel Models (Root Level)
-│   ├── 📂 Http/Controllers/    # API Controllers
-│   └── 📂 Models/              # Core Models
-│       ├── CharacterAssessment.php
-│       ├── CharacterAssessmentHistory.php
-│       ├── CharacterDimension.php
-│       └── CharacterIndicator.php
-├── 📂 backend/                 # Laravel 11 API Backend
-│   ├── 📂 app/
-│   │   ├── 📂 Http/Controllers/
-│   │   │   ├── 📂 Api/         # API Controllers
-│   │   │   └── 📂 Public/      # Public Controllers
-│   │   ├── 📂 Models/          # Database Models
-│   │   │   ├── User.php        # Core user model
-│   │   │   ├── Guru.php        # Data guru lengkap
-│   │   │   ├── Siswa.php       # Data siswa lengkap
-│   │   │   ├── OrangTua.php    # Data orang tua
-│   │   │   ├── Presensi.php    # Sistem presensi
-│   │   │   ├── KreditPoin.php  # Sistem kredit poin
-│   │   │   ├── Konseling.php   # Bimbingan konseling
-│   │   │   ├── HomeVisit.php   # Home visit BK
-│   │   │   ├── Ekstrakurikuler.php # Ekstrakurikuler
-│   │   │   ├── OSISKegiatan.php # Kegiatan OSIS
-│   │   │   ├── Kelas.php       # Master kelas
-│   │   │   ├── TahunAjaran.php # Master tahun ajaran
-│   │   │   ├── Role.php        # Role management
-│   │   │   ├── Notifikasi.php  # Notification system
-│   │   │   ├── WhatsAppLog.php # WhatsApp integration
-│   │   │   └── 📂 Public/      # Public models
-│   │   ├── 📂 Services/        # Business logic services
-│   │   ├── 📂 Notifications/   # Notification classes
-│   │   └── 📂 Rules/           # Validation rules
-│   ├── 📂 database/            # Database migrations & seeders
-│   ├── 📂 routes/              # API routes
-│   ├── 📂 config/              # Configuration files
-│   ├── 📂 public/              # Public assets
-│   ├── 📂 resources/           # Views & assets
-│   ├── 📂 storage/             # File storage
-│   ├── 📂 tests/               # Test files
-│   ├── 📂 vendor/              # Composer dependencies
-│   ├── composer.json           # PHP dependencies
-│   └── artisan                 # Laravel CLI
-├── 📂 frontend/                # Vue.js 3 SPA
-│   ├── 📂 src/
-│   │   ├── 📂 components/      # Vue components
-│   │   │   ├── 📂 character/   # Character assessment components
-│   │   │   ├── 📂 content/     # Content management
-│   │   │   ├── 📂 editor/      # Rich text editor
-│   │   │   ├── 📂 gallery/     # Image gallery
-│   │   │   ├── 📂 layout/      # Layout components
-│   │   │   ├── 📂 modals/      # Modal dialogs
-│   │   │   ├── 📂 public/      # Public components
-│   │   │   ├── 📂 ui/          # UI components
-│   │   │   └── 📂 upload/      # File upload components
-│   │   ├── 📂 views/           # Page views
-│   │   │   ├── 📂 analytics/   # Analytics dashboard
-│   │   │   ├── 📂 auth/        # Authentication pages
-│   │   │   ├── 📂 backup-restore/ # Backup & restore
-│   │   │   ├── 📂 bk/          # Bimbingan konseling
-│   │   │   ├── 📂 content/     # Content management
-│   │   │   ├── 📂 dashboard/   # Main dashboard
-│   │   │   ├── 📂 data-pegawai/ # Employee data
-│   │   │   ├── 📂 data-referensi/ # Reference data
-│   │   │   ├── 📂 data-sekolah/ # School data
-│   │   │   ├── 📂 ekstrakurikuler/ # Extracurricular
-│   │   │   ├── 📂 guru/        # Teacher management
-│   │   │   ├── 📂 hak-akses/   # Access rights
-│   │   │   ├── 📂 jadwal/      # Schedule management
-│   │   │   ├── 📂 kelas/       # Class management
-│   │   │   ├── 📂 konfigurasi-karakter/ # Character config
-│   │   │   ├── 📂 kredit-poin/ # Credit points
-│   │   │   ├── 📂 laporan/     # Reports
-│   │   │   ├── 📂 mata-pelajaran/ # Subjects
-│   │   │   ├── 📂 notifications/ # Notifications
-│   │   │   ├── 📂 osis/        # OSIS management
-│   │   │   ├── 📂 pengaturan/  # Settings
-│   │   │   ├── 📂 presensi/    # Attendance
-│   │   │   ├── 📂 profil-sekolah/ # School profile
-│   │   │   ├── 📂 profile/     # User profile
-│   │   │   ├── 📂 program-kesiswaan/ # Student programs
-│   │   │   ├── 📂 public/      # Public pages
-│   │   │   ├── 📂 referensi-data/ # Reference data
-│   │   │   ├── 📂 siswa/       # Student management
-│   │   │   ├── 📂 struktur-organisasi/ # Organization structure
-│   │   │   ├── 📂 tahun-ajaran/ # Academic year
-│   │   │   └── 📂 users/       # User management
-│   │   ├── 📂 stores/          # Pinia state management
-│   │   ├── 📂 services/        # API services
-│   │   ├── 📂 router/          # Vue Router
-│   │   ├── 📂 composables/     # Vue composables
-│   │   ├── 📂 utils/           # Utility functions
-│   │   ├── 📂 lib/             # Library configurations
-│   │   ├── 📂 plugins/         # Vue plugins
-│   │   ├── 📂 assets/          # Static assets
-│   │   ├── App.vue             # Main app component
-│   │   └── main.js             # App entry point
-│   ├── 📂 dist/                # Built assets
-│   ├── 📂 node_modules/        # NPM dependencies
-│   ├── package.json            # NPM dependencies
-│   ├── vite.config.js          # Vite configuration
-│   ├── tailwind.config.js      # Tailwind CSS config
-│   └── postcss.config.js       # PostCSS config
-├── 📂 docs/                    # Documentation
-│   ├── 📂 arsip/               # Archived documentation
-│   ├── 📂 Components/          # Component documentation
-│   ├── 📂 Dashboard/           # Dashboard documentation
-│   ├── 📂 data format/         # Excel templates
-│   └── 📂 konten/              # Content documentation
-├── 📂 docker/                  # Docker configuration
-│   ├── docker-compose.yml      # Docker services
-│   └── README.md               # Docker documentation
-├── 📂 backups/                 # Backup files
-├── 📂 ssl/                     # SSL certificates
-├── 📂 tests/                   # Test files
-├── 📂 .github/                 # GitHub workflows & docs
-│   ├── QUICK_START.md          # Quick start guide
-│   └── agent-instructions.md   # Agent instructions
-└── 📄 README.md                # This file
-```
+### 📈 **Dashboard & Laporan**
+- **Dashboard Role-based**: Tampilan sesuai peran pengguna
+- **Analytics**: Statistik dan analisis data
+- **Laporan Komprehensif**: Berbagai jenis laporan
+- **Export Data**: Ekspor data dalam berbagai format
 
 ## 🚀 Quick Start
 
 ### Prerequisites
-- **PHP 8.3+** (Laravel 11 requirement)
-- **Composer** (PHP dependency manager)
-- **Node.js 18+** (Vue.js 3 requirement)
-- **MySQL 8.0** (Database engine)
-- **Redis** (Caching & real-time features)
-- **Git** (Version control)
+- PHP 8.3+
+- Node.js 18+
+- MySQL 8.0+
+- Composer
+- NPM
 
 ### Installation
-
-1. **Clone Repository**
 ```bash
+# Clone repository
 git clone https://github.com/jejak-awan/siska.git
 cd siska
-```
 
-2. **Setup Backend (Laravel)**
-```bash
+# Backend setup
 cd backend
 composer install
 cp .env.example .env
 php artisan key:generate
 php artisan migrate --seed
-php artisan storage:link
-```
 
-3. **Setup Frontend (Vue.js)**
-```bash
-cd frontend
+# Frontend setup
+cd ../frontend
 npm install
-image.pngnpm run dev  # Runs on http://localhost:3000
+npm run dev
+
+# Start servers
+cd ..
+./scripts/server-manager.sh start all
 ```
 
-4. **Development Servers**
-```bash
-# Backend API (Laravel)
-cd backend && php artisan serve --port=8000
-# Access: http://localhost:8000/api/
+### Access Application
+- **Frontend**: http://localhost:3000
+- **Backend API**: http://localhost:8000
+- **API Documentation**: http://localhost:8080/api/documentation
 
-# Alternative Swagger Documentation
-cd backend && php artisan serve --port=8080
-# Access: http://localhost:8080/api/documentation
+### Default Login
+- **Admin**: admin@siska.local / password
+- **Guru**: guru@siska.local / password
+- **Siswa**: siswa@siska.local / password
 
-# Frontend Component Documentation
-cd frontend && npm run dev
-# Access: http://localhost:6006
-```
+## 🛠️ Technology Stack
 
-5. **Production Build (Nginx Native)**
-```bash
-# Build frontend for production
-cd frontend
-npm run build
+### Backend
+- **Laravel 11.35** - PHP Framework
+- **Laravel Sanctum** - API Authentication
+- **MySQL 8.0** - Database
+- **Swagger/OpenAPI** - API Documentation
+- **Intervention Image** - Image Processing
+- **PhpSpreadsheet** - Excel Processing
 
-# Nginx configuration already set up at /etc/nginx/sites-available/siska
-# Frontend: https://siska.local (serves static files)
-# Backend API: https://siska.local/api/ (proxy to Laravel port 8000)
-# Swagger UI: https://siska.local/api/documentation
-```
+### Frontend
+- **Vue.js 3.5.21** - JavaScript Framework
+- **Vite** - Build Tool
+- **Tailwind CSS** - Styling Framework
+- **Pinia** - State Management
+- **Axios** - HTTP Client
+- **CKEditor 5** - Rich Text Editor
+- **Chart.js** - Data Visualization
 
-5. **Configure Environment**
-```env
-# Database Configuration
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=kesiswaan
-DB_USERNAME=root
-DB_PASSWORD=
+## 📱 User Interface
 
-# Redis Configuration
-REDIS_HOST=127.0.0.1
-REDIS_PASSWORD=null
-REDIS_PORT=6379
+### Dashboard
+- **Role-based Dashboard**: Tampilan khusus sesuai peran pengguna
+- **Real-time Statistics**: Statistik terkini dan analisis
+- **Quick Actions**: Akses cepat ke fitur utama
+- **Notification Center**: Pusat notifikasi dan pengumuman
 
-# WhatsApp Configuration
-WHATSAPP_API_URL=your_whatsapp_api_url
-WHATSAPP_API_TOKEN=your_whatsapp_token
+### Responsive Design
+- **Mobile-First**: Optimized untuk perangkat mobile
+- **Tablet Support**: Tampilan optimal untuk tablet
+- **Desktop Experience**: Pengalaman lengkap di desktop
+- **Cross-browser**: Kompatibel dengan browser modern
 
-# Pusher Configuration (for real-time features)
-PUSHER_APP_ID=your_pusher_app_id
-PUSHER_APP_KEY=your_pusher_app_key
-PUSHER_APP_SECRET=your_pusher_app_secret
-```
+## 🔐 Security Features
 
-## 👥 User Roles & Permissions
+### Authentication & Authorization
+- **Multi-role Authentication**: Sistem login berdasarkan peran
+- **Token-based Security**: Keamanan berbasis token
+- **Role-based Access Control**: Kontrol akses berdasarkan peran
+- **Session Management**: Manajemen sesi yang aman
 
-### **Dashboard Khusus per Role:**
+### Data Protection
+- **Input Validation**: Validasi input yang ketat
+- **SQL Injection Prevention**: Perlindungan dari SQL injection
+- **XSS Protection**: Perlindungan dari cross-site scripting
+- **CSRF Protection**: Perlindungan dari CSRF attacks
 
-| Role | Dashboard Features | Permissions | Access Level |
-|------|-------------------|-------------|--------------|
-| **Admin** | System overview, user management, analytics | Full access to all modules | ✅ Complete |
-| **Guru** | Kelas yang diampu, presensi siswa, input kredit poin | Manage class, input points, view schedule | 📝 Manage |
-| **Siswa** | Presensi pribadi, kredit poin, jadwal, notifikasi | View own data, view schedule | 👁️ View |
-| **Wali Kelas** | Kelas yang diampu, presensi kelas, koordinasi BK | Manage class, coordinate with BK | 📝 Manage |
-| **BK** | Siswa rujukan, jadwal konseling, home visit | Manage counseling, home visit | 📝 Manage |
-| **OSIS** | Struktur OSIS, kegiatan, anggota, laporan | Manage OSIS activities | 📝 Manage |
-| **Ekstrakurikuler** | Daftar ekskul, anggota, jadwal, prestasi | Manage extracurricular | 📝 Manage |
-| **Orang Tua** | Data anak, presensi anak, kredit poin anak | View child's data | 👁️ View |
+## 📊 Data Management
 
-### **Permission Matrix:**
+### Import/Export
+- **Excel Import**: Import data dari file Excel
+- **Data Export**: Ekspor data dalam berbagai format
+- **Template Download**: Template untuk import data
+- **Data Validation**: Validasi data sebelum import
 
-| Module | Admin | Guru | Siswa | Wali Kelas | BK | OSIS | Ekstrakurikuler | Orang Tua |
-|--------|-------|------|-------|------------|----|----- |----------------|-----------|
-| **Dashboard** | ✅ Full | ✅ Role-based | ✅ Personal | ✅ Class | ✅ Counseling | ✅ OSIS | ✅ Extracurricular | ✅ Child |
-| **Presensi** | ✅ Manage | 📝 Input | 👁️ View | 📝 Manage Class | 👁️ View | 👁️ View | 👁️ View | 👁️ Child |
-| **Kredit Poin** | ✅ Manage | 📝 Input | 👁️ View | 📝 Manage Class | 📝 Refer | 📝 Input | 📝 Input | 👁️ Child |
-| **Konseling** | ✅ Manage | 📝 Refer | 📅 Schedule | 👁️ Coordinate | ✅ Manage | 👁️ View | 👁️ View | 📅 Appointment |
-| **OSIS** | ✅ Manage | 👁️ View | 🗳️ Participate | 👁️ View | 👁️ View | ✅ Manage | 👁️ View | 👁️ View |
-| **Ekstrakurikuler** | ✅ Manage | 👁️ View | 📝 Register | 👁️ View | 👁️ View | 👁️ View | ✅ Manage | 👁️ Child |
-| **Piket** | ✅ Manage | 📝 Report | 📝 Clean | 📝 Manage | 👁️ View | 👁️ View | 👁️ View | 👁️ View |
-| **User Management** | ✅ Manage | 👁️ View | 👁️ Profile | 👁️ View | 👁️ View | 👁️ View | 👁️ View | 👁️ Profile |
+### Backup & Recovery
+- **Database Backup**: Backup otomatis database
+- **File Backup**: Backup file dan media
+- **Recovery System**: Sistem pemulihan data
+- **Version Control**: Kontrol versi data
 
-## 🎯 Key Features
+## 🌐 Integration
 
-### ✅ **Core Features (Ready for Implementation)**
-- [x] **Database Schema**: 15+ tables sesuai format data Indonesia
-- [x] **Multi-role Authentication**: 8 role types dengan permissions
-- [x] **Role-based Dashboard**: Unified dashboard dengan role-specific content
-- [x] **Presensi System**: QR code + GPS validation
-- [x] **Kredit Poin System**: Automated threshold-based actions
-- [x] **WhatsApp Notifications**: Business API integration
-- [x] **Excel Import/Export**: Template-based data management
-- [x] **Real-time Updates**: WebSocket + Redis caching
+### WhatsApp Integration
+- **Notification Service**: Notifikasi via WhatsApp
+- **Bulk Messaging**: Pengiriman pesan massal
+- **Template Messages**: Template pesan yang dapat dikustomisasi
+- **Delivery Status**: Status pengiriman pesan
 
-### 🔄 **Integration Features**
-- [x] **Presensi → Kredit Poin**: Auto-trigger based on attendance
-- [x] **Kredit Poin → BK**: Auto-referral based on thresholds
-- [x] **OSIS → Kredit Poin**: Leadership points integration
-- [x] **Ekstrakurikuler → Kredit Poin**: Achievement points
-- [x] **Cross-Module**: Unified student profile across all modules
-- [x] **Notifications**: Multi-channel alerts (WhatsApp, Email, Push)
+### API Integration
+- **RESTful API**: API yang mengikuti standar REST
+- **API Documentation**: Dokumentasi API yang lengkap
+- **Rate Limiting**: Pembatasan rate API
+- **API Versioning**: Versioning untuk kompatibilitas
 
-### 🚫 **Excluded Features**
-- ❌ Payment/billing system
-- ❌ Financial reporting
-- ❌ Fee collection
-- ❌ Payment gateways
+## 📈 Performance
 
-## 📊 Dashboard Features
+### Optimization
+- **Database Indexing**: Optimasi database dengan indexing
+- **Caching System**: Sistem cache untuk performa
+- **Lazy Loading**: Loading komponen yang efisien
+- **Bundle Optimization**: Optimasi bundle frontend
 
-### **Admin Dashboard**
-- System overview & statistics
-- Multi-module analytics
-- User management
-- System configuration
+### Monitoring
+- **Performance Metrics**: Metrik performa aplikasi
+- **Error Tracking**: Tracking error dan debugging
+- **Usage Analytics**: Analisis penggunaan sistem
+- **Health Checks**: Monitoring kesehatan sistem
 
-### **Guru Dashboard**
-- Kelas yang diampu
-- Presensi siswa
-- Input kredit poin
-- Jadwal mengajar
+## 🎯 Target Users
 
-### **Siswa Dashboard**
-- Presensi pribadi
-- Kredit poin terkini
-- Jadwal kegiatan
-- Notifikasi
+### Sekolah
+- **SD/MI**: Sekolah dasar dan madrasah ibtidaiyah
+- **SMP/MTs**: Sekolah menengah pertama dan madrasah tsanawiyah
+- **SMA/MA**: Sekolah menengah atas dan madrasah aliyah
+- **SMK**: Sekolah menengah kejuruan
 
-### **Wali Kelas Dashboard**
-- Kelas yang diampu
-- Presensi kelas
-- Kredit poin kelas
-- Koordinasi dengan BK
+### Stakeholders
+- **Kepala Sekolah**: Monitoring dan evaluasi sekolah
+- **Guru**: Manajemen pembelajaran dan siswa
+- **Siswa**: Akses informasi akademik dan non-akademik
+- **Orang Tua**: Monitoring kemajuan anak
+- **Admin**: Manajemen sistem dan data
 
-### **BK Dashboard**
-- Siswa rujukan
-- Jadwal konseling
-- Home visit
-- Laporan perkembangan
+## 📞 Support & Documentation
 
-### **OSIS Dashboard**
-- Struktur organisasi
-- Kegiatan OSIS
-- Anggota OSIS
-- Laporan kegiatan
+### Documentation
+- **User Manual**: Panduan penggunaan untuk setiap role
+- **API Documentation**: Dokumentasi API yang lengkap
+- **Developer Guide**: Panduan untuk developer
+- **FAQ**: Frequently Asked Questions
 
-### **Ekstrakurikuler Dashboard**
-- Daftar ekstrakurikuler
-- Anggota per ekstrakurikuler
-- Jadwal kegiatan
-- Prestasi
-
-## 🔧 Development
-
-### Run Development Server
-```bash
-# Backend
-cd backend && php artisan serve
-
-# Frontend  
-cd frontend && npm run dev
-```
-
-### Run Tests
-```bash
-# Backend tests
-cd backend && php artisan test
-
-# Frontend tests
-cd frontend && npm run test
-```
-
-### Docker Development
-```bash
-# Start all services
-docker-compose up -d
-
-# View logs
-docker-compose logs -f
-
-# Stop services
-docker-compose down
-```
-
-## 📖 Documentation
-
-### **🔧 Automated Documentation Tools**
-
-#### **API Documentation (Swagger/OpenAPI)**
-- **Swagger UI**: `http://localhost:8080/api/documentation` (Primary documentation port)
-- **Swagger UI (Alt)**: `http://localhost:8000/api/documentation` (Backend integrated)
-- **OpenAPI Spec**: `http://localhost:8000/api/docs` (JSON format)
-- **Features**: Interactive API testing, Request/Response examples, Authentication testing
-
-#### **Frontend Component Documentation**
-- **Component Documentation**: Using inline component documentation and JSDoc comments
-- **Features**: Inline component documentation, JSDoc comments, Component examples
-
-#### **Quick Start Documentation**
-```bash
-# Development Environment
-# API Documentation (Primary)
-cd backend && php artisan serve --port=8000
-# Visit: http://localhost:8000/api/documentation
-
-# API Documentation (Alternative)
-cd backend && php artisan serve --port=8080
-# Visit: http://localhost:8080/api/documentation
-
-# Component Documentation
-cd frontend && npm run dev
-# Visit: http://localhost:6006
-
-# Production Environment
-# All documentation available at: https://siska.local/api/documentation
-```
-
-### **📋 Manual Documentation**
-- [Rencana Implementasi Lengkap](docs/RENCANA_IMPLEMENTASI_LENGKAP.md)
-- [Project Timeline & Checklist](docs/PROJECT_TIMELINE_IMPLEMENTASI.md)
-- [Rekomendasi Tambahan & Best Practices](docs/REKOMENDASI_TAMBAHAN_BEST_PRACTICES.md)
-- [Skema Database Sesuai Format Data](docs/SKEMA_DATABASE_SESUAI_FORMAT_DATA.md)
-
-### **📊 Data Format Templates**
-- [Data Guru Template](docs/data%20format/Data%20Guru.xlsx)
-- [Data Siswa Template](docs/data%20format/Data%20Siswa.xlsx)
-- [Formulir Guru](docs/data%20format/Formulir%20Guru.xlsx)
-- [Formulir Siswa](docs/data%20format/Formulir%20Siswa.xlsx)
-
-### **📁 Archived Documentation**
-- [System Integration Guide](docs/arsip/SYSTEM_INTEGRATION.md)
-- [API Documentation](docs/arsip/API_DOCUMENTATION.md)
-- [Data Format Reference](docs/arsip/DATA_FORMAT_REFERENCE.md)
-
-## 🚀 Project Status
-
-### **Current Status: ACTIVE DEVELOPMENT** 🚧
-
-**Completed:**
-- ✅ **Database Schema Design** (20+ models implemented)
-- ✅ **Project Architecture** (Laravel 11.35 + Vue.js 3.5.21)
-- ✅ **Backend Foundation** (Models, Controllers, Services)
-- ✅ **Frontend Structure** (Components, Views, Router, Stores)
-- ✅ **Technology Stack** (Modern, scalable, production-ready)
-- ✅ **Docker Configuration** (Complete containerization)
-- ✅ **UI/UX Components** (Tailwind CSS + Headless UI)
-
-**In Progress:**
-- 🔄 **API Integration** (Backend-Frontend connectivity)
-- 🔄 **Business Logic** (Kredit Poin, Presensi, BK workflows)
-- 🔄 **Real-time Features** (Notifications, Live updates)
-- 🔄 **Testing & Quality Assurance**
-
-**Next Steps:**
-- 🔄 **Phase 1**: Complete API endpoints & authentication
-- 🔄 **Phase 2**: Implement business workflows
-- 🔄 **Phase 3**: Integration testing & optimization
-- 🔄 **Phase 4**: Production deployment & monitoring
-
-**Timeline**: 4-6 weeks to completion
-**Team Size**: 2-3 developers recommended
+### Support
+- **GitHub Issues**: Laporan bug dan feature request
+- **Email Support**: Dukungan via email
+- **Community Forum**: Forum komunitas pengguna
+- **Training Materials**: Materi pelatihan dan tutorial
 
 ## 🤝 Contributing
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+Kami menyambut kontribusi dari komunitas! Silakan lihat [Contributing Guidelines](.github/CONTRIBUTING.md) untuk informasi lebih lanjut.
 
-## 📝 License
+### Development
+- Fork repository
+- Create feature branch
+- Make changes
+- Submit pull request
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+### Reporting Issues
+- Gunakan GitHub Issues
+- Berikan detail yang jelas
+- Sertakan screenshot jika perlu
+- Jelaskan langkah reproduksi
 
-## 🆘 Support
+## 📄 License
 
-For support and questions:
-- 📧 Email: jejakawan007@gmail.com
-- 📱 GitHub: [jejak-awan/siska](https://github.com/jejak-awan/siska)
-- 💬 Issues: [GitHub Issues](https://github.com/jejak-awan/siska/issues)
+Proyek ini dilisensikan di bawah [MIT License](LICENSE).
+
+## 🙏 Acknowledgments
+
+- **Laravel Community** - Framework dan ekosistem yang luar biasa
+- **Vue.js Community** - Framework frontend yang powerful
+- **Tailwind CSS** - Utility-first CSS framework
+- **Contributors** - Semua kontributor yang telah membantu
 
 ---
 
-**Sistem Manajemen Kesiswaan Terintegrasi** - Mengelola siswa dengan standar nasional Indonesia 🇮🇩
+**SISKA** - Membangun masa depan pendidikan Indonesia yang lebih baik! 🎓✨
 
-*Ready for implementation with comprehensive documentation and modern technology stack.*
+*Dibuat dengan ❤️ untuk pendidikan Indonesia*
