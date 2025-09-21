@@ -13,7 +13,7 @@ services:
       - "8000:8000" # Laravel Backend
       - "3000:3000" # Frontend (Vite)
       - "8080:8080" # Swagger Documentation
-      - "6006:6006" # Storybook
+      # Storybook removed
     environment:
       - DB_HOST=db
       - DB_DATABASE=kesiswaan

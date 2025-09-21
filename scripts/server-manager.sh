@@ -109,34 +109,8 @@ start_backend() {
     fi
 }
 
-# Function to start Storybook
-start_storybook() {
-    if check_port 6006; then
-        print_warning "Port 6006 is already in use"
-        get_port_info 6006
-        return 1
-    fi
-    
-    print_info "Starting Storybook on port 6006..."
-    cd frontend
-    nohup npm run storybook > ../logs/storybook.log 2>&1 &
-    local pid=$!
-    cd ..
-    
-    # Create logs directory if it doesn't exist
-    mkdir -p logs
-    echo "$pid" > logs/storybook.pid
-    
-    sleep 5
-    
-    if check_port 6006; then
-        print_success "Storybook started on port 6006 (PID: $pid)"
-        return 0
-    else
-        print_error "Failed to start Storybook on port 6006"
-        return 1
-    fi
-}
+# Storybook removed from project
+print_info "Storybook has been removed from the project"
 
 # Function to show server status
 show_status() {
@@ -151,7 +125,7 @@ show_status() {
     get_port_info 9000
     
     echo ""
-    get_port_info 6006  # Storybook
+    # Storybook port removed
     
     echo ""
     echo "📚 Documentation URLs:"
@@ -171,7 +145,7 @@ show_status() {
         echo "  • API Docs (9000): http://localhost:9000/api/documentation"
     fi
     if check_port 6006; then
-        echo "  • Storybook: http://localhost:6006"
+        # Storybook removed
     fi
 }
 
@@ -197,7 +171,7 @@ start_all() {
     
     start_backend 8000 "Main"
     start_backend 8080 "Alternative"
-    start_storybook
+    print_info "Storybook has been removed from the project"
     
     echo ""
     show_status
@@ -214,7 +188,7 @@ case "$1" in
                 start_backend "${3:-8000}" "Backend"
                 ;;
             "storybook")
-                start_storybook
+                print_info "Storybook has been removed from the project"
                 ;;
             "all")
                 start_all
@@ -252,7 +226,7 @@ case "$1" in
             "storybook")
                 kill_port 6006
                 sleep 2
-                start_storybook
+                print_info "Storybook has been removed from the project"
                 ;;
             "all")
                 stop_all

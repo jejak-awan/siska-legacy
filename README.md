@@ -267,7 +267,7 @@ cd backend && php artisan serve --port=8080
 # Access: http://localhost:8080/api/documentation
 
 # Frontend Component Documentation
-cd frontend && npm run storybook
+cd frontend && npm run dev
 # Access: http://localhost:6006
 ```
 
@@ -448,10 +448,9 @@ docker-compose down
 - **OpenAPI Spec**: `http://localhost:8000/api/docs` (JSON format)
 - **Features**: Interactive API testing, Request/Response examples, Authentication testing
 
-#### **Frontend Component Documentation (Storybook)**
-- **Storybook UI**: `http://localhost:6006` (Component documentation)
-- **Features**: Component playground, Interactive testing, Design system documentation
-- **Available Stories**: Button, Card, StatCard, ChartCard, ThemeToggle
+#### **Frontend Component Documentation**
+- **Component Documentation**: Removed Storybook, using inline component documentation
+- **Features**: Inline component documentation, JSDoc comments, Component examples
 
 #### **Quick Start Documentation**
 ```bash
@@ -465,7 +464,7 @@ cd backend && php artisan serve --port=8080
 # Visit: http://localhost:8080/api/documentation
 
 # Component Documentation
-cd frontend && npm run storybook
+cd frontend && npm run dev
 # Visit: http://localhost:6006
 
 # Production Environment

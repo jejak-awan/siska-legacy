@@ -156,30 +156,7 @@ else
     print_warning "Backend directory not found, skipping Swagger generation"
 fi
 
-print_status "Building Frontend Component Documentation (Storybook)..."
-
-# Build Storybook documentation
-if [ -d "frontend" ]; then
-    cd frontend
-    
-    # Check if Storybook is installed
-    if [ -d ".storybook" ]; then
-        print_status "Building Storybook documentation..."
-        npm run build-storybook
-        
-        if [ $? -eq 0 ]; then
-            print_success "Storybook documentation built successfully"
-        else
-            print_error "Failed to build Storybook documentation"
-        fi
-    else
-        print_warning "Storybook not found, skipping Storybook build"
-    fi
-    
-    cd ..
-else
-    print_warning "Frontend directory not found, skipping Storybook build"
-fi
+print_status "Frontend Component Documentation (Storybook) has been removed from the project"
 
 print_status "Updating README documentation links..."
 
@@ -201,7 +178,7 @@ if [ "$START_SERVERS" = true ]; then
     # Kill existing processes on target ports
     kill_port $BACKEND_PORT
     kill_port $ALT_PORT
-    kill_port 6006  # Storybook port
+    # Storybook port removed
     
     # Create logs directory if it doesn't exist
     mkdir -p logs
@@ -220,12 +197,9 @@ if [ "$START_SERVERS" = true ]; then
     ALT_PID=$!
     cd ..
     
-    # Start Storybook
-    print_info "Starting Storybook on port 6006..."
-    cd frontend
-    nohup npm run storybook > ../logs/storybook.log 2>&1 &
-    STORYBOOK_PID=$!
-    cd ..
+    # Storybook removed from project
+    print_info "Storybook has been removed from the project"
+    STORYBOOK_PID=""
     
     # Wait a moment for servers to start
     sleep 5
@@ -243,16 +217,13 @@ if [ "$START_SERVERS" = true ]; then
         print_success "Alternative backend server running on port $ALT_PORT (PID: $ALT_PID)"
     fi
     
-    if check_port 6006; then
-        print_error "Storybook failed to start on port 6006"
-    else
-        print_success "Storybook running on port 6006 (PID: $STORYBOOK_PID)"
-    fi
+    # Storybook check removed
+    print_info "Storybook has been removed from the project"
     
     # Save PIDs for later reference
     echo "$BACKEND_PID" > logs/backend-$BACKEND_PORT.pid
     echo "$ALT_PID" > logs/backend-$ALT_PORT.pid
-    echo "$STORYBOOK_PID" > logs/storybook.pid
+    # Storybook PID file removed
     
     print_info "Server logs available in logs/ directory"
 fi
@@ -269,7 +240,7 @@ echo ""
 echo "🔧 To start documentation servers manually:"
 echo "  • Backend (Main): cd backend && php artisan serve --port=$BACKEND_PORT"
 echo "  • Backend (Alt): cd backend && php artisan serve --port=$ALT_PORT"
-echo "  • Frontend: cd frontend && npm run storybook"
+echo "  • Frontend: cd frontend && npm run dev"
 echo ""
 echo "🛠️  Script Usage:"
 echo "  • Generate docs: ./scripts/generate-docs.sh"

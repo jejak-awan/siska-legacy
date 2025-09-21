@@ -1,5 +1,9 @@
 <template>
   <div class="ckeditor-wrapper">
+    <!-- Toolbar Container -->
+    <div ref="toolbar" class="ck-toolbar-container"></div>
+    
+    <!-- Editor Container -->
     <ckeditor
       v-model="content"
       :editor="editor"
@@ -20,7 +24,7 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue'
 import { component as ckeditor } from '@ckeditor/ckeditor5-vue'
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+import DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document'
 
 const props = defineProps({
   modelValue: {
@@ -43,8 +47,9 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue', 'change'])
 
-const editor = ClassicEditor
+const editor = DecoupledEditor
 const content = ref(props.modelValue)
+const toolbar = ref(null)
 
 // Character count (excluding HTML tags)
 const characterCount = computed(() => {
@@ -53,21 +58,22 @@ const characterCount = computed(() => {
   return textContent.length
 })
 
-// CKEditor Configuration
+// CKEditor Configuration - Decoupled Document build with advanced features
 const editorConfig = {
   placeholder: props.placeholder,
   toolbar: [
     'heading',
     '|',
+    'fontSize',
+    'fontFamily',
+    '|',
+    'fontColor',
+    'fontBackgroundColor',
+    '|',
     'bold',
     'italic',
     'underline',
     'strikethrough',
-    '|',
-    'fontSize',
-    'fontFamily',
-    'fontColor',
-    'fontBackgroundColor',
     '|',
     'alignment',
     '|',
@@ -100,7 +106,7 @@ const editorConfig = {
   },
   fontSize: {
     options: [
-      9, 11, 13, 'default', 17, 19, 21
+      9, 11, 13, 'default', 17, 19, 21, 24, 28, 32
     ],
     supportAllValues: true
   },
@@ -187,7 +193,12 @@ const editorConfig = {
 
 // Event handlers
 const onReady = (editor) => {
-  console.log('CKEditor is ready to use!', editor)
+  console.log('CKEditor Decoupled Document is ready to use!', editor)
+  
+  // Insert toolbar into the container
+  if (toolbar.value) {
+    toolbar.value.appendChild(editor.ui.view.toolbar.element)
+  }
   
   // Set initial content
   if (props.modelValue) {
