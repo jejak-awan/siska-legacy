@@ -231,6 +231,7 @@
 
 <script setup>
 import { ref, reactive, computed, onMounted } from 'vue'
+import api from '@/services/api'
 
 // Reactive data
 const loading = ref(false)
@@ -259,45 +260,42 @@ const filteredTahunAjaran = computed(() => {
 const loadTahunAjaran = async () => {
   try {
     loading.value = true
-    // TODO: Implement API call
-    // const response = await api.get('/tahun-ajaran')
-    // tahunAjaranList.value = response.data
+    // Load tahun ajaran from API
+    const response = await api.get('/tahun-ajaran', {
+      params: {
+        per_page: 100,
+        status: filterStatus.value
+      }
+    })
     
-    // Mock data
+    tahunAjaranList.value = response.data.data.data || response.data.data
+  } catch (error) {
+    console.error('Error loading tahun ajaran:', error)
+    // Fallback to mock data if API fails
     tahunAjaranList.value = [
       {
         id: 1,
-        tahun_ajaran: '2024/2025',
-        semester: 'Ganjil',
+        nama: '2024/2025',
+        tahun_mulai: 2024,
+        tahun_selesai: 2025,
         tanggal_mulai: '2024-07-15',
-        tanggal_selesai: '2024-12-20',
-        keterangan: 'Tahun ajaran baru dengan kurikulum merdeka',
-        status: 'aktif',
-        jumlah_kelas: 42
+        tanggal_selesai: '2025-06-30',
+        keterangan: 'Tahun ajaran aktif saat ini',
+        is_aktif: true,
+        jumlah_kelas: 12
       },
       {
         id: 2,
-        tahun_ajaran: '2024/2025',
-        semester: 'Genap',
-        tanggal_mulai: '2025-01-06',
-        tanggal_selesai: '2025-06-20',
-        keterangan: 'Semester genap tahun ajaran 2024/2025',
-        status: 'tidak-aktif',
-        jumlah_kelas: 42
-      },
-      {
-        id: 3,
-        tahun_ajaran: '2023/2024',
-        semester: 'Genap',
-        tanggal_mulai: '2024-01-08',
-        tanggal_selesai: '2024-06-21',
+        nama: '2023/2024',
+        tahun_mulai: 2023,
+        tahun_selesai: 2024,
+        tanggal_mulai: '2023-07-15',
+        tanggal_selesai: '2024-06-30',
         keterangan: 'Tahun ajaran sebelumnya',
-        status: 'selesai',
-        jumlah_kelas: 40
+        is_aktif: false,
+        jumlah_kelas: 12
       }
     ]
-  } catch (error) {
-    console.error('Error loading tahun ajaran:', error)
   } finally {
     loading.value = false
   }
@@ -389,8 +387,7 @@ const setActiveTahunAjaran = async (id) => {
 const deleteTahunAjaran = async (id) => {
   if (confirm('Apakah Anda yakin ingin menghapus tahun ajaran ini?')) {
     try {
-      // TODO: Implement API call
-      // await api.delete(`/tahun-ajaran/${id}`)
+      await api.delete(`/tahun-ajaran/${id}`)
       
       tahunAjaranList.value = tahunAjaranList.value.filter(t => t.id !== id)
     } catch (error) {
@@ -404,23 +401,16 @@ const saveTahunAjaran = async () => {
     loading.value = true
     
     if (showEditModal.value) {
-      // TODO: Implement API call for update
-      // await api.put(`/tahun-ajaran/${editingTahunAjaran.value.id}`, form)
-      
+      // Update existing tahun ajaran
+      const response = await api.put(`/tahun-ajaran/${editingTahunAjaran.value.id}`, form)
       const index = tahunAjaranList.value.findIndex(t => t.id === editingTahunAjaran.value.id)
       if (index !== -1) {
-        tahunAjaranList.value[index] = { ...editingTahunAjaran.value, ...form }
+        tahunAjaranList.value[index] = response.data.data
       }
     } else {
-      // TODO: Implement API call for create
-      // const response = await api.post('/tahun-ajaran', form)
-      
-      const newTahunAjaran = {
-        id: Date.now(),
-        jumlah_kelas: 0,
-        ...form
-      }
-      tahunAjaranList.value.push(newTahunAjaran)
+      // Create new tahun ajaran
+      const response = await api.post('/tahun-ajaran', form)
+      tahunAjaranList.value.push(response.data.data)
     }
     
     closeModal()

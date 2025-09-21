@@ -19,6 +19,7 @@ use App\Http\Controllers\Api\WhatsAppController;
 use App\Http\Controllers\Api\GalleryController;
 use App\Http\Controllers\Api\ContentController;
 use App\Http\Controllers\Api\MataPelajaranController;
+use App\Http\Controllers\Api\TahunAjaranController;
 use App\Http\Controllers\Api\ImageController;
 use App\Http\Controllers\Api\DocumentationController;
 use App\Http\Controllers\Api\KategoriKreditPoinController;
@@ -309,6 +310,16 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('role:admin,guru,wali_kelas,bk,osis,ekstrakurikuler')->group(function () {
         Route::apiResource('mata-pelajaran', MataPelajaranController::class);
         Route::get('mata-pelajaran-statistics', [MataPelajaranController::class, 'statistics']);
+    });
+
+    // Tahun Ajaran routes
+    Route::middleware('role:admin,guru,wali_kelas,bk,osis,ekstrakurikuler')->group(function () {
+        Route::apiResource('tahun-ajaran', TahunAjaranController::class);
+        Route::get('tahun-ajaran-statistics', [TahunAjaranController::class, 'statistics']);
+        Route::get('tahun-ajaran-options', [TahunAjaranController::class, 'options']);
+        Route::get('tahun-ajaran-current', [TahunAjaranController::class, 'current']);
+        Route::get('tahun-ajaran-active', [TahunAjaranController::class, 'active']);
+        Route::post('tahun-ajaran/{tahunAjaran}/activate', [TahunAjaranController::class, 'activate']);
     });
     
     // WhatsApp webhook routes (public)
