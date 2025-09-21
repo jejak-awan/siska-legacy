@@ -295,10 +295,29 @@ const handleSubmit = async () => {
       contentData.author = { username: 'admin' } // Mock author
     }
 
-    // TODO: Replace with actual API call
-    await new Promise(resolve => setTimeout(resolve, 1000)) // Mock delay
+    // Save to API
+    const saveData = {
+      title: form.title,
+      content: form.content,
+      category: form.category,
+      subcategory: form.subcategory,
+      tags: form.tags,
+      attachments: form.attachments,
+      is_featured: form.is_featured,
+      is_pinned: form.is_pinned,
+      status: form.status
+    }
 
-    emit('saved', contentData)
+    let response
+    if (props.isEdit && props.content) {
+      // Update existing content
+      response = await api.put(`/content/${props.content.id}`, saveData)
+    } else {
+      // Create new content
+      response = await api.post('/content', saveData)
+    }
+
+    emit('saved', response.data.data)
   } catch (error) {
     toast.error('Gagal menyimpan konten')
     console.error('Save content error:', error)

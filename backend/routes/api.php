@@ -17,6 +17,7 @@ use App\Http\Controllers\Api\CharacterAssessmentController;
 use App\Http\Controllers\Api\ReferenceDataController;
 use App\Http\Controllers\Api\WhatsAppController;
 use App\Http\Controllers\Api\GalleryController;
+use App\Http\Controllers\Api\ContentController;
 use App\Http\Controllers\Api\ImageController;
 use App\Http\Controllers\Api\DocumentationController;
 use App\Http\Controllers\Api\KategoriKreditPoinController;
@@ -289,6 +290,19 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Public gallery routes (no authentication required)
     Route::get('galleries/public', [GalleryController::class, 'public']);
+
+    // Content Management routes
+    Route::middleware('role:admin,guru,wali_kelas,bk,osis,ekstrakurikuler')->group(function () {
+        Route::apiResource('content', ContentController::class);
+        Route::get('content-statistics', [ContentController::class, 'statistics']);
+        Route::post('content/{content}/publish', [ContentController::class, 'publish']);
+        Route::post('content/{content}/unpublish', [ContentController::class, 'unpublish']);
+        Route::post('content/{content}/archive', [ContentController::class, 'archive']);
+        Route::get('content-categories', [ContentController::class, 'categories']);
+    });
+
+    // Public content routes (no authentication required)
+    Route::get('content/public', [ContentController::class, 'public']);
     
     // WhatsApp webhook routes (public)
     Route::get('whatsapp/webhook', [WhatsAppController::class, 'webhookVerify']);

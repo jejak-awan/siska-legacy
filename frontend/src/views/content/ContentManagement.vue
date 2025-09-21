@@ -387,13 +387,14 @@ const editContent = (contentItem) => {
 const deleteContent = async (contentItem) => {
   if (confirm(`Apakah Anda yakin ingin menghapus "${contentItem.title}"?`)) {
     try {
-      // TODO: Implement delete API call
+      await api.delete(`/content/${contentItem.id}`)
       const index = content.value.findIndex(item => item.id === contentItem.id)
       if (index > -1) {
         content.value.splice(index, 1)
         toast.success('Konten berhasil dihapus')
       }
     } catch (error) {
+      console.error('Delete error:', error)
       toast.error('Gagal menghapus konten')
     }
   }
@@ -420,9 +421,28 @@ const handleContentSaved = (savedContent) => {
   toast.success('Konten berhasil disimpan')
 }
 
+// Load content from API
+const loadContent = async () => {
+  try {
+    loading.value = true
+    const response = await api.get('/content', {
+      params: {
+        per_page: 50,
+        category: selectedCategory.value,
+        status: selectedStatus.value
+      }
+    })
+    content.value = response.data.data
+  } catch (error) {
+    console.error('Failed to load content:', error)
+    toast.error('Gagal memuat konten')
+  } finally {
+    loading.value = false
+  }
+}
+
 // Lifecycle
 onMounted(() => {
-  // Load content from API
-  // publicStore.fetchAllPublicContent()
+  loadContent()
 })
 </script>
