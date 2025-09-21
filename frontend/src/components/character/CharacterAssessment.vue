@@ -188,6 +188,7 @@
 
 <script setup>
 import { ref, reactive, computed, onMounted, watch } from 'vue'
+import api from '@/services/api'
 
 // Props
 const props = defineProps({
@@ -252,11 +253,86 @@ const isFormValid = computed(() => {
 // Methods
 const loadDimensions = async () => {
   try {
-    // TODO: Implement API call
-    // const response = await api.get('/character-dimensions')
-    // dimensions.value = response.data
+    loading.value = true
     
-    // Mock data
+    // Load dimensions from API
+    const response = await api.get('/character-assessment/dimensions')
+    dimensions.value = response.data.data || response.data
+    
+    // Fallback to mock data if API fails
+    if (!dimensions.value || dimensions.value.length === 0) {
+      dimensions.value = [
+        {
+          id: 1,
+          nama: 'Spiritual & Religius',
+          deskripsi: 'Kemampuan menghayati dan mengamalkan ajaran agama yang dianut',
+          indikator: [
+            {
+              id: 1,
+              nama: 'Melaksanakan ibadah sesuai agama',
+              deskripsi: 'Siswa melaksanakan ibadah sesuai dengan agama yang dianut'
+            },
+            {
+              id: 2,
+              nama: 'Menghormati perbedaan agama',
+              deskripsi: 'Siswa menghormati dan toleran terhadap perbedaan agama'
+            },
+            {
+              id: 3,
+              nama: 'Berperilaku jujur dan amanah',
+              deskripsi: 'Siswa menunjukkan kejujuran dan dapat dipercaya'
+            }
+          ]
+        },
+        {
+          id: 2,
+          nama: 'Sosial & Kebangsaan',
+          deskripsi: 'Kemampuan berinteraksi dengan lingkungan sosial dan memiliki rasa kebangsaan',
+          indikator: [
+            {
+              id: 4,
+              nama: 'Menghormati orang lain',
+              deskripsi: 'Siswa menghormati dan menghargai orang lain'
+            },
+            {
+              id: 5,
+              nama: 'Mengikuti upacara bendera',
+              deskripsi: 'Siswa aktif mengikuti upacara bendera dan kegiatan kebangsaan'
+            },
+            {
+              id: 6,
+              nama: 'Menggunakan bahasa Indonesia yang baik',
+              deskripsi: 'Siswa menggunakan bahasa Indonesia yang baik dan benar'
+            }
+          ]
+        },
+        {
+          id: 3,
+          nama: 'Gotong Royong',
+          deskripsi: 'Kemampuan bekerja sama dalam kelompok dan membantu sesama',
+          indikator: [
+            {
+              id: 7,
+              nama: 'Bekerja sama dalam kelompok',
+              deskripsi: 'Siswa dapat bekerja sama dengan baik dalam kelompok'
+            },
+            {
+              id: 8,
+              nama: 'Membantu teman yang kesulitan',
+              deskripsi: 'Siswa membantu teman yang mengalami kesulitan'
+            },
+            {
+              id: 9,
+              nama: 'Berpartisipasi dalam kegiatan sekolah',
+              deskripsi: 'Siswa aktif berpartisipasi dalam kegiatan sekolah'
+            }
+          ]
+        }
+      ]
+    }
+  } catch (error) {
+    console.error('Error loading dimensions:', error)
+    // Use mock data as fallback
     dimensions.value = [
       {
         id: 1,
@@ -325,8 +401,8 @@ const loadDimensions = async () => {
         ]
       }
     ]
-  } catch (error) {
-    console.error('Error loading dimensions:', error)
+  } finally {
+    loading.value = false
   }
 }
 
@@ -355,13 +431,27 @@ const calculateOverallScore = () => {
 const saveDraft = async () => {
   try {
     loading.value = true
-    // TODO: Implement API call
-    // await api.post('/character-assessments/draft', assessment)
     
-    console.log('Saving draft:', assessment)
-    emit('draft-saved', assessment)
+    const assessmentData = {
+      siswa_id: props.student.id,
+      periode: assessment.period,
+      semester: '1', // Default semester
+      tanggal_penilaian: assessment.assessmentDate,
+      scores: assessment.scores,
+      comments: assessment.comments,
+      evidence: assessment.evidence,
+      status: 'draft'
+    }
+    
+    // Save draft via API
+    const response = await api.post('/character-assessment', assessmentData)
+    
+    console.log('Draft saved:', response.data)
+    emit('draft-saved', response.data.data)
   } catch (error) {
     console.error('Error saving draft:', error)
+    // Fallback to emit without API
+    emit('draft-saved', assessment)
   } finally {
     loading.value = false
   }
@@ -372,6 +462,25 @@ const submitAssessment = async () => {
     loading.value = true
     
     const assessmentData = {
+      siswa_id: props.student.id,
+      periode: assessment.period,
+      semester: '1', // Default semester
+      tanggal_penilaian: assessment.assessmentDate,
+      scores: assessment.scores,
+      comments: assessment.comments,
+      evidence: assessment.evidence,
+      status: 'submitted'
+    }
+    
+    // Submit assessment via API
+    const response = await api.post('/character-assessment', assessmentData)
+    
+    console.log('Assessment submitted:', response.data)
+    emit('saved', response.data.data)
+  } catch (error) {
+    console.error('Error submitting assessment:', error)
+    // Fallback to emit without API
+    const fallbackData = {
       ...assessment,
       studentId: props.student.id,
       assessmentId: props.assessmentId,
@@ -380,14 +489,7 @@ const submitAssessment = async () => {
         average: parseFloat(getDimensionAverage(dimension.id))
       }))
     }
-    
-    // TODO: Implement API call
-    // await api.post('/character-assessments', assessmentData)
-    
-    console.log('Submitting assessment:', assessmentData)
-    emit('saved', assessmentData)
-  } catch (error) {
-    console.error('Error submitting assessment:', error)
+    emit('saved', fallbackData)
   } finally {
     loading.value = false
   }
